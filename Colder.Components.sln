@@ -3,13 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30413.136
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Colder.Logging.Abstractions", "src\Colder.Logging.Abstractions\Colder.Logging.Abstractions.csproj", "{B514FF79-D143-4ADE-A1EE-1DF929188AA7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Colder.Logging.Abstractions", "src\Colder.Logging.Abstractions\Colder.Logging.Abstractions.csproj", "{B514FF79-D143-4ADE-A1EE-1DF929188AA7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Colder.Logging.Serilog", "src\Colder.Logging.Serilog\Colder.Logging.Serilog.csproj", "{DAFFC790-6E36-4624-8372-BE31AE684EC7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Colder.Logging.Serilog", "src\Colder.Logging.Serilog\Colder.Logging.Serilog.csproj", "{DAFFC790-6E36-4624-8372-BE31AE684EC7}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "demos", "demos", "{ACCF873E-B185-4FEA-8502-D5F708E42168}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logging.Demo", "demos\Logging.Demo\Logging.Demo.csproj", "{3796A6DC-A26E-40E0-9379-617DFA943191}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Logging.Demo", "demos\Logging.Demo\Logging.Demo.csproj", "{3796A6DC-A26E-40E0-9379-617DFA943191}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventBus.Demo", "demos\EventBus.Demo\EventBus.Demo.csproj", "{81A0284A-F75E-4092-A57E-C04A2D6A850A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,12 +31,17 @@ Global
 		{3796A6DC-A26E-40E0-9379-617DFA943191}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3796A6DC-A26E-40E0-9379-617DFA943191}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3796A6DC-A26E-40E0-9379-617DFA943191}.Release|Any CPU.Build.0 = Release|Any CPU
+		{81A0284A-F75E-4092-A57E-C04A2D6A850A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{81A0284A-F75E-4092-A57E-C04A2D6A850A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{81A0284A-F75E-4092-A57E-C04A2D6A850A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{81A0284A-F75E-4092-A57E-C04A2D6A850A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{3796A6DC-A26E-40E0-9379-617DFA943191} = {ACCF873E-B185-4FEA-8502-D5F708E42168}
+		{81A0284A-F75E-4092-A57E-C04A2D6A850A} = {ACCF873E-B185-4FEA-8502-D5F708E42168}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {817CE001-2A40-4054-B349-ECDB5986C92E}
