@@ -2,12 +2,12 @@
 using GreenPipes;
 using MassTransit;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
 
-namespace Demo.EventBus.Consumer
+namespace Demo.MessageBus.Consumer
 {
     class Program
     {
@@ -35,6 +35,18 @@ namespace Demo.EventBus.Consumer
                     });
 
                     cfg.ReceiveEndpoint(Endpoints.TestPoint, ep =>
+                    {
+                        ep.Handler<ITestEvent>(async context =>
+                        {
+                            Console.WriteLine($"Received: {context.Message.Text}");
+
+                            await context.RespondAsync(new ITestEvent { Text = "返回" });
+                            await Task.CompletedTask;
+                            //throw new Exception("11");
+                        });
+                    });
+
+                    cfg.ReceiveEndpoint($"TestPoint_111", ep =>
                     {
                         ep.Handler<ITestEvent>(async context =>
                         {

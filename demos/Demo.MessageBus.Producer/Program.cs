@@ -5,7 +5,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Demo.EventBus.Publisher
+namespace Demo.MessageBus.Producer
 {
     class Program
     {
@@ -22,16 +22,16 @@ namespace Demo.EventBus.Publisher
                         h.Username("guest");
                         h.Password("guest");
                     });
-                }); 
+                });
             });
 
             var provider = services.BuildServiceProvider();
 
             var busControl = provider.GetRequiredService<IBusControl>();
-
             await busControl.StartAsync(new CancellationTokenSource(TimeSpan.FromSeconds(10)).Token);
-            
             var target = await busControl.GetSendEndpoint(new Uri($"rabbitmq://localhost/{Endpoints.TestPoint}"));
+
+            var res = await busControl.Request<ITestEvent, ITestEvent>(new ITestEvent { Text = $"{DateTime.Now}Hi" });
             await target.Send(new ITestEvent { Text = $"{DateTime.Now}Hi" });
             Console.WriteLine($"已发送 {nameof(ITestEvent)} 事件");
 
