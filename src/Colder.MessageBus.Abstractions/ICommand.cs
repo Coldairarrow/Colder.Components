@@ -1,9 +1,9 @@
 ﻿namespace Colder.MessageBus.Abstractions
 {
     /// <summary>
-    /// 消息
+    /// 命令
     /// </summary>
-    public interface IMessage
+    public interface ICommand : IMessage
     {
 
     }

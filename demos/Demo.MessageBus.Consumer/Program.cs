@@ -4,7 +4,6 @@ using MassTransit;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace Demo.MessageBus.Consumer
@@ -36,24 +35,11 @@ namespace Demo.MessageBus.Consumer
 
                     cfg.ReceiveEndpoint(Endpoints.TestPoint, ep =>
                     {
-                        ep.Handler<ITestEvent>(async context =>
-                        {
-                            Console.WriteLine($"Received: {context.Message.Text}");
-
-                            await context.RespondAsync(new ITestEvent { Text = "返回" });
-                            await Task.CompletedTask;
-                            //throw new Exception("11");
-                        });
-                    });
-
-                    cfg.ReceiveEndpoint($"TestPoint_111", ep =>
-                    {
-                        ep.Handler<ITestEvent>(async context =>
+                        ep.Handler<TestEvent>(async context =>
                         {
                             Console.WriteLine($"Received: {context.Message.Text}");
 
                             await Task.CompletedTask;
-                            //throw new Exception("11");
                         });
                     });
                 });
@@ -63,7 +49,7 @@ namespace Demo.MessageBus.Consumer
 
             var busControl = provider.GetRequiredService<IBusControl>();
 
-            await busControl.StartAsync(new CancellationTokenSource(TimeSpan.FromSeconds(10)).Token);
+            await busControl.StartAsync();
 
             Console.ReadLine();
         }

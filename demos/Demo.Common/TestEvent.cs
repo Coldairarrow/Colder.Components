@@ -1,6 +1,6 @@
 ﻿namespace Demo.Common
 {
-    public class ITestEvent
+    public class TestEvent
     {
         public string Text { get; set; }
     }

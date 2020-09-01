@@ -29,11 +29,10 @@ namespace Demo.MessageBus.Producer
 
             var busControl = provider.GetRequiredService<IBusControl>();
             await busControl.StartAsync(new CancellationTokenSource(TimeSpan.FromSeconds(10)).Token);
-            var target = await busControl.GetSendEndpoint(new Uri($"rabbitmq://localhost/{Endpoints.TestPoint}"));
 
-            var res = await busControl.Request<ITestEvent, ITestEvent>(new ITestEvent { Text = $"{DateTime.Now}Hi" });
-            await target.Send(new ITestEvent { Text = $"{DateTime.Now}Hi" });
-            Console.WriteLine($"已发送 {nameof(ITestEvent)} 事件");
+            await busControl.Send(new TestSubEvent { Text = $"{DateTime.Now}Hi" });
+
+            Console.WriteLine($"已发送 {nameof(TestSubEvent)} 事件");
 
             Console.ReadLine();
         }

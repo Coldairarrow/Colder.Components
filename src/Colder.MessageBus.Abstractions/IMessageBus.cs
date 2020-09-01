@@ -13,7 +13,7 @@ namespace Colder.MessageBus.Abstractions
         /// <typeparam name="T">消息类型</typeparam>
         /// <param name="message">消息</param>
         /// <returns></returns>
-        Task Publish<T>(T message) where T : IMessage;
+        Task Publish<T>(T message) where T : IEvent;
 
         /// <summary>
         /// 发送命令(单播)
@@ -22,6 +22,16 @@ namespace Colder.MessageBus.Abstractions
         /// <param name="message">消息</param>
         /// <param name="endpointName">指定消费节点</param>
         /// <returns></returns>
-        Task Send<T>(T message, string endpointName) where T : IMessage;
+        Task Send<T>(T message, string endpointName) where T : ICommand;
+
+        /// <summary>
+        /// 发送请求
+        /// </summary>
+        /// <typeparam name="TRequest">请求数据类型</typeparam>
+        /// <typeparam name="TResponse">返回数据类型</typeparam>
+        /// <param name="message">消息</param>
+        /// <param name="endpointName">指定消费节点</param>
+        /// <returns></returns>
+        Task<TResponse> Request<TRequest, TResponse>(TRequest message, string endpointName) where TRequest : ICommand;
     }
 }
