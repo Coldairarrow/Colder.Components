@@ -12,19 +12,24 @@ namespace Colder.MessageBus.MassTransit
         {
             _busControl = busControl;
         }
-        public Task Publish<T>(T message) where T : IEvent
+        public async Task Publish<T>(T message) where T : IEvent
         {
-            return _busControl.Publish(message);
+            await _busControl.Publish(message);
         }
-
-        public Task<TResponse> Request<TRequest, TResponse>(TRequest message, string endpointName) where TRequest : ICommand
+        public async Task Send<T>(T message, Uri destination) where T : ICommand
         {
-            throw new NotImplementedException();
+            var channel = await _busControl.GetSendEndpoint(destination);
+
+            await channel.Send(message);
         }
-
-        public Task Send<T>(T message, string endpointName) where T : ICommand
+        public async Task<TResponse> Request<TRequest, TResponse>(TRequest message, Uri destination, TimeSpan? timeout = null)
+            where TRequest : class, ICommand where TResponse : class
         {
-            throw new NotImplementedException();
+            timeout ??= TimeSpan.FromSeconds(30);
+            var reqTimeout = RequestTimeout.After(0, 0, 0, 0, (int)timeout.Value.TotalMilliseconds);
+            var response = await _busControl.Request<TRequest, TResponse>(destination, message, default, reqTimeout);
+
+            return response.Message;
         }
     }
 }

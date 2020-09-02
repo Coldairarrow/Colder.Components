@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 
 namespace Colder.MessageBus.Abstractions
 {
@@ -20,9 +21,9 @@ namespace Colder.MessageBus.Abstractions
         /// </summary>
         /// <typeparam name="T">消息类型</typeparam>
         /// <param name="message">消息</param>
-        /// <param name="endpointName">指定消费节点</param>
+        /// <param name="destination">指定消费节点</param>
         /// <returns></returns>
-        Task Send<T>(T message, string endpointName) where T : ICommand;
+        Task Send<T>(T message, Uri destination) where T : ICommand;
 
         /// <summary>
         /// 发送请求
@@ -30,8 +31,10 @@ namespace Colder.MessageBus.Abstractions
         /// <typeparam name="TRequest">请求数据类型</typeparam>
         /// <typeparam name="TResponse">返回数据类型</typeparam>
         /// <param name="message">消息</param>
-        /// <param name="endpointName">指定消费节点</param>
+        /// <param name="destination">指定消费节点</param>
+        /// <param name="timeout">请求超时时间(默认30秒)</param>
         /// <returns></returns>
-        Task<TResponse> Request<TRequest, TResponse>(TRequest message, string endpointName) where TRequest : ICommand;
+        Task<TResponse> Request<TRequest, TResponse>(TRequest message, Uri destination, TimeSpan? timeout = null)
+            where TRequest : class, ICommand where TResponse : class;
     }
 }
