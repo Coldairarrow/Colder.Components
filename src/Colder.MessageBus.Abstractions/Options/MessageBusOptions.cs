@@ -8,12 +8,22 @@
         /// <summary>
         /// 传输介质
         /// </summary>
-        public TransportType Transport { get; set; }
+        public TransportType Transport { get; set; } = TransportType.InMemory;
 
         /// <summary>
         /// 地址
         /// </summary>
-        public string Host { get; set; }
+        public string Host { get; set; } = "localhost";
+
+        /// <summary>
+        /// 虚拟主机
+        /// </summary>
+        public string VirtualHost { get; set; }
+
+        /// <summary>
+        /// 端口
+        /// </summary>
+        public ushort Port { get; set; } = 5672;
 
         /// <summary>
         /// 用户名

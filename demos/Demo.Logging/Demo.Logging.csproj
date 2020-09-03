@@ -6,6 +6,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Colder.Logging.Serilog\Colder.Logging.Serilog.csproj" />
+    <ProjectReference Include="..\..\src\Colder.MessageBus.MassTransit\Colder.MessageBus.MassTransit.csproj" />
+    <ProjectReference Include="..\Demo.Common\Demo.Common.csproj" />
   </ItemGroup>
 
 

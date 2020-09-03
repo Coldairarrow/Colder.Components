@@ -1,6 +1,8 @@
-﻿namespace Demo.Common
+﻿using Colder.MessageBus.Abstractions;
+
+namespace Demo.Common
 {
-    public class TestEvent
+    public class TestEvent : IEvent
     {
         public string Text { get; set; }
     }

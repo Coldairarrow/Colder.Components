@@ -30,7 +30,7 @@ namespace Demo.MessageBus.Producer
             var busControl = provider.GetRequiredService<IBusControl>();
             await busControl.StartAsync(new CancellationTokenSource(TimeSpan.FromSeconds(10)).Token);
 
-            await busControl.Send(new TestSubEvent { Text = $"{DateTime.Now}Hi" });
+            await busControl.Publish(new TestSubEvent { Text = $"{DateTime.Now}Hi" });
 
             Console.WriteLine($"已发送 {nameof(TestSubEvent)} 事件");
 
