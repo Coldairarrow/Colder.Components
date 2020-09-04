@@ -45,12 +45,23 @@ namespace Colder.MessageBus.MassTransit
                 .Select(x => x.GetGenericArguments()[0])
                 .Distinct()
                 .ToList();
+
+            MessageTypes.ForEach(aMessageType =>
+            {
+                var interfaceType = typeof(IMessageHandler<>).MakeGenericType(aMessageType);
+                var handlers = HanlderTypes.Where(x => interfaceType.IsAssignableFrom(x))
+                    .ToArray();
+                if (handlers.Length > 1)
+                {
+                    throw new Exception($"消息{aMessageType.Name}有多个订阅者:{string.Join(",", handlers.Select(x => x.Name))}");
+                }
+                MessageHandlers.Add(aMessageType, handlers[0]);
+            });
         }
 
         public static readonly List<Type> AllTypes = new List<Type>();
-
         public static readonly List<Type> HanlderTypes = new List<Type>();
-
         public static readonly List<Type> MessageTypes = new List<Type>();
+        public static readonly Dictionary<Type, Type> MessageHandlers = new Dictionary<Type, Type>();
     }
 }

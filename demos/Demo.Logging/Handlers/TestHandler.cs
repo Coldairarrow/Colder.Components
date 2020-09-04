@@ -15,8 +15,9 @@ namespace Demo.Logging.Handlers
         }
         public Task Handle(IMessageContext<TestEvent> context)
         {
-            //throw new System.Exception("11");
-            //_logger.LogInformation("收到 {EventType} 事件:{Message}", typeof(TestEvent), JsonConvert.SerializeObject(context.Message));
+            _logger.LogInformation("收到 {EventType} 事件:{Message}", typeof(TestEvent), JsonConvert.SerializeObject(context.Message));
+
+            throw new System.Exception("11");
 
             return Task.CompletedTask;
         }

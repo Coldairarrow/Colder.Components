@@ -1,4 +1,5 @@
 ﻿using Colder.Logging.Abstractions;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Serilog;
@@ -8,6 +9,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Colder.Logging.Serilog
 {
@@ -26,10 +28,9 @@ namespace Colder.Logging.Serilog
             var rootPath = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
             var path = Path.Combine(rootPath, "logs", "log.txt");
 
-            return hostBuilder.UseSerilog((hostingContext, serilogConfig) =>
+            return hostBuilder.UseSerilog((hostingContext, serviceProvider, serilogConfig) =>
             {
                 var envConfig = hostingContext.Configuration;
-
                 LogOptions logConfig = new LogOptions();
                 envConfig.GetSection("log").Bind(logConfig);
 
@@ -39,7 +40,6 @@ namespace Colder.Logging.Serilog
                         .MinimumLevel
                         .Override(aOverride.Source, (LogEventLevel)aOverride.MinLevel);
                 });
-
                 serilogConfig.MinimumLevel.Is((LogEventLevel)logConfig.MinLevel);
                 if (logConfig.Console.Enabled)
                 {
@@ -72,6 +72,17 @@ namespace Colder.Logging.Serilog
                         AutoRegisterTemplate = true,
                         AutoRegisterTemplateVersion = AutoRegisterTemplateVersion.ESv7,
                     });
+                }
+
+                //自定义属性
+                serilogConfig.Enrich.WithProperty("MachineName", Environment.MachineName);
+                serilogConfig.Enrich.WithProperty("ApplicationName", Assembly.GetEntryAssembly().GetName().Name);
+                serilogConfig.Enrich.WithProperty("ApplicationVersion", Assembly.GetEntryAssembly().GetName().Version);
+                var httpContext = serviceProvider.GetService<IHttpContextAccessor>()?.HttpContext;
+                if (httpContext != null)
+                {
+                    serilogConfig.Enrich.WithProperty("RequestPath", httpContext.Request.Path);
+                    serilogConfig.Enrich.WithProperty("RequestIp", httpContext.Connection.RemoteIpAddress);
                 }
             });
         }

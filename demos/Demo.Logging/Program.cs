@@ -24,14 +24,10 @@ namespace Logging.Demo
         }
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            Task.Factory.StartNew(() =>
+            _timer = new Timer(async state =>
             {
-                while (true)
-                {
-                    _messageBus.Publish(new TestEvent() { Text = Guid.NewGuid().ToString() });
-                    Thread.Sleep(1);
-                }
-            });
+                await _messageBus.Publish(new TestEvent() { Text = Guid.NewGuid().ToString() });
+            }, null, 0, 1000);
 
             return Task.CompletedTask;
         }

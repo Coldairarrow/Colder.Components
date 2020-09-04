@@ -1,4 +1,5 @@
 ﻿using Colder.MessageBus.Abstractions;
+using GreenPipes;
 using MassTransit;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -6,6 +7,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Reflection;
+using System.Threading.Tasks;
 
 namespace Colder.MessageBus.MassTransit
 {
@@ -34,15 +36,25 @@ namespace Colder.MessageBus.MassTransit
                     }
 
                     IBusControl busControl = null;
-                    logger.LogInformation("使用 {TransportType} 作为传输介质", options.Transport);
+                    logger.LogInformation("MessageBus:Use {TransportType} Transport", options.Transport);
                     switch (options.Transport)
                     {
                         case TransportType.InMemory:
                             {
                                 busControl = Bus.Factory.CreateUsingInMemory(sbc =>
                                 {
+                                    sbc.UseRetry(x => x.Immediate(3));
                                     sbc.ReceiveEndpoint(endpoint, ep =>
                                     {
+                                        ep.ConfigureError(error =>
+                                        {
+                                            error.UseInlineFilter((context, next) =>
+                                            {
+                                                logger.LogError(context.Exception, context.Exception.Message);
+
+                                                return Task.CompletedTask;
+                                            });
+                                        });
                                         BindHandler(ep);
                                     });
                                 });
@@ -52,6 +64,10 @@ namespace Colder.MessageBus.MassTransit
                             {
                                 busControl = Bus.Factory.CreateUsingRabbitMq(sbc =>
                                 {
+                                    sbc.UseRetry(retryCfg =>
+                                    {
+                                        retryCfg.Interval(3, TimeSpan.FromMilliseconds(100));
+                                    });
                                     sbc.Host(options.Host, options.Port, options.VirtualHost, config =>
                                     {
                                         if (!string.IsNullOrEmpty(options.Username) && !string.IsNullOrEmpty(options.Password))
@@ -62,6 +78,16 @@ namespace Colder.MessageBus.MassTransit
                                     });
                                     sbc.ReceiveEndpoint(endpoint, ep =>
                                     {
+                                        ep.ConfigureError(error =>
+                                        {
+                                            error.UseInlineFilter((context, next) =>
+                                            {
+                                                logger.LogError(context.Exception, context.Exception.Message);
+
+                                                return Task.CompletedTask;
+                                            });
+                                        });
+
                                         BindHandler(ep);
                                     });
                                 });
@@ -73,7 +99,7 @@ namespace Colder.MessageBus.MassTransit
                     {
                         AssemblyHelper.MessageTypes.ForEach(messageType =>
                         {
-                            logger.LogInformation("监听消息 {MessageType}", messageType);
+                            logger.LogInformation("MessageBus:Subscribe {MessageType}", messageType);
                             var delegateType = typeof(MessageHandler<>).MakeGenericType(messageType);
                             var bindMethod = typeof(ProxyHandler)
                                 .GetMethod("Handle")
@@ -87,7 +113,7 @@ namespace Colder.MessageBus.MassTransit
                     }
 
                     busControl.Start();
-                    logger.LogInformation($"消息总线已启动");
+                    logger.LogInformation($"MessageBus:Started");
 
                     return busControl;
                 });
