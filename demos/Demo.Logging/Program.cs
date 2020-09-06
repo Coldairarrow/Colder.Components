@@ -26,7 +26,14 @@ namespace Logging.Demo
         {
             _timer = new Timer(async state =>
             {
-                await _messageBus.Publish(new TestEvent() { Text = Guid.NewGuid().ToString() });
+                try
+                {
+                    await _messageBus.Publish(new TestEvent() { Text = Guid.NewGuid().ToString() });
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, ex.Message);
+                }
             }, null, 0, 1000);
 
             return Task.CompletedTask;

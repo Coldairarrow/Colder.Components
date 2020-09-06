@@ -1,12 +1,14 @@
 ﻿using Colder.MessageBus.Abstractions;
 using GreenPipes;
 using MassTransit;
+using MassTransit.Context;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Reflection;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Colder.MessageBus.MassTransit
@@ -28,6 +30,8 @@ namespace Colder.MessageBus.MassTransit
                     var loggerFactory = serviceProvider.GetService<ILoggerFactory>();
                     var logger = loggerFactory.CreateLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
+                    LogContext.ConfigureCurrentLogContext(loggerFactory);
+
                     var configuration = host.Configuration;
                     var options = configuration.GetSection("messagebus").Get<MessageBusOptions>();
                     if (options == null)
@@ -37,66 +41,54 @@ namespace Colder.MessageBus.MassTransit
 
                     IBusControl busControl = null;
                     logger.LogInformation("MessageBus:Use {TransportType} Transport", options.Transport);
-                    switch (options.Transport)
+                    if (options.Transport == TransportType.InMemory)
                     {
-                        case TransportType.InMemory:
+                        busControl = Bus.Factory.CreateUsingInMemory(busFactoryBuilder =>
+                        {
+                            ConfigBusFactory(busFactoryBuilder);
+                            busFactoryBuilder.ReceiveEndpoint(endpoint, endpointBuilder =>
                             {
-                                busControl = Bus.Factory.CreateUsingInMemory(sbc =>
-                                {
-                                    sbc.UseRetry(x => x.Immediate(3));
-                                    sbc.ReceiveEndpoint(endpoint, ep =>
-                                    {
-                                        ep.ConfigureError(error =>
-                                        {
-                                            error.UseInlineFilter((context, next) =>
-                                            {
-                                                logger.LogError(context.Exception, context.Exception.Message);
+                                ConfigEndpoint(endpointBuilder);
+                            });
+                        });
+                    }
+                    else if (options.Transport == TransportType.RabbitMQ)
+                    {
+                        busControl = Bus.Factory.CreateUsingRabbitMq(busFactoryBuilder =>
+                        {
+                            ConfigBusFactory(busFactoryBuilder);
 
-                                                return Task.CompletedTask;
-                                            });
-                                        });
-                                        BindHandler(ep);
-                                    });
-                                });
-                            }
-                            break;
-                        case TransportType.RabbitMQ:
+                            busFactoryBuilder.Host(options.Host, options.Port, options.VirtualHost, config =>
                             {
-                                busControl = Bus.Factory.CreateUsingRabbitMq(sbc =>
+                                if (!string.IsNullOrEmpty(options.Username) && !string.IsNullOrEmpty(options.Password))
                                 {
-                                    sbc.UseRetry(retryCfg =>
-                                    {
-                                        retryCfg.Interval(3, TimeSpan.FromMilliseconds(100));
-                                    });
-                                    sbc.Host(options.Host, options.Port, options.VirtualHost, config =>
-                                    {
-                                        if (!string.IsNullOrEmpty(options.Username) && !string.IsNullOrEmpty(options.Password))
-                                        {
-                                            config.Username(options.Username);
-                                            config.Password(options.Password);
-                                        }
-                                    });
-                                    sbc.ReceiveEndpoint(endpoint, ep =>
-                                    {
-                                        ep.ConfigureError(error =>
-                                        {
-                                            error.UseInlineFilter((context, next) =>
-                                            {
-                                                logger.LogError(context.Exception, context.Exception.Message);
+                                    config.Username(options.Username);
+                                    config.Password(options.Password);
+                                }
+                            });
 
-                                                return Task.CompletedTask;
-                                            });
-                                        });
-
-                                        BindHandler(ep);
-                                    });
-                                });
-                            }; break;
-                        default: throw new Exception($"Transport:{options.Transport}无效");
+                            busFactoryBuilder.ReceiveEndpoint(endpoint, endpointBuilder =>
+                            {
+                                ConfigEndpoint(endpointBuilder);
+                            });
+                        });
+                    }
+                    else
+                    {
+                        throw new Exception($"Transport:{options.Transport}无效");
                     }
 
-                    void BindHandler(IReceiveEndpointConfigurator receiveEndpointConfigurator)
+                    void ConfigBusFactory(IBusFactoryConfigurator busFactoryConfigurator)
                     {
+                        busFactoryConfigurator.UseRetry(retryCfg =>
+                        {
+                            retryCfg.Interval(3, TimeSpan.FromMilliseconds(100));
+                        });
+                    }
+
+                    void ConfigEndpoint(IReceiveEndpointConfigurator receiveEndpointConfigurator)
+                    {
+                        //绑定消费者
                         AssemblyHelper.MessageTypes.ForEach(messageType =>
                         {
                             logger.LogInformation("MessageBus:Subscribe {MessageType}", messageType);
@@ -109,6 +101,18 @@ namespace Colder.MessageBus.MassTransit
                             var method = typeof(HandlerExtensions).GetMethod("Handler")
                                 .MakeGenericMethod(messageType);
                             method.Invoke(null, new object[] { receiveEndpointConfigurator, theDelegate, null });
+                        });
+
+                        //异常处理
+                        receiveEndpointConfigurator.ConfigureError(error =>
+                        {
+                            error.UseInlineFilter((context, next) =>
+                            {
+                                string body = Encoding.UTF8.GetString(context.GetBody());
+                                logger.LogError(context.Exception, "Handle Message Error,MessageBody:{MessageBody}", body);
+
+                                return Task.CompletedTask;
+                            });
                         });
                     }
 
