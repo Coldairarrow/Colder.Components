@@ -1,4 +1,6 @@
-﻿using Demo.Common;
+﻿using Colder.MessageBus.Abstractions;
+using Colder.MessageBus.MassTransit;
+using Demo.Common;
 using MassTransit;
 using MassTransit.Context;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,6 +17,7 @@ namespace Demo.MessageBus.Producer
         public static async Task Main()
         {
             var services = new ServiceCollection();
+
             services.AddLogging(x =>
             {
                 x.SetMinimumLevel(LogLevel.Trace);
@@ -22,6 +25,11 @@ namespace Demo.MessageBus.Producer
                 {
                     config.TimestampFormat = "[HH:mm:ss.fff]";
                 });
+            });
+            services.AddMessageBus(new MessageBusOptions
+            {
+                Host = "localhost",
+                Transport = TransportType.RabbitMQ
             });
 
             var provider = services.BuildServiceProvider();

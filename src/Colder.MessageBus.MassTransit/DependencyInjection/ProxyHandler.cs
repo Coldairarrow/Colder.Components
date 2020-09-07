@@ -30,7 +30,7 @@ namespace Colder.MessageBus.MassTransit
                 SourceMachineName = context.Host.MachineName
             };
 
-            var handlerType = AssemblyHelper.MessageHandlers[typeof(T)];
+            var handlerType = Cache.MessageHandlers[typeof(T)];
             var handler = ActivatorUtilities.CreateInstance(_serviceProvider, handlerType) as IMessageHandler<T>;
             await handler.Handle(msgContext);
         }

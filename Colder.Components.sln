@@ -21,7 +21,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Colder.MessageBus.Abstracti
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Colder.MessageBus.MassTransit", "src\Colder.MessageBus.MassTransit\Colder.MessageBus.MassTransit.csproj", "{72A99E3C-9134-4103-8D3E-F28FB63B7B0E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Colder.Common", "src\Colder.Common\Colder.Common.csproj", "{AEBBBE43-DEE9-43C1-935B-21182D59850B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Colder.CommonUtil", "src\Colder.CommonUtil\Colder.CommonUtil.csproj", "{55581DAA-76D8-4279-A7FB-61F98A2EA66B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -61,10 +61,10 @@ Global
 		{72A99E3C-9134-4103-8D3E-F28FB63B7B0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{72A99E3C-9134-4103-8D3E-F28FB63B7B0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{72A99E3C-9134-4103-8D3E-F28FB63B7B0E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AEBBBE43-DEE9-43C1-935B-21182D59850B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AEBBBE43-DEE9-43C1-935B-21182D59850B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AEBBBE43-DEE9-43C1-935B-21182D59850B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AEBBBE43-DEE9-43C1-935B-21182D59850B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{55581DAA-76D8-4279-A7FB-61F98A2EA66B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{55581DAA-76D8-4279-A7FB-61F98A2EA66B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{55581DAA-76D8-4279-A7FB-61F98A2EA66B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{55581DAA-76D8-4279-A7FB-61F98A2EA66B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Demo.MessageBus.Consumer
 {
-    class Handler1 : IConsumer<TestEvent>
+    class Handler : IConsumer<TestEvent>
     {
         public Task Consume(ConsumeContext<TestEvent> context)
         {

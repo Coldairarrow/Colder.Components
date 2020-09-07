@@ -1,5 +1,5 @@
-﻿using Colder.MessageBus.Abstractions;
-using Microsoft.Extensions.Hosting;
+﻿using Microsoft.Extensions.Hosting;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -7,13 +7,15 @@ namespace Colder.MessageBus.MassTransit
 {
     internal class MassTransitMessageBusHostService : BackgroundService
     {
-        private readonly IMessageBus _messageBus;
-        public MassTransitMessageBusHostService(IMessageBus messageBus)
+        private readonly IServiceProvider _serviceProvider;
+        public MassTransitMessageBusHostService(IServiceProvider serviceProvider)
         {
-            _messageBus = messageBus;
+            _serviceProvider = serviceProvider;
         }
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
+            Cache.BusTypes.ForEach(aBusType => _serviceProvider.GetService(aBusType));
+
             return Task.CompletedTask;
         }
     }
