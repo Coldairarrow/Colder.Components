@@ -23,6 +23,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Colder.MessageBus.MassTrans
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Colder.CommonUtil", "src\Colder.CommonUtil\Colder.CommonUtil.csproj", "{55581DAA-76D8-4279-A7FB-61F98A2EA66B}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{39C8131E-709C-4240-BF1C-48D88B53E4DE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Colder.CommonUtil.Tests", "tests\Colder.CommonUtil.Tests\Colder.CommonUtil.Tests.csproj", "{EF129F99-BE42-4251-A95D-576D3A43B9A9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -65,6 +69,10 @@ Global
 		{55581DAA-76D8-4279-A7FB-61F98A2EA66B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{55581DAA-76D8-4279-A7FB-61F98A2EA66B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{55581DAA-76D8-4279-A7FB-61F98A2EA66B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EF129F99-BE42-4251-A95D-576D3A43B9A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EF129F99-BE42-4251-A95D-576D3A43B9A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EF129F99-BE42-4251-A95D-576D3A43B9A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EF129F99-BE42-4251-A95D-576D3A43B9A9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -74,6 +82,7 @@ Global
 		{4D9F6CC2-C44E-4DE4-9826-7A245CBCD8C9} = {ACCF873E-B185-4FEA-8502-D5F708E42168}
 		{BBF8F209-0526-4A55-9D2A-7D54FABF4AE2} = {ACCF873E-B185-4FEA-8502-D5F708E42168}
 		{7DCBE8EF-30D6-47AA-B518-F759F3999B47} = {ACCF873E-B185-4FEA-8502-D5F708E42168}
+		{EF129F99-BE42-4251-A95D-576D3A43B9A9} = {39C8131E-709C-4240-BF1C-48D88B53E4DE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {817CE001-2A40-4054-B349-ECDB5986C92E}
