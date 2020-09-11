@@ -2,8 +2,17 @@
 
 namespace Colder.MessageBus.Abstractions
 {
-    public interface IMessageHandler<TMessage> where TMessage : IMessage
+    /// <summary>
+    /// 消费者接口
+    /// </summary>
+    /// <typeparam name="TMessage"></typeparam>
+    public interface IMessageHandler<TMessage> where TMessage : class, IMessage
     {
+        /// <summary>
+        /// 消费消息
+        /// </summary>
+        /// <param name="context">消息上下文</param>
+        /// <returns></returns>
         Task Handle(IMessageContext<TMessage> context);
     }
 }

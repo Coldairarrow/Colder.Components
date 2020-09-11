@@ -32,9 +32,8 @@ namespace Colder.MessageBus.Abstractions
         /// <typeparam name="TResponse">返回数据类型</typeparam>
         /// <param name="message">消息</param>
         /// <param name="destination">指定消费节点</param>
-        /// <param name="timeout">请求超时时间(默认30秒)</param>
         /// <returns></returns>
-        Task<TResponse> Request<TRequest, TResponse>(TRequest message, Uri destination, TimeSpan? timeout = null)
+        Task<TResponse> Request<TRequest, TResponse>(TRequest message, Uri destination)
             where TRequest : class, ICommand where TResponse : class;
     }
 }

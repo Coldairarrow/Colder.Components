@@ -1,0 +1,15 @@
+<Project>
+
+  <PropertyGroup>
+    <!--默认统一输出XML注释文档，不需要输出的项目可以单独关闭-->
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+	<Version>$(Version)</Version>
+	<PackageProjectUrl>https://github.com/Coldairarrow/Colder.Components</PackageProjectUrl>
+	<Authors>Coldairarrow</Authors>
+    <Company>Coldairarrow</Company>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+  </PropertyGroup>
+  
+</Project>

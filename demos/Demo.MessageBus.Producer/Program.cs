@@ -1,8 +1,6 @@
 ﻿using Colder.MessageBus.Abstractions;
 using Colder.MessageBus.MassTransit;
 using Demo.Common;
-using MassTransit;
-using MassTransit.Context;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
@@ -36,26 +34,13 @@ namespace Demo.MessageBus.Producer
             var loggerFactory = provider.GetService<ILoggerFactory>();
             var logger = loggerFactory.CreateLogger(MethodBase.GetCurrentMethod().GetType());
 
-            var bus = Bus.Factory.CreateUsingRabbitMq(cfg =>
-            {
-                LogContext.ConfigureCurrentLogContext(logger);
-
-                cfg.Host("localhost", "/", h =>
-                {
-                    h.Username("guest");
-                    h.Password("guest");
-                    h.Heartbeat(1);
-                });
-            });
-
-            await bus.StartAsync(); // This is important!
-
+            var bus = provider.GetService<IMessageBus>();
             while (true)
             {
                 try
                 {
                     var token = new CancellationTokenSource(TimeSpan.FromSeconds(3)).Token;
-                    await bus.Publish(new TestSubEvent { Text = $"{DateTime.Now}Hi" }, token);
+                    await bus.Publish(new TestSubEvent { Text = $"{DateTime.Now}Hi" });
                     logger.LogInformation($"已发送 {nameof(TestSubEvent)} 事件");
 
                     Thread.Sleep(1000);

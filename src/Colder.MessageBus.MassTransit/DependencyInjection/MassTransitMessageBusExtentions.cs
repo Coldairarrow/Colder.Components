@@ -15,6 +15,9 @@ using System.Threading.Tasks;
 
 namespace Colder.MessageBus.MassTransit
 {
+    /// <summary>
+    /// 消息总线拓展
+    /// </summary>
     public static class MassTransitMessageBusExtentions
     {
         #region 私有成员
@@ -131,7 +134,7 @@ namespace Colder.MessageBus.MassTransit
             busControl.Start();
             logger.LogInformation($"MessageBus:Started");
 
-            return new MassTransitMessageBus(busControl);
+            return new MassTransitMessageBus(busControl, options);
         }
 
         #endregion

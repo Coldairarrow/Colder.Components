@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 namespace Colder.MessageBus.Abstractions
 {
+    /// <summary>
+    /// 消息上下文
+    /// </summary>
     public interface IMessageContext
     {
         /// <summary>

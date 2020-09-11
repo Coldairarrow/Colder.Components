@@ -18,7 +18,7 @@
         /// <summary>
         /// 虚拟主机
         /// </summary>
-        public string VirtualHost { get; set; }
+        public string VirtualHost { get; set; } = "/";
 
         /// <summary>
         /// 端口
@@ -28,11 +28,16 @@
         /// <summary>
         /// 用户名
         /// </summary>
-        public string Username { get; set; }
+        public string Username { get; set; } = "guest";
 
         /// <summary>
         /// 密码
         /// </summary>
-        public string Password { get; set; }
+        public string Password { get; set; } = "guest";
+
+        /// <summary>
+        /// 发送消息超时时间,单位(秒)
+        /// </summary>
+        public int SendMessageTimeout { get; set; } = 30;
     }
 }

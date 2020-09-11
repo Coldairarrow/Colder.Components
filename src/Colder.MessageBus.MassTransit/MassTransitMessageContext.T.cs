@@ -4,9 +4,9 @@ using System.Collections.Generic;
 
 namespace Colder.MessageBus.MassTransit
 {
-    internal class MassTransitMessageContext<TMessage> : IMessageContext<TMessage>
+    internal class MassTransitMessageContext<TMessage> : IMessageContext<TMessage> where TMessage : class, IMessage
     {
-        public TMessage Message { get; set; }
+        public TMessage Message { get; set; } = null;
         public Guid? MessageId { get; set; }
         public Uri SourceAddress { get; set; }
         public string SourceMachineName { get; set; }

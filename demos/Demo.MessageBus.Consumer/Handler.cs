@@ -1,13 +1,13 @@
-﻿using Demo.Common;
-using MassTransit;
+﻿using Colder.MessageBus.Abstractions;
+using Demo.Common;
 using System;
 using System.Threading.Tasks;
 
 namespace Demo.MessageBus.Consumer
 {
-    class Handler : IConsumer<TestEvent>
+    class Handler : IMessageHandler<TestEvent>
     {
-        public Task Consume(ConsumeContext<TestEvent> context)
+        public Task Handle(IMessageContext<TestEvent> context)
         {
             Console.WriteLine(context.MessageId);
 
