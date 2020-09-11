@@ -2,6 +2,7 @@
 using Colder.MessageBus.MassTransit;
 using Demo.Common;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Reflection;
@@ -14,23 +15,27 @@ namespace Demo.MessageBus.Producer
     {
         public static async Task Main()
         {
-            var services = new ServiceCollection();
-
-            services.AddLogging(x =>
-            {
-                x.SetMinimumLevel(LogLevel.Trace);
-                x.AddConsole(config =>
+            var host = Host.CreateDefaultBuilder()
+                .ConfigureServices(services =>
                 {
-                    config.TimestampFormat = "[HH:mm:ss.fff]";
-                });
-            });
-            services.AddMessageBus(new MessageBusOptions
-            {
-                Host = "localhost",
-                Transport = TransportType.RabbitMQ
-            });
+                    services.AddLogging(x =>
+                    {
+                        x.SetMinimumLevel(LogLevel.Trace);
+                        x.AddConsole(config =>
+                        {
+                            config.TimestampFormat = "[HH:mm:ss.fff]";
+                        });
+                    });
+                    services.AddMessageBus(new MessageBusOptions
+                    {
+                        Host = "localhost",
+                        Transport = TransportType.RabbitMQ
+                    });
+                })
+                .Build();
+            await host.RunAsync();
 
-            var provider = services.BuildServiceProvider();
+            var provider = host.Services;
             var loggerFactory = provider.GetService<ILoggerFactory>();
             var logger = loggerFactory.CreateLogger(MethodBase.GetCurrentMethod().GetType());
 
