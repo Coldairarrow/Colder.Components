@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Demo.MessageBus.Producer
 {
-    class Handler : IMessageHandler<TestEvent>
+    public class Handler : IMessageHandler<TestEvent>
     {
         private readonly ILogger<Handler> _logger;
         public Handler(ILogger<Handler> logger)

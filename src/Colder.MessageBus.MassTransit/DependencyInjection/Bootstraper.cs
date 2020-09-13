@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 
 namespace Colder.MessageBus.MassTransit
 {
-    internal class MassTransitMessageBusHostService : BackgroundService
+    internal class Bootstraper : BackgroundService
     {
         private readonly IServiceProvider _serviceProvider;
-        public MassTransitMessageBusHostService(IServiceProvider serviceProvider)
+        public Bootstraper(IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
         }

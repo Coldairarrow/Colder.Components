@@ -18,7 +18,7 @@ namespace Colder.MessageBus.MassTransit
     /// <summary>
     /// 消息总线拓展
     /// </summary>
-    public static class MassTransitMessageBusExtentions
+    public static class DependencyInjectionExtentions
     {
         #region 私有成员
 
@@ -189,7 +189,7 @@ namespace Colder.MessageBus.MassTransit
             where TMessageBus : class, IMessageBus
         {
             Cache.BusTypes.Add(typeof(TMessageBus));
-            services.AddHostedService<MassTransitMessageBusHostService>();
+            services.AddHostedService<Bootstraper>();
 
             return services.AddSingleton(_ =>
             {

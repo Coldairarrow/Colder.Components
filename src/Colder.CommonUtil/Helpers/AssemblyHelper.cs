@@ -19,7 +19,10 @@ namespace Colder.CommonUtil
                     && !new FileInfo(x).Name.StartsWith("Microsoft"))
                 .Select(x => Assembly.LoadFrom(x))
                 .Where(x => !x.IsDynamic)
+                .Concat(new Assembly[] { Assembly.GetEntryAssembly() })
+                .Distinct()
                 .ToList();
+
             List<Assembly> allAssemblies = new List<Assembly>();
             List<Type> allTypes = new List<Type>();
             assemblies.ForEach(aAssembly =>

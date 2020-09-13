@@ -17,6 +17,8 @@ namespace Colder.MessageBus.MassTransit
                      y.IsGenericType && y.GetGenericTypeDefinition() == typeof(IMessageHandler<>))
                 ).ToList();
 
+            var type = AssemblyHelper.AllTypes.Where(x => x.Name == "Handler").ToList();
+
             MessageTypes = HanlderTypes
                 .SelectMany(x => x.GetInterfaces())
                 .Where(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IMessageHandler<>))
