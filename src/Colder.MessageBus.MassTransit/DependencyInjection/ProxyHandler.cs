@@ -3,6 +3,7 @@ using MassTransit;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Colder.MessageBus.MassTransit
@@ -22,7 +23,7 @@ namespace Colder.MessageBus.MassTransit
                 Message = context.Message,
                 DestinationAddress = context.DestinationAddress,
                 FaultAddress = context.FaultAddress,
-                Headers = new Dictionary<string, object>(context.Headers.GetAll()),
+                Headers = new Dictionary<string, object>(context.Headers.GetAll().ToDictionary(x => x.Key, x => x.Value)),
                 MessageId = context.MessageId,
                 ResponseAddress = context.ResponseAddress,
                 SentTime = context.SentTime,

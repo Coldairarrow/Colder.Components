@@ -1,18 +1,20 @@
 ﻿using Colder.Logging.Serilog;
 using Colder.MessageBus.Abstractions;
 using Colder.MessageBus.MassTransit;
-using Demo.Common;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System.Threading.Tasks;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Threading;
 
-namespace Demo.MessageBus.Producer
+namespace Colder.CommonUtil.Tests
 {
-    class Program
+    [TestClass]
+    public class MessageBusTest
     {
-        public static async Task Main()
+        [TestMethod]
+        public void Test()
         {
-            await Host.CreateDefaultBuilder()
+            var host = Host.CreateDefaultBuilder()
                .ConfigureLoggingDefaults()
                .ConfigureServices(services =>
                {
@@ -21,9 +23,12 @@ namespace Demo.MessageBus.Producer
                    {
                        Host = "localhost",
                        Transport = TransportType.RabbitMQ
-                   }, MessageBusEndpoints.Producer);
+                   });
                })
-               .RunConsoleAsync();
+               .Build();
+            host.Start();
+
+            Thread.Sleep(3000);
         }
     }
 }

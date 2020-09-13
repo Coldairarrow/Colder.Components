@@ -1,5 +1,5 @@
 ::定义版本
-set Version=1.0.0
+set Version=1.0.1
 
 ::删除所有bin与obj下的文件
 @echo off
@@ -17,7 +17,7 @@ echo 清理完成
 ::构建
 dotnet build -c Release
 ::推送
-for /r %nowpath% %%i in (*.nupkg) do (dotnet nuget push %%i --api-key oy2de6x6jna3dlf57ghay32lovre65pufnxf3fquw3jbqa --source https://api.nuget.org/v3/index.json)
+for /r %nowpath% %%i in (*.nupkg) do (dotnet nuget push %%i --api-key {key} --source https://api.nuget.org/v3/index.json)
 
 echo 完成
 pause

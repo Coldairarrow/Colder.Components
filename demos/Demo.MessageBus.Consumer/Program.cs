@@ -1,9 +1,8 @@
-﻿using Colder.MessageBus.Abstractions;
+﻿using Colder.Logging.Serilog;
+using Colder.MessageBus.Abstractions;
 using Colder.MessageBus.MassTransit;
 using Demo.Common;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using System;
+using Microsoft.Extensions.Hosting;
 using System.Threading.Tasks;
 
 namespace Demo.MessageBus.Consumer
@@ -12,28 +11,17 @@ namespace Demo.MessageBus.Consumer
     {
         public static async Task Main()
         {
-            var services = new ServiceCollection();
-
-            services.AddLogging(x =>
-            {
-                x.SetMinimumLevel(LogLevel.Trace);
-                x.AddConsole(config =>
+            await Host.CreateDefaultBuilder()
+                .ConfigureLoggingDefaults()
+                .ConfigureServices(services =>
                 {
-                    config.TimestampFormat = "[HH:mm:ss.fff]";
-                });
-            });
-            services.AddMessageBus(new MessageBusOptions
-            {
-                Host = "localhost",
-                Transport = TransportType.RabbitMQ
-            }, Endpoints.TestPoint);
-
-            var provider = services.BuildServiceProvider();
-            var messageBus = provider.GetService<IMessageBus>();
-
-            await Task.CompletedTask;
-
-            Console.ReadLine();
+                    services.AddMessageBus(new MessageBusOptions
+                    {
+                        Host = "localhost",
+                        Transport = TransportType.RabbitMQ
+                    }, MessageBusEndpoints.Consumer);
+                })
+                .RunConsoleAsync();
         }
     }
 }

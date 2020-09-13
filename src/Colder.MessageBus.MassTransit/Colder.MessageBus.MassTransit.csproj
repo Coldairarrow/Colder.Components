@@ -2,8 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Library</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
-    <Nullable>warnings</Nullable>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <Description>消息总线MassTransit实现</Description>
   </PropertyGroup>
 

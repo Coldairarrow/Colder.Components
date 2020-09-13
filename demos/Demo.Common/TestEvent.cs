@@ -2,7 +2,7 @@
 
 namespace Demo.Common
 {
-    public class TestEvent : IEvent
+    public class TestEvent : IEvent, ICommand
     {
         public string Text { get; set; }
     }
