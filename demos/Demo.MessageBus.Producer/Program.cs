@@ -19,8 +19,10 @@ namespace Demo.MessageBus.Producer
                    services.AddHostedService<SendTest>();
                    services.AddMessageBus(new MessageBusOptions
                    {
-                       Host = "localhost",
-                       Transport = TransportType.RabbitMQ
+                       Host = "amqp://localhost:5672/",
+                       Transport = TransportType.RabbitMQ,
+                       Username = "guest",
+                       Password = "guest"
                    }, MessageBusEndpoints.Producer);
                })
                .RunConsoleAsync();

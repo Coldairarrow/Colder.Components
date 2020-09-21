@@ -19,22 +19,28 @@ namespace Colder.MessageBus.MassTransit
         {
             return new CancellationTokenSource(TimeSpan.FromSeconds(_options.SendMessageTimeout)).Token;
         }
-
-        public async Task Publish<T>(T message) where T : IEvent
+        private Uri BuildUri(string endpoint)
         {
-            await _busControl.Publish(message, GetCancellationToken());
+            return new Uri($"{_options.Host}{endpoint}");
         }
-        public async Task Send<T>(T message, Uri destination) where T : ICommand
-        {
-            var channel = await _busControl.GetSendEndpoint(destination);
 
-            await channel.Send(message, GetCancellationToken());
+        async Task IMessageBus.Publish<TMessage>(TMessage message, string endpoint)
+        {
+            if (string.IsNullOrEmpty(endpoint))
+            {
+                await _busControl.Publish(message, GetCancellationToken());
+            }
+            else
+            {
+                var channel = await _busControl.GetSendEndpoint(BuildUri(endpoint));
+
+                await channel.Send(message, GetCancellationToken());
+            }
         }
-        public async Task<TResponse> Request<TRequest, TResponse>(TRequest message, Uri destination)
-            where TRequest : class, ICommand where TResponse : class
+        async Task<TResponse> IMessageBus.Request<TRequest, TResponse>(TRequest message, string endpoint)
         {
             var reqTimeout = RequestTimeout.After(0, 0, 0, _options.SendMessageTimeout);
-            var response = await _busControl.Request<TRequest, TResponse>(destination, message, default, reqTimeout);
+            var response = await _busControl.Request<TRequest, TResponse>(BuildUri(endpoint), message, default, reqTimeout);
 
             return response.Message;
         }

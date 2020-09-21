@@ -70,7 +70,7 @@ namespace Colder.MessageBus.MassTransit
                 {
                     ConfigBusFactory(busFactoryBuilder);
 
-                    busFactoryBuilder.Host(options.Host, options.Port, options.VirtualHost, config =>
+                    busFactoryBuilder.Host(options.Host, config =>
                     {
                         if (!string.IsNullOrEmpty(options.Username) && !string.IsNullOrEmpty(options.Password))
                         {

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace Colder.MessageBus.Abstractions
 {
@@ -11,19 +10,11 @@ namespace Colder.MessageBus.Abstractions
         /// <summary>
         /// 发布事件(广播)
         /// </summary>
-        /// <typeparam name="T">消息类型</typeparam>
+        /// <typeparam name="TMessage">消息类型</typeparam>
         /// <param name="message">消息</param>
+        /// <param name="endpoint">指定消费节点</param>
         /// <returns></returns>
-        Task Publish<T>(T message) where T : IEvent;
-
-        /// <summary>
-        /// 发送命令(单播)
-        /// </summary>
-        /// <typeparam name="T">消息类型</typeparam>
-        /// <param name="message">消息</param>
-        /// <param name="destination">指定消费节点</param>
-        /// <returns></returns>
-        Task Send<T>(T message, Uri destination) where T : ICommand;
+        Task Publish<TMessage>(TMessage message, string endpoint = null) where TMessage : class, IMessage;
 
         /// <summary>
         /// 发送请求
@@ -31,9 +22,10 @@ namespace Colder.MessageBus.Abstractions
         /// <typeparam name="TRequest">请求数据类型</typeparam>
         /// <typeparam name="TResponse">返回数据类型</typeparam>
         /// <param name="message">消息</param>
-        /// <param name="destination">指定消费节点</param>
+        /// <param name="endpoint">指定消费节点</param>
         /// <returns></returns>
-        Task<TResponse> Request<TRequest, TResponse>(TRequest message, Uri destination)
-            where TRequest : class, ICommand where TResponse : class;
+        Task<TResponse> Request<TRequest, TResponse>(TRequest message, string endpoint)
+            where TRequest : class, IMessage
+            where TResponse : class;
     }
 }
