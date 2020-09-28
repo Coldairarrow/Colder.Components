@@ -21,7 +21,7 @@ namespace Colder.CommonUtil.Tests
                 {
                     for (int j = 0; j < 1000000; j++)
                     {
-                        guids.Add(GuidHelper.GetId());
+                        guids.Add(GuidHelper.NewGuid());
                     }
                 }));
             }

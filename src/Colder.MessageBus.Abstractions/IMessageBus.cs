@@ -8,7 +8,7 @@ namespace Colder.MessageBus.Abstractions
     public interface IMessageBus
     {
         /// <summary>
-        /// 发布事件(广播)
+        /// 发布事件
         /// </summary>
         /// <typeparam name="TMessage">消息类型</typeparam>
         /// <param name="message">消息</param>

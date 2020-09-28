@@ -16,7 +16,7 @@ namespace Colder.CommonUtil
         /// </summary>
         /// <param name="guidType">序列类型</param>
         /// <returns></returns>
-        public static Guid GetId(SequentialGuidType guidType = SequentialGuidType.AtEnd)
+        public static Guid NewGuid(SequentialGuidType guidType = SequentialGuidType.AtEnd)
         {
             byte[] randomBytes = new byte[10];
             _randomGenerator.GetBytes(randomBytes);

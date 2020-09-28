@@ -1,4 +1,5 @@
 ﻿using Colder.MessageBus.Abstractions;
+using GreenPipes;
 using MassTransit;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -18,6 +19,8 @@ namespace Colder.MessageBus.MassTransit
 
         public async Task Handle<T>(ConsumeContext<T> context) where T : class, IMessage
         {
+            //var body = context.GetPayload<string>();
+
             MassTransitMessageContext<T> msgContext = new MassTransitMessageContext<T>
             {
                 Message = context.Message,
