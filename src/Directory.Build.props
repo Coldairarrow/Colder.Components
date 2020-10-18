@@ -1,6 +1,7 @@
 <Project>
 
   <PropertyGroup>
+	<LangVersion>8.0</LangVersion>
     <!--默认统一输出XML注释文档，不需要输出的项目可以单独关闭-->
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
 	<Version>$(Version)</Version>

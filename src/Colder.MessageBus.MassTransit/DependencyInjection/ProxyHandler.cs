@@ -1,5 +1,4 @@
 ﻿using Colder.MessageBus.Abstractions;
-using GreenPipes;
 using MassTransit;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -19,7 +18,7 @@ namespace Colder.MessageBus.MassTransit
 
         public async Task Handle<T>(ConsumeContext<T> context) where T : class, IMessage
         {
-            //var body = context.GetPayload<string>();
+            using var scop = _serviceProvider.CreateScope();
 
             MassTransitMessageContext<T> msgContext = new MassTransitMessageContext<T>
             {
@@ -35,7 +34,7 @@ namespace Colder.MessageBus.MassTransit
             };
 
             var handlerType = Cache.MessageHandlers[typeof(T)];
-            var handler = ActivatorUtilities.CreateInstance(_serviceProvider, handlerType) as IMessageHandler<T>;
+            var handler = ActivatorUtilities.CreateInstance(scop.ServiceProvider, handlerType) as IMessageHandler<T>;
             await handler.Handle(msgContext);
         }
     }

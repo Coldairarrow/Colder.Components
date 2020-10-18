@@ -1,5 +1,5 @@
 ::定义版本
-set Version=1.0.2
+set Version=1.0.3
 
 ::删除所有bin与obj下的文件
 @echo off
