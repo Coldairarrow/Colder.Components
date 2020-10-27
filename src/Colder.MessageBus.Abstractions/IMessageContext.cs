@@ -49,5 +49,10 @@ namespace Colder.MessageBus.Abstractions
         /// or by features within MassTransit, such as when a message is moved to an error queue.
         /// </summary>
         Dictionary<string, object> Headers { get; }
+
+        /// <summary>
+        /// 消息体
+        /// </summary>
+        public string MessageBody { get; set; }
     }
 }

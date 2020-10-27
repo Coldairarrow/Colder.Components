@@ -13,6 +13,11 @@
         /// <summary>
         /// RabbitMQ
         /// </summary>
-        RabbitMQ = 2
+        RabbitMQ = 2,
+
+        /// <summary>
+        /// MQTT
+        /// </summary>
+        MQTT = 3
     }
 }
