@@ -1,4 +1,5 @@
 ﻿using Colder.MessageBus.Abstractions;
+using Colder.MessageBus.MQTT.Primitives;
 using MQTTnet;
 using MQTTnet.Client;
 using Newtonsoft.Json;
@@ -12,7 +13,7 @@ namespace Colder.MessageBus.MassTransit
     {
         private readonly MessageBusOptions _options;
         private readonly IMqttClient _mqttClient;
-        public MqttMessageBus( MessageBusOptions options, IMqttClient mqttClient)
+        public MqttMessageBus(MessageBusOptions options, IMqttClient mqttClient)
         {
             _options = options;
 
@@ -22,32 +23,34 @@ namespace Colder.MessageBus.MassTransit
         {
             return new CancellationTokenSource(TimeSpan.FromSeconds(_options.SendMessageTimeout)).Token;
         }
-        //private Uri BuildUri(string endpoint)
-        //{
-        //    //return new Uri($"{_options.Host}{endpoint}");
-        //}
 
         async Task IMessageBus.Publish<TMessage>(TMessage message, string endpoint)
         {
+            Topic topic = new Topic
+            {
+                MessageId = Guid.NewGuid(),
+                MessageBodyType = typeof(TMessage).FullName,
+                MessageType = string.IsNullOrEmpty(endpoint) ? MessageTypes.Event : MessageTypes.Command,
+                SourceClientId = _mqttClient.Options.ClientId,
+                SourceEndpoint = _options.Endpoint,
+                TargetClientId = "+",
+                TargetEndpoint = string.IsNullOrEmpty(endpoint) ? "+" : endpoint
+            };
+
             var payload = new MqttApplicationMessageBuilder()
                 .WithPayload(JsonConvert.SerializeObject(message))
                 .WithAtLeastOnceQoS()
-                .WithTopic("");
+                .WithTopic(topic.ToString());
 
-            await _mqttClient.PublishAsync(new MQTTnet.MqttApplicationMessage)
-            //if (string.IsNullOrEmpty(endpoint))
-            //{
-            //    await _busControl.Publish(message, GetCancellationToken());
-            //}
-            //else
-            //{
-            //    var channel = await _busControl.GetSendEndpoint(BuildUri(endpoint));
-
-            //    await channel.Send(message, GetCancellationToken());
-            //}
+            await _mqttClient.PublishAsync(payload.Build());
         }
+
         async Task<TResponse> IMessageBus.Request<TRequest, TResponse>(TRequest message, string endpoint)
         {
+            await Task.CompletedTask;
+
+            throw new NotImplementedException();
+
             //var reqTimeout = RequestTimeout.After(0, 0, 0, _options.SendMessageTimeout);
             //var response = await _busControl.Request<TRequest, TResponse>(BuildUri(endpoint), message, default, reqTimeout);
 

@@ -29,5 +29,10 @@
         /// 发送消息超时时间,单位(秒)
         /// </summary>
         public int SendMessageTimeout { get; set; } = 30;
+
+        /// <summary>
+        /// 终结点
+        /// </summary>
+        public string Endpoint { get; set; }
     }
 }
