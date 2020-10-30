@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Colder.MessageBus.MassTransit
+namespace Colder.MessageBus
 {
     internal static class Cache
     {
@@ -16,8 +16,6 @@ namespace Colder.MessageBus.MassTransit
                  && x.GetInterfaces().Any(y =>
                      y.IsGenericType && y.GetGenericTypeDefinition() == typeof(IMessageHandler<>))
                 ).ToList();
-
-            var type = AssemblyHelper.AllTypes.Where(x => x.Name == "Handler").ToList();
 
             MessageTypes = HanlderTypes
                 .SelectMany(x => x.GetInterfaces())

@@ -12,11 +12,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Colder.CommonUtil\Colder.CommonUtil.csproj" />
     <ProjectReference Include="..\Colder.MessageBus.Abstractions\Colder.MessageBus.Abstractions.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Utils\" />
+    <Compile Include="..\Colder.MessageBus.MassTransit\**\Cache.cs"></Compile>
   </ItemGroup>
 
 </Project>
