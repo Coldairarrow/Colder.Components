@@ -13,9 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo.Common", "demos\Demo.C
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo.Logging", "demos\Demo.Logging\Demo.Logging.csproj", "{4D9F6CC2-C44E-4DE4-9826-7A245CBCD8C9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo.MessageBus.Consumer", "demos\Demo.MessageBus.Consumer\Demo.MessageBus.Consumer.csproj", "{BBF8F209-0526-4A55-9D2A-7D54FABF4AE2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RabbitMQBus.Consumer", "demos\Demo.MessageBus.Consumer\RabbitMQBus.Consumer.csproj", "{BBF8F209-0526-4A55-9D2A-7D54FABF4AE2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo.MessageBus.Producer", "demos\Demo.MessageBus.Producer\Demo.MessageBus.Producer.csproj", "{7DCBE8EF-30D6-47AA-B518-F759F3999B47}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RabbitMQBus.Producer", "demos\Demo.MessageBus.Producer\RabbitMQBus.Producer.csproj", "{7DCBE8EF-30D6-47AA-B518-F759F3999B47}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Colder.MessageBus.Abstractions", "src\Colder.MessageBus.Abstractions\Colder.MessageBus.Abstractions.csproj", "{D992648F-AF77-46AA-A1D3-24DF7D7F2EC3}"
 EndProject
@@ -27,7 +27,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{39C8131E
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Colder.CommonUtil.Tests", "tests\Colder.CommonUtil.Tests\Colder.CommonUtil.Tests.csproj", "{EF129F99-BE42-4251-A95D-576D3A43B9A9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Colder.MessageBus.MQTT", "src\Colder.MessageBus.MQTT\Colder.MessageBus.MQTT.csproj", "{D26E3E08-5F9D-408B-A7AA-A5D3BB6FBFDB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Colder.MessageBus.MQTT", "src\Colder.MessageBus.MQTT\Colder.MessageBus.MQTT.csproj", "{D26E3E08-5F9D-408B-A7AA-A5D3BB6FBFDB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MQTTBus.Producer", "demos\MQTTBus.Producer\MQTTBus.Producer.csproj", "{1B7BDD56-D8F0-4C61-9F49-A4F6EE2A0294}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MQTTBus.Consumer", "demos\MQTTBus.Consumer\MQTTBus.Consumer.csproj", "{8085200B-13E1-4C5E-A7B9-85485165013A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -79,6 +83,14 @@ Global
 		{D26E3E08-5F9D-408B-A7AA-A5D3BB6FBFDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D26E3E08-5F9D-408B-A7AA-A5D3BB6FBFDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D26E3E08-5F9D-408B-A7AA-A5D3BB6FBFDB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1B7BDD56-D8F0-4C61-9F49-A4F6EE2A0294}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B7BDD56-D8F0-4C61-9F49-A4F6EE2A0294}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B7BDD56-D8F0-4C61-9F49-A4F6EE2A0294}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B7BDD56-D8F0-4C61-9F49-A4F6EE2A0294}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8085200B-13E1-4C5E-A7B9-85485165013A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8085200B-13E1-4C5E-A7B9-85485165013A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8085200B-13E1-4C5E-A7B9-85485165013A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8085200B-13E1-4C5E-A7B9-85485165013A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -89,6 +101,8 @@ Global
 		{BBF8F209-0526-4A55-9D2A-7D54FABF4AE2} = {ACCF873E-B185-4FEA-8502-D5F708E42168}
 		{7DCBE8EF-30D6-47AA-B518-F759F3999B47} = {ACCF873E-B185-4FEA-8502-D5F708E42168}
 		{EF129F99-BE42-4251-A95D-576D3A43B9A9} = {39C8131E-709C-4240-BF1C-48D88B53E4DE}
+		{1B7BDD56-D8F0-4C61-9F49-A4F6EE2A0294} = {ACCF873E-B185-4FEA-8502-D5F708E42168}
+		{8085200B-13E1-4C5E-A7B9-85485165013A} = {ACCF873E-B185-4FEA-8502-D5F708E42168}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {817CE001-2A40-4054-B349-ECDB5986C92E}

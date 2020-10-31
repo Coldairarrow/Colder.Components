@@ -20,7 +20,7 @@ namespace Colder.MessageBus.MassTransit
         {
             using var scop = _serviceProvider.CreateScope();
 
-            MassTransitMessageContext<T> msgContext = new MassTransitMessageContext<T>
+            MessageContext<T> msgContext = new MessageContext<T>
             {
                 Message = context.Message,
                 DestinationAddress = context.DestinationAddress,

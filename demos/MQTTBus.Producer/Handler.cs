@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System.Threading.Tasks;
 
-namespace Demo.MessageBus.Producer
+namespace MQTTBus.Producer
 {
     public class Handler : IMessageHandler<TestEvent>
     {

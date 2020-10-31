@@ -8,11 +8,11 @@ namespace Colder.MessageBus.MQTT.Primitives
         //Topic格式
         //ClientId={Endpoint}.{MachineName}
         //Colder.MessageBus.MQTT/{SourceClientId}/{TargetClientId}/{SourceEndpoint}/{TargetEndpoint}/{MessageBodyType}/{MessageType}/{MessageId}
-        private static readonly string _rootTopic = "Colder.MessageBus.MQTT";
+        public static readonly string RootTopic = "Colder.MessageBus.MQTT";
 
         public static Topic Parse(string topic)
         {
-            string pattern = $"^{_rootTopic}/(.*?)/(.*?)/(.*?)/(.*?)/(.*?)/(.*?)/(.*?)$";
+            string pattern = $"^{RootTopic}/(.*?)/(.*?)/(.*?)/(.*?)/(.*?)/(.*?)/(.*?)$";
             var match = Regex.Match(topic, pattern);
 
             Enum.TryParse<MessageTypes>(match.Groups[6].ToString(), out MessageTypes messageType);
@@ -37,7 +37,7 @@ namespace Colder.MessageBus.MQTT.Primitives
 
         public override string ToString()
         {
-            return $"{_rootTopic}/{SourceClientId}/{TargetClientId}/{SourceEndpoint}/{TargetEndpoint}/{MessageBodyType}/{MessageType}/{MessageId}";
+            return $"{RootTopic}/{SourceClientId}/{TargetClientId}/{SourceEndpoint}/{TargetEndpoint}/{MessageBodyType}/{MessageType}/{MessageId}";
         }
     }
 }

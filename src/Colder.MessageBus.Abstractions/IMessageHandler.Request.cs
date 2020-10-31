@@ -14,6 +14,6 @@ namespace Colder.MessageBus.Abstractions
         /// </summary>
         /// <param name="context">消息上下文</param>
         /// <returns></returns>
-        Task<TResponse> Handle(IMessageContext<TRequest> context);
+        Task<TResponse> Handle(MessageContext<TRequest> context);
     }
 }

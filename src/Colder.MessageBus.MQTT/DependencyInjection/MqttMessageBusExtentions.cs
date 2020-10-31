@@ -1,10 +1,15 @@
-﻿using Colder.MessageBus.Abstractions;
+﻿using Colder.CommonUtil;
+using Colder.MessageBus.Abstractions;
 using Colder.MessageBus.MQTT.Primitives;
 using Microsoft.Extensions.DependencyInjection;
 using MQTTnet;
 using MQTTnet.Client;
 using MQTTnet.Client.Options;
+using Newtonsoft.Json;
 using System;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Colder.MessageBus.MQTT.DependencyInjection
 {
@@ -13,11 +18,19 @@ namespace Colder.MessageBus.MQTT.DependencyInjection
     /// </summary>
     public static class MqttMessageBusExtentions
     {
+        /// <summary>
+        /// 注入MQTT消息总线
+        /// </summary>
+        /// <param name="services">服务容器</param>
+        /// <param name="messageBusOptions">配置参数</param>
+        /// <returns></returns>
         public static IServiceCollection AddMqttMessageBus(this IServiceCollection services, MessageBusOptions messageBusOptions)
         {
+            var host = messageBusOptions.Host.Split(':');
+
             var options = new MqttClientOptionsBuilder()
                 .WithClientId($"{messageBusOptions.Endpoint}.{Environment.MachineName}")
-                .WithTcpServer(messageBusOptions.Host)
+                .WithTcpServer(host[0], int.Parse(host[1]))
                 .Build();
 
             services.AddSingleton(options);
@@ -26,34 +39,66 @@ namespace Colder.MessageBus.MQTT.DependencyInjection
             {
                 var factory = new MqttFactory();
                 var mqttClient = factory.CreateMqttClient();
-                
-                mqttClient.UseApplicationMessageReceivedHandler(e =>
+
+                mqttClient.UseApplicationMessageReceivedHandler(async e =>
                 {
                     Topic topic = Topic.Parse(e.ApplicationMessage.Topic);
+                    var theMessageType = Cache.MessageTypes.Where(x => x.FullName == topic.MessageBodyType).FirstOrDefault();
+                    if (theMessageType != null)
+                    {
+                        using var scop = serviceProvider.CreateScope();
 
-                    //Console.WriteLine("### RECEIVED APPLICATION MESSAGE ###");
-                    //Console.WriteLine($"+ Topic = {e.ApplicationMessage.Topic}");
-                    //Console.WriteLine($"+ Payload = {Encoding.UTF8.GetString(e.ApplicationMessage.Payload)}");
-                    //Console.WriteLine($"+ QoS = {e.ApplicationMessage.QualityOfServiceLevel}");
-                    //Console.WriteLine($"+ Retain = {e.ApplicationMessage.Retain}");
-                    //Console.WriteLine();
+                        object messageContext = Activator.CreateInstance(typeof(MessageContext<>).MakeGenericType(theMessageType));
+                        string payload = Encoding.UTF8.GetString(e.ApplicationMessage.Payload);
+                        object message = JsonConvert.DeserializeObject(payload, theMessageType);
+
+                        messageContext.SetPropertyValue("MessageId", topic.MessageId);
+                        messageContext.SetPropertyValue("Message", message);
+                        messageContext.SetPropertyValue("MessageBody", payload);
+
+                        var handlerType = Cache.MessageHandlers[theMessageType];
+                        var handler = ActivatorUtilities.CreateInstance(scop.ServiceProvider, handlerType);
+                        var method = handler.GetType().GetMethods().Where(x =>
+                             x.Name == "Handle"
+                             && x.GetParameters().Length == 1
+                             && x.GetParameters()[0].ParameterType == messageContext.GetType()
+                            ).FirstOrDefault();
+
+                        if (method != null)
+                        {
+                            var task = method.Invoke(handler, new object[] { messageContext }) as Task;
+                            await task;
+                        }
+                    }
                 });
 
                 mqttClient.UseConnectedHandler(async e =>
                 {
-                    //Console.WriteLine("### CONNECTED WITH SERVER ###");
+                    //Topic格式
+                    //ClientId={Endpoint}.{MachineName}
+                    //Colder.MessageBus.MQTT/{SourceClientId}/{TargetClientId}/{SourceEndpoint}/{TargetEndpoint}/{MessageBodyType}/{MessageType}/{MessageId}
 
-                    //// Subscribe to a topic
-                    //await mqttClient.SubscribeAsync(new MqttTopicFilterBuilder().WithTopic("my/topic").Build());
-
-                    //Console.WriteLine("### SUBSCRIBED ###");
+                    foreach (var aMessageType in Cache.MessageTypes)
+                    {
+                        //事件广播
+                        await mqttClient.SubscribeAsync(
+                            $"{Topic.RootTopic}/+/+/+/+/{aMessageType.FullName}/Event/+");
+                        //命令单播
+                        await mqttClient.SubscribeAsync(
+                            $"{Topic.RootTopic}/+/+/+/{messageBusOptions.Endpoint}/{aMessageType.FullName}/Command/+");
+                        //请求返回
+                        await mqttClient.SubscribeAsync(
+                            $"{Topic.RootTopic}/+/{options.ClientId}/+/+/{aMessageType.FullName}/Response/+");
+                    }
                 });
 
                 return mqttClient;
             });
 
+            services.AddSingleton<IMessageBus>(serviceProvider =>
+                new MqttMessageBus(messageBusOptions, serviceProvider.GetService<IMqttClient>()));
+
             services.AddHostedService<Bootstrapper>();
-            //await mqttClient.ConnectAsync(options, CancellationToken.None); // Since 3.0.5 with CancellationToken
             return services;
         }
     }

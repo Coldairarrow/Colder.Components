@@ -7,7 +7,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Colder.MessageBus.MassTransit
+namespace Colder.MessageBus.MQTT
 {
     internal class MqttMessageBus : IMessageBus
     {
@@ -33,8 +33,8 @@ namespace Colder.MessageBus.MassTransit
                 MessageType = string.IsNullOrEmpty(endpoint) ? MessageTypes.Event : MessageTypes.Command,
                 SourceClientId = _mqttClient.Options.ClientId,
                 SourceEndpoint = _options.Endpoint,
-                TargetClientId = "+",
-                TargetEndpoint = string.IsNullOrEmpty(endpoint) ? "+" : endpoint
+                TargetClientId = "*",
+                TargetEndpoint = string.IsNullOrEmpty(endpoint) ? "*" : endpoint,
             };
 
             var payload = new MqttApplicationMessageBuilder()
