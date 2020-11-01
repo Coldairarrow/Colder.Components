@@ -19,7 +19,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RabbitMQBus.Producer", "dem
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Colder.MessageBus.Abstractions", "src\Colder.MessageBus.Abstractions\Colder.MessageBus.Abstractions.csproj", "{D992648F-AF77-46AA-A1D3-24DF7D7F2EC3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Colder.MessageBus.MassTransit", "src\Colder.MessageBus.MassTransit\Colder.MessageBus.MassTransit.csproj", "{72A99E3C-9134-4103-8D3E-F28FB63B7B0E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Colder.MessageBus.RabbitMQ", "src\Colder.MessageBus.MassTransit\Colder.MessageBus.RabbitMQ.csproj", "{72A99E3C-9134-4103-8D3E-F28FB63B7B0E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Colder.CommonUtil", "src\Colder.CommonUtil\Colder.CommonUtil.csproj", "{55581DAA-76D8-4279-A7FB-61F98A2EA66B}"
 EndProject
@@ -29,9 +29,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Colder.CommonUtil.Tests", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Colder.MessageBus.MQTT", "src\Colder.MessageBus.MQTT\Colder.MessageBus.MQTT.csproj", "{D26E3E08-5F9D-408B-A7AA-A5D3BB6FBFDB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MQTTBus.Producer", "demos\MQTTBus.Producer\MQTTBus.Producer.csproj", "{1B7BDD56-D8F0-4C61-9F49-A4F6EE2A0294}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MQTTBus.Producer", "demos\MQTTBus.Producer\MQTTBus.Producer.csproj", "{1B7BDD56-D8F0-4C61-9F49-A4F6EE2A0294}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MQTTBus.Consumer", "demos\MQTTBus.Consumer\MQTTBus.Consumer.csproj", "{8085200B-13E1-4C5E-A7B9-85485165013A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MQTTBus.Consumer", "demos\MQTTBus.Consumer\MQTTBus.Consumer.csproj", "{8085200B-13E1-4C5E-A7B9-85485165013A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Colder.MessageBus.Hosting", "src\Colder.MessageBus.Hosting\Colder.MessageBus.Hosting.csproj", "{D0809548-5A85-4D29-9E54-0FA54621E008}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Colder.MessageBus.InMemory", "src\Colder.MessageBus.InMemory\Colder.MessageBus.InMemory.csproj", "{21A3F8AB-3588-45BC-893B-DB56AC20A33B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -91,6 +95,14 @@ Global
 		{8085200B-13E1-4C5E-A7B9-85485165013A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8085200B-13E1-4C5E-A7B9-85485165013A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8085200B-13E1-4C5E-A7B9-85485165013A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D0809548-5A85-4D29-9E54-0FA54621E008}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0809548-5A85-4D29-9E54-0FA54621E008}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0809548-5A85-4D29-9E54-0FA54621E008}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0809548-5A85-4D29-9E54-0FA54621E008}.Release|Any CPU.Build.0 = Release|Any CPU
+		{21A3F8AB-3588-45BC-893B-DB56AC20A33B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{21A3F8AB-3588-45BC-893B-DB56AC20A33B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{21A3F8AB-3588-45BC-893B-DB56AC20A33B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{21A3F8AB-3588-45BC-893B-DB56AC20A33B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

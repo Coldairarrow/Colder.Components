@@ -1,4 +1,6 @@
-﻿namespace Colder.MessageBus.Abstractions
+﻿using System.Reflection;
+
+namespace Colder.MessageBus.Abstractions
 {
     /// <summary>
     /// 消息总线配置
@@ -31,8 +33,8 @@
         public int SendMessageTimeout { get; set; } = 30;
 
         /// <summary>
-        /// 终结点
+        /// 终结点，默认为入口程序集名
         /// </summary>
-        public string Endpoint { get; set; }
+        public string Endpoint { get; set; } = Assembly.GetEntryAssembly().GetName().FullName;
     }
 }
