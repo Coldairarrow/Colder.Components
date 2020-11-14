@@ -1,6 +1,6 @@
 ﻿using Colder.Logging.Serilog;
 using Colder.MessageBus.Abstractions;
-using Colder.MessageBus.MassTransit;
+using Colder.MessageBus.Hosting;
 using Demo.Common;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -21,8 +21,9 @@ namespace Demo.MessageBus.Producer
                        Host = "amqp://localhost:5672/",
                        Transport = TransportType.RabbitMQ,
                        Username = "guest",
-                       Password = "guest"
-                   }, MessageBusEndpoints.Producer);
+                       Password = "guest",
+                       Endpoint = MessageBusEndpoints.Producer
+                   });
 
                    services.AddHostedService<SendTest>();
                })

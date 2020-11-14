@@ -52,5 +52,10 @@ namespace Colder.MessageBus.Abstractions
         /// 消息体
         /// </summary>
         public string MessageBody { get; set; }
+
+        /// <summary>
+        /// 返回消息（仅用于请求）
+        /// </summary>
+        public object Response { get; set; }
     }
 }

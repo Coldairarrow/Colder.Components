@@ -1,6 +1,6 @@
 ﻿using Colder.Logging.Serilog;
 using Colder.MessageBus.Abstractions;
-using Colder.MessageBus.MassTransit;
+using Colder.MessageBus.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.VisualStudio.TestTools.UnitTesting;

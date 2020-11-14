@@ -40,6 +40,5 @@ namespace Colder.MessageBus.Hosting
         public static readonly List<Type> HanlderTypes = new List<Type>();
         public static readonly List<Type> MessageTypes = new List<Type>();
         public static readonly Dictionary<Type, Type> MessageHandlers = new Dictionary<Type, Type>();
-        public static readonly List<Type> BusTypes = new List<Type>();
     }
 }

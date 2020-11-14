@@ -1,6 +1,6 @@
 ﻿using Colder.Logging.Serilog;
 using Colder.MessageBus.Abstractions;
-using Colder.MessageBus.MQTT.DependencyInjection;
+using Colder.MessageBus.Hosting;
 using Demo.Common;
 using Microsoft.Extensions.Hosting;
 using System.Threading.Tasks;
@@ -15,7 +15,7 @@ namespace MQTTBus.Consumer
                .ConfigureLoggingDefaults()
                .ConfigureServices(services =>
                {
-                   services.AddMqttMessageBus(new MessageBusOptions
+                   services.AddMessageBus(new MessageBusOptions
                    {
                        Host = "localhost:1883",
                        Transport = TransportType.MQTT,

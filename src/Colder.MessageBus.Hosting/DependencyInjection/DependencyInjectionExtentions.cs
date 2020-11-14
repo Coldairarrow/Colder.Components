@@ -86,15 +86,15 @@ namespace Colder.MessageBus.Hosting
         public static IServiceCollection AddMessageBus<TMessageBus>(this IServiceCollection services, MessageBusOptions options)
             where TMessageBus : class, IMessageBus
         {
-            Cache.BusTypes.Add(typeof(TMessageBus));
-            services.AddHostedService<Bootstraper>();
+            services.AddHostedService<MessageBusBootstraper>();
+            MessageBusBootstraper.Bootstrap += serviceProvider => serviceProvider.GetService<TMessageBus>();
 
-            return services.AddSingleton(_ =>
+            return services.AddSingleton(serviceProvider =>
             {
-                var busInstance = GetBusInstance(_, options, endpoint);
+                var busInstance = MessageBusFactory.GetBusInstance(serviceProvider, options);
 
                 if (typeof(TMessageBus) == typeof(IMessageBus))
-                    return (IMessageBus)busInstance;
+                    return busInstance;
                 else
                     return Generator.CreateInterfaceProxyWithoutTarget<TMessageBus>(new ActLikeInterceptor(busInstance));
             });
