@@ -19,10 +19,6 @@ namespace Colder.MessageBus.MQTT
 
             _mqttClient = mqttClient;
         }
-        private CancellationToken GetCancellationToken()
-        {
-            return new CancellationTokenSource(TimeSpan.FromSeconds(_options.SendMessageTimeout)).Token;
-        }
 
         async Task IMessageBus.Publish<TMessage>(TMessage message, string endpoint)
         {
@@ -47,14 +43,40 @@ namespace Colder.MessageBus.MQTT
 
         async Task<TResponse> IMessageBus.Request<TRequest, TResponse>(TRequest message, string endpoint)
         {
-            await Task.CompletedTask;
+            Topic topic = new Topic
+            {
+                MessageId = Guid.NewGuid(),
+                MessageBodyType = typeof(TRequest).FullName,
+                MessageType = MessageTypes.Command,
+                SourceClientId = _mqttClient.Options.ClientId,
+                SourceEndpoint = _options.Endpoint,
+                TargetClientId = "*",
+                TargetEndpoint = endpoint
+            };
 
-            throw new NotImplementedException();
+            var payload = new MqttApplicationMessageBuilder()
+                .WithPayload(JsonConvert.SerializeObject(message))
+                .WithAtMostOnceQoS()
+                .WithTopic(topic.ToString());
 
-            //var reqTimeout = RequestTimeout.After(0, 0, 0, _options.SendMessageTimeout);
-            //var response = await _busControl.Request<TRequest, TResponse>(BuildUri(endpoint), message, default, reqTimeout);
+            await _mqttClient.PublishAsync(payload.Build());
 
-            //return response.Message;
+            Semaphore sp = new Semaphore(0, 1);
+            RequestWaiter.WaitingDic[topic.MessageId] = (sp, null);
+
+            bool success = sp.WaitOne(TimeSpan.FromSeconds(_options.SendMessageTimeout));
+            RequestWaiter.WaitingDic.TryRemove(topic.MessageId, out _);
+
+            if (success)
+            {
+                var responsejson = RequestWaiter.WaitingDic[topic.MessageId].responseJson;
+
+                return JsonConvert.DeserializeObject<TResponse>(responsejson);
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 }

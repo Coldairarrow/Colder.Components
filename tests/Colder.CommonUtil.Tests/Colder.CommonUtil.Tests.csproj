@@ -24,10 +24,4 @@
     <ProjectReference Include="..\..\src\Colder.MessageBus.MassTransit\Colder.MessageBus.RabbitMQ.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Update="appsettings.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
 </Project>

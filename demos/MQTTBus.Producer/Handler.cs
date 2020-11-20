@@ -6,17 +6,17 @@ using System.Threading.Tasks;
 
 namespace MQTTBus.Producer
 {
-    public class Handler : IMessageHandler<TestEvent>
+    public class Handler : IMessageHandler<RequestMessage>
     {
         private readonly ILogger<Handler> _logger;
         public Handler(ILogger<Handler> logger)
         {
             _logger = logger;
         }
-        public Task Handle(MessageContext<TestEvent> context)
+        public Task Handle(MessageContext<RequestMessage> context)
         {
             _logger.LogInformation("收到 {EventType} 事件,MessageBody:{MessageBody}",
-                typeof(TestEvent).Name, JsonConvert.SerializeObject(context.Message));
+                typeof(RequestMessage).Name, JsonConvert.SerializeObject(context.Message));
 
             return Task.CompletedTask;
         }

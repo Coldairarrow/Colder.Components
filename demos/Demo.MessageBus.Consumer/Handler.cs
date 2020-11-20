@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Demo.MessageBus.Consumer
 {
-    class Handler : IMessageHandler<TestSubEvent>
+    class Handler : IMessageHandler<RequestMessage>
     {
         private readonly ILogger<Handler> _logger;
         private readonly IMessageBus _messageBus;
@@ -15,14 +15,14 @@ namespace Demo.MessageBus.Consumer
             _logger = logger;
             _messageBus = messageBus;
         }
-        public async Task Handle(MessageContext<TestSubEvent> context)
+        public async Task Handle(MessageContext<RequestMessage> context)
         {
             _logger.LogInformation("收到 {EventType} 事件,MessageBody:{MessageBody}",
-                typeof(TestSubEvent).Name, JsonConvert.SerializeObject(context.Message));
+                typeof(RequestMessage).Name, JsonConvert.SerializeObject(context.Message));
 
-            //往回发送
-            //var uri = new Uri($"rabbitmq://localhost/{MessageBusEndpoints.Producer}");
-            await _messageBus.Publish(new TestSubEvent { Text = "回复" }, MessageBusEndpoints.Producer);
+            context.Response = new ResponseMessage { Text = "回复" };
+
+            await Task.CompletedTask;
         }
     }
 }

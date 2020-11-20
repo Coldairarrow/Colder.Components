@@ -2,7 +2,7 @@
 
 namespace Demo.Common
 {
-    public class TestEvent : IMessage
+    public class RequestMessage : IMessage
     {
         public string Text { get; set; }
     }

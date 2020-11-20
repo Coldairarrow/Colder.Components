@@ -24,8 +24,10 @@ namespace Demo.MessageBus.Producer
             {
                 try
                 {
-                    await _messageBus.Publish(new TestSubEvent { Text = $"{DateTimeOffset.Now}Hi" });
-                    _logger.LogInformation($"已发送 {nameof(TestSubEvent)} 事件");
+                    var res = await _messageBus.Request<RequestMessage, ResponseMessage>(
+                        new RequestMessage { Text = $"{DateTimeOffset.Now}Hi" }, MessageBusEndpoints.Consumer);
+                    //_logger.LogInformation($"已发送 {nameof(RequestMessage)} 事件");
+                    _logger.LogInformation("收到回复：{Response}", res.Text);
                 }
                 catch (Exception ex)
                 {

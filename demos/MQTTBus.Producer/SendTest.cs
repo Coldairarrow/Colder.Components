@@ -24,8 +24,8 @@ namespace MQTTBus.Producer
             {
                 try
                 {
-                    await _messageBus.Publish(new TestEvent { Text = $"{DateTimeOffset.Now}Hi" });
-                    _logger.LogInformation($"已发送 {nameof(TestEvent)} 事件");
+                    await _messageBus.Publish(new RequestMessage { Text = $"{DateTimeOffset.Now}Hi" });
+                    _logger.LogInformation($"已发送 {nameof(RequestMessage)} 事件");
                 }
                 catch (Exception ex)
                 {
