@@ -2,6 +2,7 @@
 using Colder.MessageBus.Abstractions;
 using Colder.MessageBus.Hosting;
 using Colder.MessageBus.MQTT.Primitives;
+using Microsoft.Extensions.Logging;
 using MQTTnet;
 using MQTTnet.Client;
 using MQTTnet.Client.Options;
@@ -42,13 +43,17 @@ namespace Colder.MessageBus.MQTT
                     //事件广播
                     await mqttClient.SubscribeAsync(
                         $"{Topic.RootTopic}/+/+/+/+/{aMessageType.FullName}/{MessageTypes.Event}/+");
+
                     //命令单播
                     await mqttClient.SubscribeAsync(
                         $"{Topic.RootTopic}/+/+/+/{Options.Endpoint}/{aMessageType.FullName}/{MessageTypes.Command}/+");
-                    //请求返回
-                    await mqttClient.SubscribeAsync(
-                        $"{Topic.RootTopic}/+/{options.ClientId}/+/+/{aMessageType.FullName}/{MessageTypes.Response}/+");
+
+                    Logger.LogInformation("MessageBus:Subscribe {MessageType}", aMessageType);
                 }
+
+                //请求返回
+                await mqttClient.SubscribeAsync(
+                    $"{Topic.RootTopic}/+/{options.ClientId}/+/+/+/{MessageTypes.Response}/+");
             });
 
             AsyncHelper.RunSync(() => mqttClient.ConnectAsync(options));

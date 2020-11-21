@@ -61,22 +61,18 @@ namespace Colder.MessageBus.MQTT
 
             await _mqttClient.PublishAsync(payload.Build());
 
-            Semaphore sp = new Semaphore(0, 1);
-            RequestWaiter.WaitingDic[topic.MessageId] = (sp, null);
+            Waiter theWaiter = new Waiter { Sp = new Semaphore(0, 1) };
+            RequestWaiter.WaitingDic[topic.MessageId] = theWaiter;
 
-            bool success = sp.WaitOne(TimeSpan.FromSeconds(_options.SendMessageTimeout));
+            bool success = theWaiter.Sp.WaitOne(TimeSpan.FromSeconds(_options.SendMessageTimeout));
             RequestWaiter.WaitingDic.TryRemove(topic.MessageId, out _);
 
-            if (success)
+            if (!success)
             {
-                var responsejson = RequestWaiter.WaitingDic[topic.MessageId].responseJson;
+                throw new TimeoutException("请求超时");
+            }
 
-                return JsonConvert.DeserializeObject<TResponse>(responsejson);
-            }
-            else
-            {
-                return null;
-            }
+            return JsonConvert.DeserializeObject<TResponse>(theWaiter.ResponseJson);
         }
     }
 }

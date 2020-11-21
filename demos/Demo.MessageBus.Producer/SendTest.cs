@@ -26,14 +26,14 @@ namespace Demo.MessageBus.Producer
                 {
                     var res = await _messageBus.Request<RequestMessage, ResponseMessage>(
                         new RequestMessage { Text = $"{DateTimeOffset.Now}Hi" }, MessageBusEndpoints.Consumer);
-                    //_logger.LogInformation($"已发送 {nameof(RequestMessage)} 事件");
+                    _logger.LogInformation($"已发送 {nameof(RequestMessage)} 事件");
                     _logger.LogInformation("收到回复：{Response}", res.Text);
                 }
                 catch (Exception ex)
                 {
                     _logger.LogError(ex, "发送异常");
                 }
-            }, null, 0, 1000);
+            }, null, 0, 1);
 
             return Task.CompletedTask;
         }
