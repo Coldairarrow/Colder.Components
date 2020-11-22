@@ -25,7 +25,7 @@ namespace Colder.MessageBus.Abstractions
         /// <param name="endpoint">指定消费节点</param>
         /// <returns></returns>
         Task<TResponse> Request<TRequest, TResponse>(TRequest message, string endpoint)
-            where TRequest : class, IMessage
-            where TResponse : class;
+           where TRequest : class, IMessage
+           where TResponse : class;
     }
 }

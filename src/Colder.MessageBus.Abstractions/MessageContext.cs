@@ -14,6 +14,11 @@ namespace Colder.MessageBus.Abstractions
         public Guid? MessageId { get; set; }
 
         /// <summary>
+        /// 当前容器
+        /// </summary>
+        public IServiceProvider  ServiceProvider { get; set; }
+
+        /// <summary>
         /// 源地址
         /// </summary>
         public Uri SourceAddress { get; set; }

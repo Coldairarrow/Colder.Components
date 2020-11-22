@@ -21,7 +21,6 @@ namespace Demo.MessageBus.Consumer
             _logger.LogInformation("收到 {EventType} 事件,MessageBody:{MessageBody}",
                 typeof(RequestMessage).Name, JsonConvert.SerializeObject(context.Message));
 
-            await Task.Delay(5000);
             context.Response = new ResponseMessage { Text = $"回复{DateTimeOffset.Now}" };
 
             await Task.CompletedTask;

@@ -86,6 +86,11 @@ namespace Colder.MessageBus.Hosting
         public static IServiceCollection AddMessageBus<TMessageBus>(this IServiceCollection services, MessageBusOptions options)
             where TMessageBus : class, IMessageBus
         {
+            if(!typeof(TMessageBus).IsPublic)
+            {
+                throw new Exception($"{typeof(TMessageBus).FullName}必须公开");
+            }
+
             services.AddHostedService<MessageBusBootstraper>();
             MessageBusBootstraper.Bootstrap += serviceProvider => serviceProvider.GetService<TMessageBus>();
 
@@ -94,7 +99,7 @@ namespace Colder.MessageBus.Hosting
                 var busInstance = MessageBusFactory.GetBusInstance(serviceProvider, options);
 
                 if (typeof(TMessageBus) == typeof(IMessageBus))
-                    return busInstance;
+                    return (TMessageBus)busInstance;
                 else
                     return Generator.CreateInterfaceProxyWithoutTarget<TMessageBus>(new ActLikeInterceptor(busInstance));
             });

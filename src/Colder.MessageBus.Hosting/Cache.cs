@@ -1,8 +1,9 @@
 ﻿using Colder.CommonUtil;
 using Colder.MessageBus.Abstractions;
+using Colder.MessageBus.Hosting.Primitives;
 using System;
-using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 namespace Colder.MessageBus.Hosting
 {
@@ -10,35 +11,48 @@ namespace Colder.MessageBus.Hosting
     {
         static Cache()
         {
-            HanlderTypes = AssemblyHelper.AllTypes.Where(x =>
+            Handlers = AssemblyHelper.AllTypes.Where(x =>
                  x.IsClass
                  && !x.IsAbstract
                  && x.GetInterfaces().Any(y =>
                      y.IsGenericType && y.GetGenericTypeDefinition() == typeof(IMessageHandler<>))
-                ).ToList();
+                ).Select(x => new HandlerClass(x))
+                .ToArray();
 
-            MessageTypes = HanlderTypes
-                .SelectMany(x => x.GetInterfaces())
-                .Where(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IMessageHandler<>))
-                .Select(x => x.GetGenericArguments()[0])
-                .Distinct()
+            var handlerCounts = Handlers.SelectMany(x => x.HandlerMethods.Select(y => y.MessageType))
+                .GroupBy(x => x)
+                .Select(g => new { g.Key, Count = g.Count() })
                 .ToList();
-
-            MessageTypes.ForEach(aMessageType =>
+            var repeatHandlers = handlerCounts.Where(x => x.Count > 1).ToList();
+            if (repeatHandlers.Count > 0)
             {
-                var interfaceType = typeof(IMessageHandler<>).MakeGenericType(aMessageType);
-                var handlers = HanlderTypes.Where(x => interfaceType.IsAssignableFrom(x))
-                    .ToArray();
-                if (handlers.Length > 1)
-                {
-                    throw new Exception($"消息{aMessageType.Name}有多个订阅者:{string.Join(",", handlers.Select(x => x.Name))}");
-                }
-                MessageHandlers.Add(aMessageType, handlers[0]);
-            });
+                throw new Exception($"消息{string.Join(",", repeatHandlers.Select(x => x.Key.FullName))}有多个订阅者");
+            }
+
+            MessageTypes = Handlers.SelectMany(x => x.HandlerMethods.Select(y => y.MessageType)).ToArray();
+            AllMessageTypes = Handlers.SelectMany(x => x.HandlerMethods.SelectMany(y => y.AllMessageTypes)).ToArray();
         }
 
-        public static readonly List<Type> HanlderTypes = new List<Type>();
-        public static readonly List<Type> MessageTypes = new List<Type>();
-        public static readonly Dictionary<Type, Type> MessageHandlers = new Dictionary<Type, Type>();
+        public static readonly HandlerClass[] Handlers;
+        public static readonly Type[] MessageTypes;
+        public static readonly Type[] AllMessageTypes;
+
+        public static (Type realMessageType, Type handleMessageType, Type handlerType, MethodInfo handleMethod)
+            GetHandler(string messageType)
+        {
+            var theMethod = Handlers.SelectMany(x => x.HandlerMethods)
+                .Where(y => y.AllMessageTypes.Any(z => z.FullName == messageType))
+                .FirstOrDefault();
+
+            if (theMethod == null)
+            {
+                return default;
+            }
+            else
+            {
+                return (theMethod.AllMessageTypes.Where(x => x.FullName == messageType).FirstOrDefault(),
+                    theMethod.MessageType, theMethod.HandlerClass.HanlderType, theMethod.Method);
+            }
+        }
     }
 }

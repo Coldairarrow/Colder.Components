@@ -38,25 +38,30 @@ namespace Colder.MessageBus.MQTT
                 //ClientId={Endpoint}.{MachineName}
                 //Colder.MessageBus.MQTT/{SourceClientId}/{TargetClientId}/{SourceEndpoint}/{TargetEndpoint}/{MessageBodyType}/{MessageType}/{MessageId}
 
-                foreach (var aMessageType in Cache.MessageTypes)
+                string topic;
+                foreach (var aMessageType in Cache.AllMessageTypes)
                 {
                     //事件广播
-                    await mqttClient.SubscribeAsync(
-                        $"{Topic.RootTopic}/+/+/+/+/{aMessageType.FullName}/{MessageTypes.Event}/+");
+                    topic = $"{Topic.RootTopic}/+/+/+/+/{aMessageType.FullName}/{MessageTypes.Event}/+";
+                    await mqttClient.SubscribeAsync(topic);
+                    Logger.LogInformation("MessageBus:Subscribe To Topic {Topic}", topic);
 
                     //命令单播
-                    await mqttClient.SubscribeAsync(
-                        $"{Topic.RootTopic}/+/+/+/{Options.Endpoint}/{aMessageType.FullName}/{MessageTypes.Command}/+");
+                    topic = $"{Topic.RootTopic}/+/+/+/{Options.Endpoint}/{aMessageType.FullName}/{MessageTypes.Command}/+";
+                    await mqttClient.SubscribeAsync(topic);
+                    Logger.LogInformation("MessageBus:Subscribe To Topic {Topic}", topic);
 
                     Logger.LogInformation("MessageBus:Subscribe {MessageType}", aMessageType);
                 }
 
                 //请求返回
-                await mqttClient.SubscribeAsync(
-                    $"{Topic.RootTopic}/+/{options.ClientId}/+/+/+/{MessageTypes.Response}/+");
+                topic = $"{Topic.RootTopic}/+/{options.ClientId}/+/+/+/{MessageTypes.Response}/+";
+                await mqttClient.SubscribeAsync(topic);
+                Logger.LogInformation("MessageBus:Subscribe To Topic {Topic}", topic);
             });
 
             AsyncHelper.RunSync(() => mqttClient.ConnectAsync(options));
+            Logger.LogInformation("MessageBus:Started");
 
             return new MqttMessageBus(Options, mqttClient);
         }

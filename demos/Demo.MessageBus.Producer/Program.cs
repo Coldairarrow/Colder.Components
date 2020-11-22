@@ -18,12 +18,13 @@ namespace Demo.MessageBus.Producer
                {
                    services.AddMessageBus(new MessageBusOptions
                    {
-                       //Host = "amqp://localhost:5672/",
-                       Host = "localhost:1883",
-                       Transport = TransportType.MQTT,
+                       Host = "amqp://localhost:5672/",
+                       //Host = "localhost:1884",
+                       Transport = TransportType.RabbitMQ,
                        Username = "guest",
                        Password = "guest",
-                       Endpoint = MessageBusEndpoints.Producer
+                       Endpoint = MessageBusEndpoints.Producer,
+                       SendMessageTimeout = 1000
                    });
 
                    services.AddHostedService<SendTest>();

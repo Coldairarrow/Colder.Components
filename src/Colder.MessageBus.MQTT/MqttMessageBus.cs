@@ -20,12 +20,12 @@ namespace Colder.MessageBus.MQTT
             _mqttClient = mqttClient;
         }
 
-        async Task IMessageBus.Publish<TMessage>(TMessage message, string endpoint)
+        public async Task Publish<TMessage>(TMessage message, string endpoint) where TMessage : class, IMessage
         {
             Topic topic = new Topic
             {
                 MessageId = Guid.NewGuid(),
-                MessageBodyType = typeof(TMessage).FullName,
+                MessageBodyType = message.GetType().FullName,
                 MessageType = string.IsNullOrEmpty(endpoint) ? MessageTypes.Event : MessageTypes.Command,
                 SourceClientId = _mqttClient.Options.ClientId,
                 SourceEndpoint = _options.Endpoint,
@@ -41,12 +41,14 @@ namespace Colder.MessageBus.MQTT
             await _mqttClient.PublishAsync(payload.Build());
         }
 
-        async Task<TResponse> IMessageBus.Request<TRequest, TResponse>(TRequest message, string endpoint)
+        public async Task<TResponse> Request<TRequest, TResponse>(TRequest message, string endpoint)
+            where TRequest : class, IMessage
+            where TResponse : class
         {
             Topic topic = new Topic
             {
                 MessageId = Guid.NewGuid(),
-                MessageBodyType = typeof(TRequest).FullName,
+                MessageBodyType = message.GetType().FullName,
                 MessageType = MessageTypes.Command,
                 SourceClientId = _mqttClient.Options.ClientId,
                 SourceEndpoint = _options.Endpoint,

@@ -18,15 +18,18 @@ namespace Demo.MessageBus.Producer
             _messageBus = messageBus;
             _logger = logger;
         }
-        protected override Task ExecuteAsync(CancellationToken stoppingToken)
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
+            //var res = await _messageBus.Request<SubRequestMessage, ResponseMessage>(
+            //    new SubRequestMessage { Text = $"{DateTimeOffset.Now}Hi" }, MessageBusEndpoints.Gateway);
+            //_logger.LogInformation("收到回复：{Response}", res.Text);
+
             _timer = new Timer(async state =>
             {
                 try
                 {
-                    var res = await _messageBus.Request<RequestMessage, ResponseMessage>(
-                        new RequestMessage { Text = $"{DateTimeOffset.Now}Hi" }, MessageBusEndpoints.Consumer);
-                    _logger.LogInformation($"已发送 {nameof(RequestMessage)} 事件");
+                    var res = await _messageBus.Request<SubRequestMessage, ResponseMessage>(
+                        new SubRequestMessage { Text = $"{DateTimeOffset.Now}Hi" }, MessageBusEndpoints.Consumer);
                     _logger.LogInformation("收到回复：{Response}", res.Text);
                 }
                 catch (Exception ex)
@@ -35,7 +38,7 @@ namespace Demo.MessageBus.Producer
                 }
             }, null, 0, 1);
 
-            return Task.CompletedTask;
+            await Task.CompletedTask;
         }
     }
 }

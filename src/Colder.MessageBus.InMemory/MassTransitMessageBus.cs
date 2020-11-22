@@ -24,7 +24,7 @@ namespace Colder.MessageBus.InMemory
             return new Uri($"{_options.Host}{endpoint}");
         }
 
-        async Task IMessageBus.Publish<TMessage>(TMessage message, string endpoint)
+        public async Task Publish<TMessage>(TMessage message, string endpoint) where TMessage : class, IMessage
         {
             if (string.IsNullOrEmpty(endpoint))
             {
@@ -37,7 +37,9 @@ namespace Colder.MessageBus.InMemory
                 await channel.Send(message, GetCancellationToken());
             }
         }
-        async Task<TResponse> IMessageBus.Request<TRequest, TResponse>(TRequest message, string endpoint)
+        public async Task<TResponse> Request<TRequest, TResponse>(TRequest message, string endpoint)
+            where TRequest : class, IMessage
+           where TResponse : class
         {
             var reqTimeout = RequestTimeout.After(0, 0, 0, _options.SendMessageTimeout);
             var response = await _busControl.Request<TRequest, TResponse>(BuildUri(endpoint), message, default, reqTimeout);

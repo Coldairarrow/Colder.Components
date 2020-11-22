@@ -5,6 +5,7 @@ using MassTransit;
 using MassTransit.Context;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -12,7 +13,7 @@ namespace Colder.MessageBus.InMemory
 {
     internal abstract class MassTransitProvider : AbstractProvider
     {
-        protected MassTransitProvider(IServiceProvider serviceProvider, MessageBusOptions options) 
+        protected MassTransitProvider(IServiceProvider serviceProvider, MessageBusOptions options)
             : base(serviceProvider, options)
         {
         }
@@ -41,7 +42,7 @@ namespace Colder.MessageBus.InMemory
                 //绑定消费者
                 if (Options.Endpoint != Constant.SENDONLY)
                 {
-                    Cache.MessageTypes.ForEach(messageType =>
+                    Cache.MessageTypes.ToList().ForEach(messageType =>
                     {
                         Logger.LogInformation("MessageBus:Subscribe {MessageType}", messageType);
                         var delegateType = typeof(MessageHandler<>).MakeGenericType(messageType);

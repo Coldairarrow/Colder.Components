@@ -23,6 +23,7 @@ namespace Colder.MessageBus.InMemory
 
             MessageContext<T> msgContext = new MessageContext<T>
             {
+                ServiceProvider = _serviceProvider,
                 Message = context.Message,
                 DestinationAddress = context.DestinationAddress,
                 FaultAddress = context.FaultAddress,
@@ -34,9 +35,9 @@ namespace Colder.MessageBus.InMemory
                 SourceMachineName = context.Host.MachineName
             };
 
-            var handlerType = Cache.MessageHandlers[typeof(T)];
-            var handler = ActivatorUtilities.CreateInstance(scop.ServiceProvider, handlerType) as IMessageHandler<T>;
-            await handler.Handle(msgContext);
+            var theHandler = Cache.GetHandler(typeof(T).FullName);
+            var handlerInstance = ActivatorUtilities.CreateInstance(scop.ServiceProvider, theHandler.handlerType) as IMessageHandler<T>;
+            await handlerInstance.Handle(msgContext);
 
             if (msgContext.Response != null)
             {
