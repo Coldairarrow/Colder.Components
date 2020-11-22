@@ -7,6 +7,8 @@ using MQTTnet;
 using MQTTnet.Client;
 using MQTTnet.Client.Options;
 using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Colder.MessageBus.MQTT
 {
@@ -60,8 +62,23 @@ namespace Colder.MessageBus.MQTT
                 Logger.LogInformation("MessageBus:Subscribe To Topic {Topic}", topic);
             });
 
+            mqttClient.UseDisconnectedHandler(async e =>
+            {
+                Logger.LogWarning("MessageBus:Disconnected from {Host}", Options.Host);
+                await Task.Delay(TimeSpan.FromSeconds(3));
+
+                try
+                {
+                    await mqttClient.ConnectAsync(options, CancellationToken.None);
+                }
+                catch (Exception ex)
+                {
+                    Logger.LogError(ex, "MessageBus:Reconnect To {Host} Fail", Options.Host);
+                }
+            });
+
             AsyncHelper.RunSync(() => mqttClient.ConnectAsync(options));
-            Logger.LogInformation("MessageBus:Started");
+            Logger.LogInformation("MessageBus:Started (Host:{Host})", Options.Host);
 
             return new MqttMessageBus(Options, mqttClient);
         }

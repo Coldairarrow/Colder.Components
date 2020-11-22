@@ -17,9 +17,9 @@ namespace Demo.MessageBus.Consumer
                 {
                     services.AddMessageBus(new MessageBusOptions
                     {
-                        Host = "amqp://localhost:5672/",
-                        //Host = "localhost:1883",
-                        Transport = TransportType.RabbitMQ,
+                        //Host = "amqp://localhost:5672/",
+                        Host = "localhost:1883",
+                        Transport = TransportType.MQTT,
                         Username = "guest",
                         Password = "guest",
                         Endpoint = MessageBusEndpoints.Consumer
