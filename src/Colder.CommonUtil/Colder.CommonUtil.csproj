@@ -5,10 +5,6 @@
     <Description>通用工具</Description>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <Optimize>false</Optimize>
-  </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="Castle.Core.AsyncInterceptor" Version="1.7.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0" />

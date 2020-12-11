@@ -33,7 +33,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo.MessageBus.Consumer", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo.MessageBus.Producer", "demos\Demo.MessageBus.Producer\Demo.MessageBus.Producer.csproj", "{E326A22A-24C3-4115-B700-C41A1C353579}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.MessageBus.Gateway", "demos\Demo.MessageBus.Gateway\Demo.MessageBus.Gateway.csproj", "{C147789E-B8D0-46C1-B04D-EAF98AB066DE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo.MessageBus.Gateway", "demos\Demo.MessageBus.Gateway\Demo.MessageBus.Gateway.csproj", "{C147789E-B8D0-46C1-B04D-EAF98AB066DE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Colder.Extentions", "src\Colder.Extentions\Colder.Extentions.csproj", "{92D4DEC7-6D6D-4CC9-BD76-01109865618A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -97,6 +99,10 @@ Global
 		{C147789E-B8D0-46C1-B04D-EAF98AB066DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C147789E-B8D0-46C1-B04D-EAF98AB066DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C147789E-B8D0-46C1-B04D-EAF98AB066DE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{92D4DEC7-6D6D-4CC9-BD76-01109865618A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{92D4DEC7-6D6D-4CC9-BD76-01109865618A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{92D4DEC7-6D6D-4CC9-BD76-01109865618A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{92D4DEC7-6D6D-4CC9-BD76-01109865618A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
