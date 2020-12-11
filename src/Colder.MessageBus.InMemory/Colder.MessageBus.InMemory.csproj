@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MassTransit" Version="7.0.6" />
+    <PackageReference Include="MassTransit" Version="7.0.7" />
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
       <_Parameter1>Colder.MessageBus.RabbitMQ</_Parameter1>
     </AssemblyAttribute>
