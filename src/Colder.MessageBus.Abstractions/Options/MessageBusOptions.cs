@@ -35,6 +35,6 @@ namespace Colder.MessageBus.Abstractions
         /// <summary>
         /// 终结点，默认为入口程序集名
         /// </summary>
-        public string Endpoint { get; set; } = Assembly.GetEntryAssembly().GetName().FullName;
+        public string Endpoint { get; set; } = Assembly.GetEntryAssembly().GetName().Name;
     }
 }
