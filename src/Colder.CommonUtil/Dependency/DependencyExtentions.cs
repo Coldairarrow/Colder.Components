@@ -17,9 +17,10 @@ namespace Colder.CommonUtil
         /// 自动注入服务
         /// 服务必须继承ITransientDependency、IScopedDependency或ISingletonDependency
         /// </summary>
-        /// <param name="services"></param>
+        /// <param name="services">容器</param>
+        /// <param name="minElapsedMilliseconds">调用方法耗时记录最小值，默认1000ms</param>
         /// <returns></returns>
-        public static IServiceCollection AddServices(this IServiceCollection services)
+        public static IServiceCollection AddServices(this IServiceCollection services, int minElapsedMilliseconds = 1000)
         {
             Dictionary<Type, ServiceLifetime> lifeTimeMap = new Dictionary<Type, ServiceLifetime>
             {
@@ -44,7 +45,7 @@ namespace Colder.CommonUtil
                                 //注入AOP
                                 services.Add(new ServiceDescriptor(aInterface, serviceProvider =>
                                 {
-                                    CastleInterceptor castleInterceptor = new CastleInterceptor(serviceProvider);
+                                    CastleInterceptor castleInterceptor = new CastleInterceptor(serviceProvider, minElapsedMilliseconds);
 
                                     return _generator.CreateInterfaceProxyWithTarget(
                                         aInterface,
