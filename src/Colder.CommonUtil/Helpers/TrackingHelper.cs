@@ -86,17 +86,17 @@ namespace Colder.CommonUtil
             properties.ForEach(aProperty =>
             {
                 Type itemType = aProperty.PropertyType.GetGenericArguments()[0];
-                dynamic dbProperty = aProperty.GetValue(dbData);
-                dynamic newProperty = aProperty.GetValue(newData);
-                var dbCollection = (dbProperty as IEnumerable).Cast<dynamic>();
-                var newCollection = (newProperty as IEnumerable).Cast<dynamic>();
+                object dbProperty = aProperty.GetValue(dbData);
+                object newProperty = aProperty.GetValue(newData);
+                var dbCollection = (dbProperty as IEnumerable).Cast<object>();
+                var newCollection = (newProperty as IEnumerable).Cast<object>();
 
-                List<dynamic> allValues = new List<dynamic>();
+                List<object> allValues = new List<object>();
                 allValues.AddRange(dbCollection);
                 allValues.AddRange(newCollection);
                 allValues.ForEach(aItem =>
                 {
-                    string idField = GetKeyField(((object)aItem).GetType());
+                    string idField = GetKeyField(aItem.GetType());
 
                     var itemId = GetPropertyValue(aItem, idField);
 
@@ -115,7 +115,9 @@ namespace Colder.CommonUtil
                     //删除
                     else if (dbItem != null && newItem == null)
                     {
-                        dbProperty.Remove(dbItem);
+                        var removeMethod = aProperty.PropertyType.GetMethod("Remove", new Type[] { itemType });
+
+                        removeMethod.Invoke(dbProperty, new object[] { dbItem });
 
                         removed.Add(dbItem);
                     }
