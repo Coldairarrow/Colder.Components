@@ -6,8 +6,6 @@ using MassTransit.Context;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Colder.MessageBus.InMemory
 {
@@ -56,18 +54,6 @@ namespace Colder.MessageBus.InMemory
                         method.Invoke(null, new object[] { endpointBuilder, theDelegate, null });
                     });
                 }
-
-                //异常处理
-                endpointBuilder.ConfigureError(error =>
-                {
-                    error.UseInlineFilter((context, next) =>
-                    {
-                        string body = Encoding.UTF8.GetString(context.GetBody());
-                        Logger.LogError(context.Exception, "Handle Message Error,MessageBody:{MessageBody}", body);
-
-                        return Task.CompletedTask;
-                    });
-                });
             });
         }
     }

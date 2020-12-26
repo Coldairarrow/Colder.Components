@@ -2,7 +2,6 @@
 using Demo.Common;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using System;
 using System.Threading.Tasks;
 
 namespace Demo.MessageBus.Consumer
@@ -20,8 +19,6 @@ namespace Demo.MessageBus.Consumer
         {
             _logger.LogInformation("收到 {EventType} 事件,MessageBody:{MessageBody}",
                 typeof(RequestMessage).Name, JsonConvert.SerializeObject(context.Message));
-
-            context.Response = new ResponseMessage { Text = $"回复{DateTimeOffset.Now}" };
 
             await Task.CompletedTask;
         }
