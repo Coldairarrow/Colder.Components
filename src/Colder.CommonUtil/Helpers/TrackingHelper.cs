@@ -58,7 +58,7 @@ namespace Colder.CommonUtil
                     var addValue = newValue.DeepClone();
                     aProperty.SetValue(dbData, addValue);
 
-                    added.Add(addValue);
+                    added.AddRange(SetAdded(addValue));
                 }
                 //删除
                 else if (dbValue != null && newValue == null)
@@ -110,7 +110,7 @@ namespace Colder.CommonUtil
 
                         addMethod.Invoke(dbProperty, new object[] { addItem });
 
-                        added.Add(addItem);
+                        added.AddRange(SetAdded(addItem));
                     }
                     //删除
                     else if (dbItem != null && newItem == null)
@@ -135,6 +135,48 @@ namespace Colder.CommonUtil
             return (added, updated, removed);
         }
 
+        private static List<object> SetAdded(object obj)
+        {
+            List<object> addedList = new List<object>()
+            {
+                obj
+            };
+
+            //类属性跟踪
+            var properties = obj.GetType().GetProperties().Where(x =>
+                x.CanWrite
+                && NeedTracking(x.PropertyType)
+                && IsEntityClass(x.PropertyType)
+                ).ToList();
+            properties.ForEach(aPropperty =>
+            {
+                var value = aPropperty.GetValue(obj);
+                if (value != null)
+                {
+                    addedList.AddRange(SetAdded(value));
+                }
+            });
+
+            //集合属性跟踪
+            properties = obj.GetType().GetProperties().Where(x =>
+                x.CanWrite
+                && NeedTracking(x.PropertyType)
+                && IsEntityCollection(x.PropertyType)
+                ).ToList();
+            properties.ForEach(aProperty =>
+            {
+                var value = (IEnumerable)aProperty.GetValue(obj);
+                if (value != null)
+                {
+                    value.Cast<object>().ToList().ForEach(aItem =>
+                    {
+                        addedList.AddRange(SetAdded(aItem));
+                    });
+                }
+            });
+
+            return addedList;
+        }
         private static object GetPropertyValue(object obj, string propertyName)
         {
             return obj.GetType().GetProperty(propertyName, _bindingFlags).GetValue(obj);
