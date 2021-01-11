@@ -25,11 +25,14 @@ namespace Colder.CommonUtil
         public static (List<object> added, List<object> updated, List<object> removed) Tracking<TEntity>(TEntity dbData, TEntity newData)
         {
             List<object> added = new List<object>();
-            List<object> updated = new List<object>();
+            List<object> updated = new List<object>
+            {
+                dbData
+            };
             List<object> removed = new List<object>();
 
             //普通属性跟踪
-            var properties = typeof(TEntity).GetProperties(_bindingFlags).Where(x =>
+            var properties = dbData.GetType().GetProperties(_bindingFlags).Where(x =>
                 x.CanWrite
                 && NeedTracking(x.PropertyType)
                 && (!IsEntityClass(x.PropertyType))
@@ -41,7 +44,7 @@ namespace Colder.CommonUtil
             });
 
             //类属性跟踪
-            properties = typeof(TEntity).GetProperties().Where(x =>
+            properties = dbData.GetType().GetProperties().Where(x =>
                 x.CanWrite
                 && NeedTracking(x.PropertyType)
                 && IsEntityClass(x.PropertyType)
@@ -71,14 +74,15 @@ namespace Colder.CommonUtil
                 else
                 {
                     //递归
-                    Tracking(dbValue, newValue);
-
-                    updated.Add(dbValue);
+                    var res = Tracking(dbValue, newValue);
+                    added.AddRange(res.added);
+                    updated.AddRange(res.updated);
+                    removed.AddRange(res.removed);
                 }
             });
 
             //集合属性跟踪
-            properties = typeof(TEntity).GetProperties().Where(x =>
+            properties = dbData.GetType().GetProperties().Where(x =>
                 x.CanWrite
                 && NeedTracking(x.PropertyType)
                 && IsEntityCollection(x.PropertyType)
@@ -86,24 +90,30 @@ namespace Colder.CommonUtil
             properties.ForEach(aProperty =>
             {
                 Type itemType = aProperty.PropertyType.GetGenericArguments()[0];
+                string idField = GetKeyField(itemType);
+
                 object dbProperty = aProperty.GetValue(dbData);
                 object newProperty = aProperty.GetValue(newData);
-                var dbCollection = (dbProperty as IEnumerable).Cast<object>();
-                var newCollection = (newProperty as IEnumerable).Cast<object>();
+                var dbCollection = (dbProperty as IEnumerable).Cast<object>().ToList();
+                var newCollection = (newProperty as IEnumerable).Cast<object>().ToList();
 
-                List<object> allValues = new List<object>();
-                allValues.AddRange(dbCollection);
-                allValues.AddRange(newCollection);
-                allValues.ForEach(aItem =>
-                {
-                    string idField = GetKeyField(aItem.GetType());
+                //删除
+                dbCollection
+                    .Where(x => !newCollection.Any(y => GetPropertyValue(x, idField)?.ToString() == GetPropertyValue(y, idField)?.ToString()))
+                    .ToList()
+                    .ForEach(aItem =>
+                    {
+                        var removeMethod = aProperty.PropertyType.GetMethod("Remove", new Type[] { itemType });
 
-                    var itemId = GetPropertyValue(aItem, idField);
+                        removeMethod.Invoke(dbProperty, new object[] { aItem });
 
-                    var dbItem = dbCollection.Where(x => GetPropertyValue(x, idField) == itemId).FirstOrDefault();
-                    var newItem = newCollection.Where(x => GetPropertyValue(x, idField) == itemId).FirstOrDefault();
-                    //添加
-                    if (dbItem == null && newItem != null)
+                        removed.Add(aItem);
+                    });
+                //添加
+                newCollection
+                    .Where(x => !dbCollection.Any(y => GetPropertyValue(x, idField)?.ToString() == GetPropertyValue(y, idField)?.ToString()))
+                    .ToList()
+                    .ForEach(aItem =>
                     {
                         var addItem = DeepCloneExtensions.DeepClone(aItem);
                         var addMethod = aProperty.PropertyType.GetMethod("Add", new Type[] { itemType });
@@ -111,25 +121,23 @@ namespace Colder.CommonUtil
                         addMethod.Invoke(dbProperty, new object[] { addItem });
 
                         added.AddRange(SetAdded(addItem));
-                    }
-                    //删除
-                    else if (dbItem != null && newItem == null)
-                    {
-                        var removeMethod = aProperty.PropertyType.GetMethod("Remove", new Type[] { itemType });
+                    });
 
-                        removeMethod.Invoke(dbProperty, new object[] { dbItem });
-
-                        removed.Add(dbItem);
-                    }
-                    //修改
-                    else
+                //修改
+                dbCollection
+                    .Where(x => newCollection.Any(y => GetPropertyValue(x, idField)?.ToString() == GetPropertyValue(y, idField)?.ToString()))
+                    .ToList()
+                    .ForEach(aItem =>
                     {
+                        var itemId = GetPropertyValue(aItem, idField).ToString();
+                        var newItem = newCollection.Where(x => GetPropertyValue(x, idField)?.ToString() == itemId).FirstOrDefault();
+
                         //递归
-                        Tracking(dbItem, newItem);
-
-                        updated.Add(dbItem);
-                    }
-                });
+                        var res = Tracking(aItem, newItem);
+                        added.AddRange(res.added);
+                        updated.AddRange(res.updated);
+                        removed.AddRange(res.removed);
+                    });
             });
 
             return (added, updated, removed);
@@ -179,7 +187,9 @@ namespace Colder.CommonUtil
         }
         private static object GetPropertyValue(object obj, string propertyName)
         {
-            return obj.GetType().GetProperty(propertyName, _bindingFlags).GetValue(obj);
+            var value = obj.GetType().GetProperty(propertyName, _bindingFlags).GetValue(obj);
+
+            return value;
         }
         private static bool NeedTracking(Type type)
         {
