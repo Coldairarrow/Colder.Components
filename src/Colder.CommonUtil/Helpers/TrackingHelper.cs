@@ -14,7 +14,7 @@ namespace Colder.CommonUtil
     public static class TrackingHelper
     {
         private static readonly BindingFlags _bindingFlags
-                    = BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public | BindingFlags.Static;
+            = BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public;
 
         /// <summary>
         /// 自动跟踪实体
@@ -24,6 +24,15 @@ namespace Colder.CommonUtil
         /// <param name="newData">新数据</param>
         public static (List<object> added, List<object> updated, List<object> removed) Tracking<TEntity>(TEntity dbData, TEntity newData)
         {
+            if (dbData == null)
+            {
+                throw new Exception($"{nameof(dbData)}不能为Null");
+            }
+            if (newData == null)
+            {
+                throw new Exception($"{nameof(newData)}不能为Null");
+            }
+
             List<object> added = new List<object>();
             List<object> updated = new List<object>
             {
