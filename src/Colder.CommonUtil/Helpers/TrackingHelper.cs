@@ -80,7 +80,7 @@ namespace Colder.CommonUtil
                     removed.Add(dbValue);
                 }
                 //修改
-                else
+                else if (dbValue != null && newValue != null)
                 {
                     //递归
                     var res = Tracking(dbValue, newValue);
