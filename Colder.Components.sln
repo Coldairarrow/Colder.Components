@@ -21,8 +21,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Colder.CommonUtil", "src\Co
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{39C8131E-709C-4240-BF1C-48D88B53E4DE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Colder.CommonUtil.Tests", "tests\Colder.CommonUtil.Tests\Colder.CommonUtil.Tests.csproj", "{EF129F99-BE42-4251-A95D-576D3A43B9A9}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Colder.MessageBus.MQTT", "src\Colder.MessageBus.MQTT\Colder.MessageBus.MQTT.csproj", "{D26E3E08-5F9D-408B-A7AA-A5D3BB6FBFDB}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Colder.MessageBus.Hosting", "src\Colder.MessageBus.Hosting\Colder.MessageBus.Hosting.csproj", "{D0809548-5A85-4D29-9E54-0FA54621E008}"
@@ -33,11 +31,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Colder.Extentions", "src\Co
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo.MessageBus", "demos\Demo.MessageBus\Demo.MessageBus.csproj", "{CAC2BAF6-D968-473F-9239-11B17C32FDC6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Colder.DistributedLock.Abstractions", "src\Colder.DistributedLock.Abstractions\Colder.DistributedLock.Abstractions.csproj", "{BA38145B-3FA5-4C20-96C6-06088ECBD8F1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Colder.DistributedLock.Abstractions", "src\Colder.DistributedLock.Abstractions\Colder.DistributedLock.Abstractions.csproj", "{BA38145B-3FA5-4C20-96C6-06088ECBD8F1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Colder.DistributedLock.InMemory", "src\Colder.DistributedLock.InMemory\Colder.DistributedLock.InMemory.csproj", "{5E2BFE70-FAC5-4F17-92E9-3F223FFB5C36}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Colder.DistributedLock.InMemory", "src\Colder.DistributedLock.InMemory\Colder.DistributedLock.InMemory.csproj", "{5E2BFE70-FAC5-4F17-92E9-3F223FFB5C36}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Colder.DistributedLock.Hosting", "src\Colder.DistributedLock.Hosting\Colder.DistributedLock.Hosting.csproj", "{5A5B3A74-F397-46DE-BE3B-DBA2F81BD460}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Colder.DistributedLock.Hosting", "src\Colder.DistributedLock.Hosting\Colder.DistributedLock.Hosting.csproj", "{5A5B3A74-F397-46DE-BE3B-DBA2F81BD460}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Colder.Tests", "tests\Colder.Tests\Colder.Tests.csproj", "{B4D6F58D-89C7-4660-A7C6-9C8712B87E87}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -73,10 +73,6 @@ Global
 		{55581DAA-76D8-4279-A7FB-61F98A2EA66B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{55581DAA-76D8-4279-A7FB-61F98A2EA66B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{55581DAA-76D8-4279-A7FB-61F98A2EA66B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EF129F99-BE42-4251-A95D-576D3A43B9A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EF129F99-BE42-4251-A95D-576D3A43B9A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EF129F99-BE42-4251-A95D-576D3A43B9A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EF129F99-BE42-4251-A95D-576D3A43B9A9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D26E3E08-5F9D-408B-A7AA-A5D3BB6FBFDB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D26E3E08-5F9D-408B-A7AA-A5D3BB6FBFDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D26E3E08-5F9D-408B-A7AA-A5D3BB6FBFDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -109,6 +105,10 @@ Global
 		{5A5B3A74-F397-46DE-BE3B-DBA2F81BD460}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5A5B3A74-F397-46DE-BE3B-DBA2F81BD460}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5A5B3A74-F397-46DE-BE3B-DBA2F81BD460}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B4D6F58D-89C7-4660-A7C6-9C8712B87E87}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B4D6F58D-89C7-4660-A7C6-9C8712B87E87}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B4D6F58D-89C7-4660-A7C6-9C8712B87E87}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B4D6F58D-89C7-4660-A7C6-9C8712B87E87}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -116,8 +116,8 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{FEC13662-54D5-4EAF-B6E5-4E14BA4475BD} = {ACCF873E-B185-4FEA-8502-D5F708E42168}
 		{4D9F6CC2-C44E-4DE4-9826-7A245CBCD8C9} = {ACCF873E-B185-4FEA-8502-D5F708E42168}
-		{EF129F99-BE42-4251-A95D-576D3A43B9A9} = {39C8131E-709C-4240-BF1C-48D88B53E4DE}
 		{CAC2BAF6-D968-473F-9239-11B17C32FDC6} = {ACCF873E-B185-4FEA-8502-D5F708E42168}
+		{B4D6F58D-89C7-4660-A7C6-9C8712B87E87} = {39C8131E-709C-4240-BF1C-48D88B53E4DE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {817CE001-2A40-4054-B349-ECDB5986C92E}

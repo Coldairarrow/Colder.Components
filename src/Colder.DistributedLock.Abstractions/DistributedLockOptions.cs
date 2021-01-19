@@ -8,6 +8,6 @@
         /// <summary>
         /// 锁类型
         /// </summary>
-        public LockTypes LockType { get; set; }
+        public LockTypes LockType { get; set; } = LockTypes.InMemory;
     }
 }
