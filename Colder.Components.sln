@@ -39,6 +39,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Colder.DistributedLock.Host
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Colder.Tests", "tests\Colder.Tests\Colder.Tests.csproj", "{B4D6F58D-89C7-4660-A7C6-9C8712B87E87}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Colder.DistributedLock.Redis", "src\Colder.DistributedLock.Redis\Colder.DistributedLock.Redis.csproj", "{1CD5B881-FC66-4EC1-87B6-846F68FDFA9C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.DistributedLock", "demos\Demo.DistributedLock\Demo.DistributedLock.csproj", "{66FD7051-1DCB-449A-B025-59E86D2D70AE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -109,6 +113,14 @@ Global
 		{B4D6F58D-89C7-4660-A7C6-9C8712B87E87}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B4D6F58D-89C7-4660-A7C6-9C8712B87E87}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B4D6F58D-89C7-4660-A7C6-9C8712B87E87}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1CD5B881-FC66-4EC1-87B6-846F68FDFA9C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1CD5B881-FC66-4EC1-87B6-846F68FDFA9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1CD5B881-FC66-4EC1-87B6-846F68FDFA9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1CD5B881-FC66-4EC1-87B6-846F68FDFA9C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{66FD7051-1DCB-449A-B025-59E86D2D70AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{66FD7051-1DCB-449A-B025-59E86D2D70AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{66FD7051-1DCB-449A-B025-59E86D2D70AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{66FD7051-1DCB-449A-B025-59E86D2D70AE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -118,6 +130,7 @@ Global
 		{4D9F6CC2-C44E-4DE4-9826-7A245CBCD8C9} = {ACCF873E-B185-4FEA-8502-D5F708E42168}
 		{CAC2BAF6-D968-473F-9239-11B17C32FDC6} = {ACCF873E-B185-4FEA-8502-D5F708E42168}
 		{B4D6F58D-89C7-4660-A7C6-9C8712B87E87} = {39C8131E-709C-4240-BF1C-48D88B53E4DE}
+		{66FD7051-1DCB-449A-B025-59E86D2D70AE} = {ACCF873E-B185-4FEA-8502-D5F708E42168}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {817CE001-2A40-4054-B349-ECDB5986C92E}

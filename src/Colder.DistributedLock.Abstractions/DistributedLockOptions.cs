@@ -9,5 +9,10 @@
         /// 锁类型
         /// </summary>
         public LockTypes LockType { get; set; } = LockTypes.InMemory;
+
+        /// <summary>
+        /// Redis节点
+        /// </summary>
+        public string[] RedisEndPoints { get; set; }
     }
 }

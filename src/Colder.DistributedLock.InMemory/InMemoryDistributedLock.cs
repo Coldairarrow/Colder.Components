@@ -9,18 +9,14 @@ namespace Colder.DistributedLock.InMemory
 {
     internal class InMemoryDistributedLock : IDistributedLock
     {
-        public InMemoryDistributedLock(IMemoryCache memoryCache)
-        {
-            LockDic = memoryCache;
-        }
-        public IMemoryCache LockDic { get; }
+        private readonly IMemoryCache _lockDic  = new MemoryCache(new MemoryCacheOptions());
         private readonly ConcurrentDictionary<string, object> _cacheLock
             = new ConcurrentDictionary<string, object>();
         public Task<IDisposable> Lock(string key, TimeSpan? timeout)
         {
             lock (_cacheLock.GetOrAdd(key, new object()))
             {
-                var theLock = LockDic.GetOrCreate(key, cacheEntry =>
+                var theLock = _lockDic.GetOrCreate(key, cacheEntry =>
                 {
                     var newLock = new SemaphoreSlimLock();
 
