@@ -36,5 +36,15 @@ namespace Colder.MessageBus.Abstractions
         /// 终结点，默认为入口程序集名
         /// </summary>
         public string Endpoint { get; set; } = Assembly.GetEntryAssembly().GetName().Name;
+
+        /// <summary>
+        /// 失败重试次数，默认3
+        /// </summary>
+        public int RetryCount { get; set; } = 3;
+
+        /// <summary>
+        /// 重试等待间隔（毫秒），默认1000
+        /// </summary>
+        public int RetryIntervalMilliseconds { get; set; } = 1000;
     }
 }

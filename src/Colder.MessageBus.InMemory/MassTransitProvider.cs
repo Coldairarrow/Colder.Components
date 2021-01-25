@@ -32,7 +32,7 @@ namespace Colder.MessageBus.InMemory
         {
             busFactoryConfigurator.UseRetry(retryCfg =>
             {
-                retryCfg.Interval(3, TimeSpan.FromMilliseconds(1000));
+                retryCfg.Interval(Options.RetryCount, TimeSpan.FromMilliseconds(Options.RetryIntervalMilliseconds));
             });
 
             busFactoryConfigurator.ReceiveEndpoint(Options.Endpoint, endpointBuilder =>

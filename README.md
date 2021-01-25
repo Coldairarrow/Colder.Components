@@ -46,7 +46,24 @@ IHostBuilder.ConfigureMessageBusDefaults()
     "Transport": "RabbitMQ",
     "Host": "amqp://localhost:5672/",
     "Username": "guest",
-    "Password": "guest"
+    "Password": "guest",
+    "RetryCount":3, //失败重试次数
+    "RetryIntervalMilliseconds":1000 //失败重试间隔毫秒数
+  }
+}
+```
+
+## 分布式锁
+使用方式
+```c#
+IHostBuilder.ConfigureDistributedLockDefaults()
+```
+配置
+```javascript
+{
+  "distributedLock": {
+    "LockTypes": "InMemory",//可选值：InMemory、Redis
+    "RedisEndPoints": ["localhost:6379"] //Redis节点
   }
 }
 ```
