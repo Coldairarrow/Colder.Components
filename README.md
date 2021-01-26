@@ -48,7 +48,8 @@ IHostBuilder.ConfigureMessageBusDefaults()
     "Username": "guest",
     "Password": "guest",
     "RetryCount":3, //失败重试次数
-    "RetryIntervalMilliseconds":1000 //失败重试间隔毫秒数
+    "RetryIntervalMilliseconds":1000, //失败重试间隔毫秒数
+    "Endpoint":"Endpoint001",//指定节点名,默认为程序入口程序集名
   }
 }
 ```
