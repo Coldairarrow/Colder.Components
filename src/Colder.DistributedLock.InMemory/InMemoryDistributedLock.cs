@@ -1,7 +1,6 @@
 ﻿using Colder.DistributedLock.Abstractions;
 using Microsoft.Extensions.Caching.Memory;
 using System;
-using System.Collections.Concurrent;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -9,27 +8,24 @@ namespace Colder.DistributedLock.InMemory
 {
     internal class InMemoryDistributedLock : IDistributedLock
     {
-        private readonly IMemoryCache _lockDic  = new MemoryCache(new MemoryCacheOptions());
-        private readonly ConcurrentDictionary<string, object> _cacheLock
-            = new ConcurrentDictionary<string, object>();
+        private readonly IMemoryCache _lockDic = new MemoryCache(new MemoryCacheOptions());
         public Task<IDisposable> Lock(string key, TimeSpan? timeout)
         {
             timeout = timeout ?? TimeSpan.FromSeconds(10);
 
             SemaphoreSlimLock theLock;
 
-            lock (_cacheLock.GetOrAdd(key, new object()))
+            lock (key)
             {
                 theLock = _lockDic.GetOrCreate(key, cacheEntry =>
                 {
                     var newLock = new SemaphoreSlimLock();
 
-                    cacheEntry.SlidingExpiration = TimeSpan.FromMinutes(1);
+                    cacheEntry.SlidingExpiration = TimeSpan.FromMinutes(10);
                     cacheEntry.PostEvictionCallbacks.Add(new PostEvictionCallbackRegistration
                     {
                         EvictionCallback = (_, _, _, _) =>
                         {
-                            _cacheLock.TryRemove(key, out object _);
                             newLock.DisposeLock();
                         }
                     });
@@ -38,7 +34,7 @@ namespace Colder.DistributedLock.InMemory
                 });
             }
 
-            theLock.WaitOne(timeout);
+            theLock.WaitOne(timeout.Value);
 
             return Task.FromResult((IDisposable)theLock);
         }
@@ -46,15 +42,11 @@ namespace Colder.DistributedLock.InMemory
         private class SemaphoreSlimLock : IDisposable
         {
             private readonly Semaphore _semaphore = new Semaphore(1, 1);
-            public void WaitOne(TimeSpan? timeout)
+            public void WaitOne(TimeSpan timeout)
             {
-                if (timeout == null)
+                if (!_semaphore.WaitOne(timeout))
                 {
-                    _semaphore.WaitOne();
-                }
-                else
-                {
-                    _semaphore.WaitOne(timeout.Value);
+                    throw new Exception("获取锁超时");
                 }
             }
             public void Dispose()
