@@ -14,9 +14,13 @@ namespace Colder.DistributedLock.InMemory
             = new ConcurrentDictionary<string, object>();
         public Task<IDisposable> Lock(string key, TimeSpan? timeout)
         {
+            timeout = timeout ?? TimeSpan.FromSeconds(10);
+
+            SemaphoreSlimLock theLock;
+
             lock (_cacheLock.GetOrAdd(key, new object()))
             {
-                var theLock = _lockDic.GetOrCreate(key, cacheEntry =>
+                theLock = _lockDic.GetOrCreate(key, cacheEntry =>
                 {
                     var newLock = new SemaphoreSlimLock();
 
@@ -32,11 +36,11 @@ namespace Colder.DistributedLock.InMemory
 
                     return newLock;
                 });
-
-                theLock.WaitOne(timeout);
-
-                return Task.FromResult((IDisposable)theLock);
             }
+
+            theLock.WaitOne(timeout);
+
+            return Task.FromResult((IDisposable)theLock);
         }
 
         private class SemaphoreSlimLock : IDisposable
