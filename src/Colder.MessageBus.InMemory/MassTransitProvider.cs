@@ -15,7 +15,6 @@ namespace Colder.MessageBus.InMemory
             : base(serviceProvider, options)
         {
         }
-
         public override IMessageBus GetBusInstance()
         {
             LogContext.ConfigureCurrentLogContext(LoggerFactory);
@@ -34,27 +33,26 @@ namespace Colder.MessageBus.InMemory
             {
                 retryCfg.Interval(Options.RetryCount, TimeSpan.FromMilliseconds(Options.RetryIntervalMilliseconds));
             });
-
-            busFactoryConfigurator.ReceiveEndpoint(Options.Endpoint, endpointBuilder =>
+        }
+        protected void ConfigEndpoint(IReceiveEndpointConfigurator receiveEndpointConfigurator)
+        {
+            //绑定消费者
+            if (Options.Endpoint != Constant.SENDONLY)
             {
-                //绑定消费者
-                if (Options.Endpoint != Constant.SENDONLY)
+                Cache.MessageTypes.ToList().ForEach(messageType =>
                 {
-                    Cache.MessageTypes.ToList().ForEach(messageType =>
-                    {
-                        Logger.LogInformation("MessageBus:Subscribe {MessageType}", messageType);
-                        var delegateType = typeof(MessageHandler<>).MakeGenericType(messageType);
-                        var bindMethod = typeof(ProxyHandler)
-                            .GetMethod("Handle")
-                            .MakeGenericMethod(messageType);
-                        ProxyHandler proxyHandler = new ProxyHandler(ServiceProvider);
-                        var theDelegate = Delegate.CreateDelegate(delegateType, proxyHandler, bindMethod);
-                        var method = typeof(HandlerExtensions).GetMethod("Handler")
-                            .MakeGenericMethod(messageType);
-                        method.Invoke(null, new object[] { endpointBuilder, theDelegate, null });
-                    });
-                }
-            });
+                    Logger.LogInformation("MessageBus:Subscribe {MessageType}", messageType);
+                    var delegateType = typeof(MessageHandler<>).MakeGenericType(messageType);
+                    var bindMethod = typeof(ProxyHandler)
+                        .GetMethod("Handle")
+                        .MakeGenericMethod(messageType);
+                    ProxyHandler proxyHandler = new ProxyHandler(ServiceProvider);
+                    var theDelegate = Delegate.CreateDelegate(delegateType, proxyHandler, bindMethod);
+                    var method = typeof(HandlerExtensions).GetMethod("Handler")
+                        .MakeGenericMethod(messageType);
+                    method.Invoke(null, new object[] { receiveEndpointConfigurator, theDelegate, null });
+                });
+            }
         }
     }
 }

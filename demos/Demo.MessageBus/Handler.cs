@@ -20,6 +20,9 @@ namespace Demo.MessageBus.Consumer
             _logger.LogInformation("收到 {EventType} 事件,MessageBody:{MessageBody}",
                 typeof(RequestMessage).Name, JsonConvert.SerializeObject(context.Message));
 
+            _logger.LogInformation("结束 {EventType} 事件,MessageBody:{MessageBody}",
+                typeof(RequestMessage).Name, JsonConvert.SerializeObject(context.Message));
+
             await Task.CompletedTask;
         }
     }

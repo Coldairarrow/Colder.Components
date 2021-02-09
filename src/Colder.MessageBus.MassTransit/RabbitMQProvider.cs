@@ -15,8 +15,6 @@ namespace Colder.MessageBus.RabbitMQ
         {
             return Bus.Factory.CreateUsingRabbitMq(busFactoryBuilder =>
             {
-                ConfigBusFactory(busFactoryBuilder);
-
                 busFactoryBuilder.Host(Options.Host, config =>
                 {
                     if (!string.IsNullOrEmpty(Options.Username) && !string.IsNullOrEmpty(Options.Password))
@@ -24,6 +22,19 @@ namespace Colder.MessageBus.RabbitMQ
                         config.Username(Options.Username);
                         config.Password(Options.Password);
                     }
+                });
+
+                ConfigBusFactory(busFactoryBuilder);
+                
+                busFactoryBuilder.ReceiveEndpoint(Options.Endpoint, endpointBuilder =>
+                {
+                    //并发数配置
+                    if (Options.Concurrency != 0)
+                    {
+                        endpointBuilder.PrefetchCount = Options.Concurrency;
+                    }
+
+                    ConfigEndpoint(endpointBuilder);
                 });
             });
         }

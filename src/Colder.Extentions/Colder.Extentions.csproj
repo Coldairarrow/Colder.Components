@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="EFCore.Sharding" Version="5.0.0.1" />
+    <PackageReference Include="EFCore.Sharding" Version="5.0.0.6" />
   </ItemGroup>
 
   <ItemGroup>

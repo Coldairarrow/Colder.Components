@@ -2,6 +2,8 @@
 using Colder.MessageBus.Abstractions;
 using Colder.MessageBus.Hosting;
 using Colder.MessageBus.MQTT.Primitives;
+using MediatR;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using MQTTnet;
 using MQTTnet.Client;
@@ -14,6 +16,16 @@ namespace Colder.MessageBus.MQTT
 {
     internal class MQTTProvider : AbstractProvider
     {
+        private readonly static IMediator _mediator;
+        static MQTTProvider()
+        {
+            var services = new ServiceCollection();
+
+            services.AddMediatR(typeof(MqttMessageReceivedEvent));
+
+            _mediator = services.BuildServiceProvider().GetService<IMediator>();
+        }
+
         public MQTTProvider(IServiceProvider serviceProvider, MessageBusOptions options)
             : base(serviceProvider, options)
         {
@@ -32,7 +44,7 @@ namespace Colder.MessageBus.MQTT
             var mqttClient = factory.CreateMqttClient();
 
             mqttClient.UseApplicationMessageReceivedHandler(
-                new MessageBusHandler(ServiceProvider, Options, mqttClient));
+                new MessageBusHandler(ServiceProvider, Options, mqttClient, _mediator));
 
             mqttClient.UseConnectedHandler(async e =>
             {

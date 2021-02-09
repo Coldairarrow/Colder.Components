@@ -15,6 +15,17 @@ namespace Colder.MessageBus.InMemory
             return Bus.Factory.CreateUsingInMemory(busFactoryBuilder =>
             {
                 ConfigBusFactory(busFactoryBuilder);
+
+                busFactoryBuilder.ReceiveEndpoint(Options.Endpoint, endpointBuilder =>
+                {
+                    //并发数配置
+                    if (Options.Concurrency != 0)
+                    {
+                        endpointBuilder.ConcurrencyLimit = Options.Concurrency;
+                    }
+
+                    ConfigEndpoint(endpointBuilder);
+                });
             });
         }
     }

@@ -46,5 +46,10 @@ namespace Colder.MessageBus.Abstractions
         /// 重试等待间隔（毫秒），默认1000
         /// </summary>
         public int RetryIntervalMilliseconds { get; set; } = 1000;
+
+        /// <summary>
+        /// 并发处理数（默认根据逻辑处理器数量自动分配）
+        /// </summary>
+        public ushort Concurrency { get; set; }
     }
 }

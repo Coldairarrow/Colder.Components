@@ -50,6 +50,7 @@ IHostBuilder.ConfigureMessageBusDefaults()
     "RetryCount":3, //失败重试次数
     "RetryIntervalMilliseconds":1000, //失败重试间隔毫秒数
     "Endpoint":"Endpoint001",//指定节点名,默认为程序入口程序集名
+    "Concurrency":0//并发处理数,默认根据逻辑处理器数量自动分配
   }
 }
 ```

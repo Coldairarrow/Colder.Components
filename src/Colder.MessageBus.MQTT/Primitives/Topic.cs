@@ -7,7 +7,7 @@ namespace Colder.MessageBus.MQTT.Primitives
     {
         //Topic格式
         //ClientId={Endpoint}.{MachineName}
-        //Colder.MessageBus.MQTT/{SourceClientId}/{TargetClientId}/{SourceEndpoint}/{TargetEndpoint}/{MessageBodyType}/{MessageType}/{MessageId}
+        //MQTTMessageBus/{SourceClientId}/{TargetClientId}/{SourceEndpoint}/{TargetEndpoint}/{MessageBodyType}/{MessageType}/{MessageId}
         public static readonly string RootTopic = "MQTTMessageBus";
 
         public static Topic Parse(string topic)
