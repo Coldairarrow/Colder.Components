@@ -24,7 +24,7 @@ namespace Demo.MessageBus
                 {
                     Text = "小明"
                 });
-            }, null, 0, 1);
+            }, null, 0, 1000);
         }
     }
 }
