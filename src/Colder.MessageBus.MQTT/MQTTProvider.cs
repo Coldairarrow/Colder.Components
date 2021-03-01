@@ -2,8 +2,7 @@
 using Colder.MessageBus.Abstractions;
 using Colder.MessageBus.Hosting;
 using Colder.MessageBus.MQTT.Primitives;
-using MediatR;
-using Microsoft.Extensions.DependencyInjection;
+using MassTransit;
 using Microsoft.Extensions.Logging;
 using MQTTnet;
 using MQTTnet.Client;
@@ -16,16 +15,6 @@ namespace Colder.MessageBus.MQTT
 {
     internal class MQTTProvider : AbstractProvider
     {
-        private readonly static IMediator _mediator;
-        static MQTTProvider()
-        {
-            var services = new ServiceCollection();
-
-            services.AddMediatR(typeof(MqttMessageReceivedEvent));
-
-            _mediator = services.BuildServiceProvider().GetService<IMediator>();
-        }
-
         public MQTTProvider(IServiceProvider serviceProvider, MessageBusOptions options)
             : base(serviceProvider, options)
         {
@@ -33,6 +22,8 @@ namespace Colder.MessageBus.MQTT
 
         public override IMessageBus GetBusInstance()
         {
+            IBusControl busControl = null;
+
             var host = Options.Host.Split(':');
 
             var options = new MqttClientOptionsBuilder()
@@ -43,8 +34,14 @@ namespace Colder.MessageBus.MQTT
             var factory = new MqttFactory();
             var mqttClient = factory.CreateMqttClient();
 
-            mqttClient.UseApplicationMessageReceivedHandler(
-                new MessageBusHandler(ServiceProvider, Options, mqttClient, _mediator));
+            mqttClient.UseApplicationMessageReceivedHandler(async e =>
+            {
+                await busControl.Publish(new MqttMessageReceivedEvent
+                {
+                    Topic = e.ApplicationMessage.Topic,
+                    Payload = e.ApplicationMessage.Payload,
+                });
+            });
 
             mqttClient.UseConnectedHandler(async e =>
             {
@@ -88,6 +85,19 @@ namespace Colder.MessageBus.MQTT
                     Logger.LogError(ex, "MessageBus:Reconnect To {Host} Fail", Options.Host);
                 }
             });
+
+            busControl = Bus.Factory.CreateUsingInMemory(sbc =>
+            {
+                sbc.ReceiveEndpoint(ep =>
+                {
+                    ep.Handler<MqttMessageReceivedEvent>(async context =>
+                    {
+                        await new MqttMessageReceivedEventHandler(ServiceProvider, Options, mqttClient)
+                            .Handle(context.Message);
+                    });
+                });
+            });
+            busControl.Start();
 
             AsyncHelper.RunSync(() => mqttClient.ConnectAsync(options));
             Logger.LogInformation("MessageBus:Started (Host:{Host})", Options.Host);

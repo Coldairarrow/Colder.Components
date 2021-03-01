@@ -2,24 +2,35 @@
 using Colder.MessageBus.Abstractions;
 using Colder.MessageBus.Hosting;
 using Colder.MessageBus.MQTT.Primitives;
-using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using MQTTnet;
 using MQTTnet.Client;
 using Newtonsoft.Json;
 using System;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 
-namespace Colder.MessageBus.MQTT.MediatR
+namespace Colder.MessageBus.MQTT
 {
-    class MqttMessageReceivedEventHandler : INotificationHandler<MqttMessageReceivedEvent>
+    internal class MqttMessageReceivedEventHandler
     {
-        public async Task Handle(MqttMessageReceivedEvent notification, CancellationToken cancellationToken)
+        private readonly IServiceProvider _serviceProvider;
+        private readonly MessageBusOptions _messageBusOptions;
+        private readonly IMqttClient _mqttClient;
+        public MqttMessageReceivedEventHandler(
+            IServiceProvider serviceProvider, 
+            MessageBusOptions messageBusOptions,
+            IMqttClient mqttClient
+            )
         {
-            Topic topic = Topic.Parse(notification.EventArgs.ApplicationMessage.Topic);
-            string payload = Encoding.UTF8.GetString(notification.EventArgs.ApplicationMessage.Payload);
+            _serviceProvider = serviceProvider;
+            _messageBusOptions = messageBusOptions;
+            _mqttClient = mqttClient;
+        }
+        public async Task Handle(MqttMessageReceivedEvent notification)
+        {
+            Topic topic = Topic.Parse(notification.Topic);
+            string payload = Encoding.UTF8.GetString(notification.Payload);
 
             //请求返回
             if (topic.MessageType == MessageTypes.Response)
@@ -37,7 +48,7 @@ namespace Colder.MessageBus.MQTT.MediatR
 
             if (theHandler.handleMessageType != null)
             {
-                using var scop = notification.ServiceProvider.CreateScope();
+                using var scop = _serviceProvider.CreateScope();
 
                 var messageContext = Activator.CreateInstance(typeof(MessageContext<>).MakeGenericType(theHandler.handleMessageType)) as MessageContext;
                 object message = JsonConvert.DeserializeObject(payload, theHandler.realMessageType);
@@ -60,8 +71,8 @@ namespace Colder.MessageBus.MQTT.MediatR
                         MessageId = topic.MessageId,
                         MessageBodyType = messageContext.Response.GetType().FullName,
                         MessageType = MessageTypes.Response,
-                        SourceClientId = notification.MqttClient.Options.ClientId,
-                        SourceEndpoint = notification.MessageBusOptions.Endpoint,
+                        SourceClientId = _mqttClient.Options.ClientId,
+                        SourceEndpoint = _messageBusOptions.Endpoint,
                         TargetClientId = topic.SourceClientId,
                         TargetEndpoint = topic.SourceEndpoint
                     };
@@ -71,7 +82,7 @@ namespace Colder.MessageBus.MQTT.MediatR
                         .WithAtLeastOnceQoS()
                         .WithTopic(responseTopic.ToString());
 
-                    await notification.MqttClient.PublishAsync(responsePayload.Build());
+                    await _mqttClient.PublishAsync(responsePayload.Build());
                 }
             }
         }
