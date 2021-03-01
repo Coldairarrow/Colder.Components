@@ -3,6 +3,8 @@
  <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <Description>日志组件Serilog实现</Description>
+   <!--打包-->
+   <GeneratePackageOnBuild Condition="'$(Configuration)'=='Release'">true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>

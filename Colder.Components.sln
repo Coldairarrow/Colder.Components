@@ -39,9 +39,21 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Colder.DistributedLock.Host
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Colder.Tests", "tests\Colder.Tests\Colder.Tests.csproj", "{B4D6F58D-89C7-4660-A7C6-9C8712B87E87}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Colder.DistributedLock.Redis", "src\Colder.DistributedLock.Redis\Colder.DistributedLock.Redis.csproj", "{1CD5B881-FC66-4EC1-87B6-846F68FDFA9C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Colder.DistributedLock.Redis", "src\Colder.DistributedLock.Redis\Colder.DistributedLock.Redis.csproj", "{1CD5B881-FC66-4EC1-87B6-846F68FDFA9C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.DistributedLock", "demos\Demo.DistributedLock\Demo.DistributedLock.csproj", "{66FD7051-1DCB-449A-B025-59E86D2D70AE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo.DistributedLock", "demos\Demo.DistributedLock\Demo.DistributedLock.csproj", "{66FD7051-1DCB-449A-B025-59E86D2D70AE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".common", ".common", "{09E17F77-EE0E-4F5D-8815-2066641BBF6B}"
+	ProjectSection(SolutionItems) = preProject
+		.gitattributes = .gitattributes
+		.gitignore = .gitignore
+		Directory.Build.props = Directory.Build.props
+		gitversion.yml = gitversion.yml
+		global.json = global.json
+		LICENSE = LICENSE
+		nuget-publish.bat = nuget-publish.bat
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

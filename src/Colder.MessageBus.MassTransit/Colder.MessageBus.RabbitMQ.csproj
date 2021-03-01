@@ -5,6 +5,8 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <Description>消息总线MassTransit实现</Description>
     <NoWarn>1701;1702;CS8602</NoWarn>
+    <!--打包-->
+    <GeneratePackageOnBuild Condition="'$(Configuration)'=='Release'">true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
