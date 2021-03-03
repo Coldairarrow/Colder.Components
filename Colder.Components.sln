@@ -43,7 +43,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Colder.DistributedLock.Redi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo.DistributedLock", "demos\Demo.DistributedLock\Demo.DistributedLock.csproj", "{66FD7051-1DCB-449A-B025-59E86D2D70AE}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".common", ".common", "{09E17F77-EE0E-4F5D-8815-2066641BBF6B}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".solution", ".solution", "{09E17F77-EE0E-4F5D-8815-2066641BBF6B}"
 	ProjectSection(SolutionItems) = preProject
 		.gitattributes = .gitattributes
 		.gitignore = .gitignore
@@ -51,7 +51,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".common", ".common", "{09E1
 		gitversion.yml = gitversion.yml
 		global.json = global.json
 		LICENSE = LICENSE
-		nuget-publish.bat = nuget-publish.bat
 		README.md = README.md
 	EndProjectSection
 EndProject

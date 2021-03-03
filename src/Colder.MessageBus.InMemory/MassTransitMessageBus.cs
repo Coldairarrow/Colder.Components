@@ -15,10 +15,6 @@ namespace Colder.MessageBus.InMemory
             _busControl = busControl;
             _options = options;
         }
-        private CancellationToken GetCancellationToken()
-        {
-            return new CancellationTokenSource(TimeSpan.FromSeconds(_options.SendMessageTimeout)).Token;
-        }
         private Uri BuildUri(string endpoint)
         {
             return new Uri($"{_options.Host}{endpoint}");
@@ -26,15 +22,18 @@ namespace Colder.MessageBus.InMemory
 
         public async Task Publish<TMessage>(TMessage message, string endpoint) where TMessage : class, IMessage
         {
+            using CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+            cancellationTokenSource.CancelAfter(TimeSpan.FromSeconds(_options.SendMessageTimeout));
+
             if (string.IsNullOrEmpty(endpoint))
             {
-                await _busControl.Publish(message, GetCancellationToken());
+                await _busControl.Publish(message, cancellationTokenSource.Token);
             }
             else
             {
                 var channel = await _busControl.GetSendEndpoint(BuildUri(endpoint));
 
-                await channel.Send(message, GetCancellationToken());
+                await channel.Send(message, cancellationTokenSource.Token);
             }
         }
         public async Task<TResponse> Request<TRequest, TResponse>(TRequest message, string endpoint)
