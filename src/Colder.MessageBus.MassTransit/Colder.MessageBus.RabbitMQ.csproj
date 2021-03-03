@@ -10,7 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MassTransit.RabbitMQ" Version="7.1.4" />
+    <PackageReference Include="MassTransit.RabbitMQ" Version="7.1.6" />
   </ItemGroup>
 
   <ItemGroup>
