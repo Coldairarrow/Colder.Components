@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace Colder.CommonUtil
 {
@@ -41,9 +42,8 @@ namespace Colder.CommonUtil
             List<object> removed = new List<object>();
 
             //普通属性跟踪
-            var properties = dbData.GetType().GetProperties(_bindingFlags).Where(x =>
-                x.CanWrite
-                && NeedTracking(x.PropertyType)
+            var properties = dbData.GetType().GetPropertyOrFields().Where(x =>
+                NeedTracking(x.MemberInfo)
                 && (!IsEntityClass(x.PropertyType))
                 && (!IsEntityCollection(x.PropertyType))
                 ).ToList();
@@ -53,9 +53,8 @@ namespace Colder.CommonUtil
             });
 
             //类属性跟踪
-            properties = dbData.GetType().GetProperties().Where(x =>
-                x.CanWrite
-                && NeedTracking(x.PropertyType)
+            properties = dbData.GetType().GetPropertyOrFields().Where(x =>
+                NeedTracking(x.MemberInfo)
                 && IsEntityClass(x.PropertyType)
                 ).ToList();
 
@@ -91,9 +90,8 @@ namespace Colder.CommonUtil
             });
 
             //集合属性跟踪
-            properties = dbData.GetType().GetProperties().Where(x =>
-                x.CanWrite
-                && NeedTracking(x.PropertyType)
+            properties = dbData.GetType().GetPropertyOrFields().Where(x =>
+                NeedTracking(x.MemberInfo)
                 && IsEntityCollection(x.PropertyType)
                 ).ToList();
             properties.ForEach(aProperty =>
@@ -108,7 +106,7 @@ namespace Colder.CommonUtil
 
                 //删除
                 dbCollection
-                    .Where(x => !newCollection.Any(y => GetPropertyValue(x, idField)?.ToString() == GetPropertyValue(y, idField)?.ToString()))
+                    .Where(x => !newCollection.Any(y => GetPropertyOrFieldValue(x, idField)?.ToString() == GetPropertyOrFieldValue(y, idField)?.ToString()))
                     .ToList()
                     .ForEach(aItem =>
                     {
@@ -120,7 +118,7 @@ namespace Colder.CommonUtil
                     });
                 //添加
                 newCollection
-                    .Where(x => !dbCollection.Any(y => GetPropertyValue(x, idField)?.ToString() == GetPropertyValue(y, idField)?.ToString()))
+                    .Where(x => !dbCollection.Any(y => GetPropertyOrFieldValue(x, idField)?.ToString() == GetPropertyOrFieldValue(y, idField)?.ToString()))
                     .ToList()
                     .ForEach(aItem =>
                     {
@@ -134,12 +132,12 @@ namespace Colder.CommonUtil
 
                 //修改
                 dbCollection
-                    .Where(x => newCollection.Any(y => GetPropertyValue(x, idField)?.ToString() == GetPropertyValue(y, idField)?.ToString()))
+                    .Where(x => newCollection.Any(y => GetPropertyOrFieldValue(x, idField)?.ToString() == GetPropertyOrFieldValue(y, idField)?.ToString()))
                     .ToList()
                     .ForEach(aItem =>
                     {
-                        var itemId = GetPropertyValue(aItem, idField).ToString();
-                        var newItem = newCollection.Where(x => GetPropertyValue(x, idField)?.ToString() == itemId).FirstOrDefault();
+                        var itemId = GetPropertyOrFieldValue(aItem, idField).ToString();
+                        var newItem = newCollection.Where(x => GetPropertyOrFieldValue(x, idField)?.ToString() == itemId).FirstOrDefault();
 
                         //递归
                         var res = Tracking(aItem, newItem);
@@ -160,9 +158,8 @@ namespace Colder.CommonUtil
             };
 
             //类属性跟踪
-            var properties = obj.GetType().GetProperties().Where(x =>
-                x.CanWrite
-                && NeedTracking(x.PropertyType)
+            var properties = obj.GetType().GetPropertyOrFields().Where(x =>
+                NeedTracking(x.MemberInfo)
                 && IsEntityClass(x.PropertyType)
                 ).ToList();
             properties.ForEach(aPropperty =>
@@ -175,9 +172,8 @@ namespace Colder.CommonUtil
             });
 
             //集合属性跟踪
-            properties = obj.GetType().GetProperties().Where(x =>
-                x.CanWrite
-                && NeedTracking(x.PropertyType)
+            properties = obj.GetType().GetPropertyOrFields().Where(x =>
+                NeedTracking(x.MemberInfo)
                 && IsEntityCollection(x.PropertyType)
                 ).ToList();
             properties.ForEach(aProperty =>
@@ -194,16 +190,22 @@ namespace Colder.CommonUtil
 
             return addedList;
         }
-        private static object GetPropertyValue(object obj, string propertyName)
+        private static object GetPropertyOrFieldValue(object obj, string propertyName)
         {
-            var value = obj.GetType().GetProperty(propertyName, _bindingFlags).GetValue(obj);
-
-            return value;
+            return obj.GetType().GetProperty(propertyName, _bindingFlags)?.GetValue(obj)
+                ?? obj.GetType().GetField(propertyName, _bindingFlags)?.GetValue(obj);
         }
-        private static bool NeedTracking(Type type)
+        private static bool NeedTracking(MemberInfo type)
         {
-            return type.GetCustomAttribute<NotMappedAttribute>() == null
+            bool needTracking = type.GetCustomAttribute<NotMappedAttribute>() == null
                 && type.GetCustomAttribute<ConcurrencyCheckAttribute>() == null;
+
+            if (type is PropertyInfo property)
+            {
+                needTracking = needTracking && property.CanWrite && NeedTracking(property.PropertyType);
+            }
+
+            return needTracking;
         }
         private static bool IsEntityClass(Type type)
         {
@@ -219,6 +221,68 @@ namespace Colder.CommonUtil
         private static string GetKeyField(Type type)
         {
             return type.GetProperties().Where(x => x.GetCustomAttribute<KeyAttribute>() != null).FirstOrDefault()?.Name ?? "Id";
+        }
+        private static PropertyOrField[] GetPropertyOrFields(this Type type)
+        {
+            return type.GetProperties(_bindingFlags).Select(x => new PropertyOrField { MemberInfo = x })
+                .Concat(type.GetFields(_bindingFlags).Select(x => new PropertyOrField { MemberInfo = x }))
+                .Where(x => !x.MemberInfo.IsDefined(typeof(CompilerGeneratedAttribute), false))//去除私有BackingField
+                .ToArray();
+        }
+        private class PropertyOrField
+        {
+            public MemberInfo MemberInfo { get; set; }
+            public Type PropertyType
+            {
+                get
+                {
+                    if (MemberInfo is PropertyInfo property)
+                    {
+                        return property.PropertyType;
+                    }
+                    else if (MemberInfo is FieldInfo field)
+                    {
+                        return field.FieldType;
+                    }
+                    else
+                    {
+                        throw new Exception("MemberInfo必须为属性或字段");
+                    }
+                }
+            }
+            public void SetValue(object obj, object value)
+            {
+                if (MemberInfo is PropertyInfo property)
+                {
+                    if (property.CanWrite)
+                    {
+                        property.SetValue(obj, value);
+                    }
+                }
+                else if (MemberInfo is FieldInfo field)
+                {
+                    field.SetValue(obj, value);
+                }
+                else
+                {
+                    throw new Exception("memberInfo必须为属性或字段");
+                }
+            }
+            public object GetValue(object obj)
+            {
+                if (MemberInfo is PropertyInfo property)
+                {
+                    return property.GetValue(obj);
+                }
+                else if (MemberInfo is FieldInfo field)
+                {
+                    return field.GetValue(obj);
+                }
+                else
+                {
+                    throw new Exception("memberInfo必须为属性或字段");
+                }
+            }
         }
     }
 }
