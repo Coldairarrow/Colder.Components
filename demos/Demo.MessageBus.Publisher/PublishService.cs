@@ -21,7 +21,7 @@ namespace Demo.MessageBus
         {
             _ = Task.Run(async () =>
             {
-                for (int i = 0; i < 1000; i++)
+                for (int i = 0; i < 70000; i++)
                 {
                     await _messageBus.Publish(new RequestMessage
                     {

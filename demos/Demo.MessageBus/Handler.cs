@@ -17,11 +17,14 @@ namespace Demo.MessageBus.Consumer
         }
         public async Task Handle(MessageContext<RequestMessage> context)
         {
-            _logger.LogInformation("收到 {EventType} 事件,MessageBody:{MessageBody}",
-                typeof(RequestMessage).Name, JsonConvert.SerializeObject(context.Message));
+            //_logger.LogInformation("收到 {EventType} 事件,MessageBody:{MessageBody}",
+            //    typeof(RequestMessage).Name, JsonConvert.SerializeObject(context.Message));
 
-            _logger.LogInformation("结束 {EventType} 事件,MessageBody:{MessageBody}",
-                typeof(RequestMessage).Name, JsonConvert.SerializeObject(context.Message));
+            //await Task.Delay(1000);
+
+            _logger.LogInformation("当前 {Index}/{Total}", context.Message.Index, context.Message.Total);
+            //_logger.LogInformation("结束 {EventType} 事件,MessageBody:{MessageBody}",
+            //    typeof(RequestMessage).Name, JsonConvert.SerializeObject(context.Message));
 
             await Task.CompletedTask;
         }

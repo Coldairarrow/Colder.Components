@@ -1,0 +1,10 @@
+﻿{
+  "profiles": {
+    "Demo.MessageBus.Publisher": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}

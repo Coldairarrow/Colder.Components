@@ -22,6 +22,11 @@ namespace Colder.MessageBus.RabbitMQ
                         config.Username(Options.Username);
                         config.Password(Options.Password);
                     }
+                    config.ConfigureBatchPublish(batch =>
+                    {
+                        batch.Enabled = true;
+                        batch.MessageLimit = 100;
+                    });
                 });
 
                 ConfigBusFactory(busFactoryBuilder);

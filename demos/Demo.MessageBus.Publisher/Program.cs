@@ -17,13 +17,13 @@ namespace Demo.MessageBus.Consumer
             await Host.CreateDefaultBuilder()
                 .ConfigureLoggingDefaults()
                 .ConfigureMessageBusDefaults()
-                //.ConfigureServices((host,services) =>
-                //{
-                //    MessageBusOptions messageBusOptions = host.Configuration.GetSection("messagebus").Get<MessageBusOptions>();
-                //    messageBusOptions.Endpoint = Constant.SENDONLY;
-                //    services.AddHostedService<PublishService>();
-                //    services.AddMessageBus<ISendOnlyMessageBus>(messageBusOptions);
-                //})
+                .ConfigureServices((host,services) =>
+                {
+                    MessageBusOptions messageBusOptions = host.Configuration.GetSection("messagebus").Get<MessageBusOptions>();
+                    messageBusOptions.Endpoint = Constant.SENDONLY;
+                    services.AddHostedService<PublishService>();
+                    services.AddMessageBus<ISendOnlyMessageBus>(messageBusOptions);
+                })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
