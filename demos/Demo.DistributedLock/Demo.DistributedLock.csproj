@@ -12,6 +12,7 @@
   
   <ItemGroup>
     <ProjectReference Include="..\..\src\Colder.DistributedLock.Hosting\Colder.DistributedLock.Hosting.csproj" />
+    <ProjectReference Include="..\..\src\Colder.DistributedLock.InMemory\Colder.DistributedLock.InMemory.csproj" />
     <ProjectReference Include="..\..\src\Colder.DistributedLock.Redis\Colder.DistributedLock.Redis.csproj" />
   </ItemGroup>
 

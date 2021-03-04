@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
+using Serilog.Debugging;
 using Serilog.Events;
 using Serilog.Sinks.Elasticsearch;
 using System;
@@ -16,7 +17,7 @@ namespace Colder.Logging.Serilog
     /// <summary>
     /// 注入拓展
     /// </summary>
-    public static class SerilogDIExtentions
+    public static class SerilogExtentions
     {
         /// <summary>
         /// 配置日志
@@ -27,7 +28,7 @@ namespace Colder.Logging.Serilog
         {
             var rootPath = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
             var path = Path.Combine(rootPath, "logs", "log.txt");
-            
+            SelfLog.Enable(Console.Error);
             return hostBuilder.UseSerilog((hostingContext, serviceProvider, serilogConfig) =>
             {
                 var envConfig = hostingContext.Configuration;
