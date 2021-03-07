@@ -60,16 +60,13 @@ namespace Colder.Orleans.Hosting
                             options.ClusterId = orleansOptions.ClusterId;
                             options.ServiceId = orleansOptions.ServiceId;
                         })
-                        //.Configure<ClusterMembershipOptions>(options =>
-                        //{
-                        //    //及时下线
-                        //    //options.ProbeTimeout = TimeSpan.FromSeconds(3);
-                        //    options.IAmAliveTablePublishTimeout = TimeSpan.FromSeconds(3);
-                        //    options.NumVotesForDeathDeclaration = 1;
-                        //    //options.NumMissedProbesLimit = 1;
-                        //    //options.NumProbedSilos = 1;
-                        //    //options.NumMissedTableIAmAliveLimit = 1;
-                        //})
+                        .Configure<ClusterMembershipOptions>(options =>
+                        {
+                            //及时下线
+                            options.ProbeTimeout = TimeSpan.FromSeconds(3);
+                            options.IAmAliveTablePublishTimeout = TimeSpan.FromSeconds(3);
+                            options.NumVotesForDeathDeclaration = 1;
+                        })
                         .Configure<EndpointOptions>(options =>
                         {
                             if (orleansOptions.Provider != ProviderTypes.InMemory)

@@ -1,6 +1,10 @@
 [![Build Status](https://coldairarrow.visualstudio.com/Colder/_apis/build/status/Colder.Components-ci?branchName=master)](https://coldairarrow.visualstudio.com/Colder/_build/latest?definitionId=3&branchName=master)
-
-# 用法详见Demo
+- [通用基础组件](#通用基础组件)
+  - [日志](#日志)
+  - [消息总线](#消息总线)
+  - [分布式锁](#分布式锁)
+  - [Orleans](#orleans)
+# 通用基础组件
 ## 日志
 使用方式
 ```c#
@@ -67,6 +71,26 @@ IHostBuilder.ConfigureDistributedLockDefaults()
   "distributedLock": {
     "LockTypes": "InMemory",//可选值：InMemory、Redis
     "RedisEndPoints": ["localhost:6379"] //Redis节点
+  }
+}
+```
+
+## Orleans
+使用方式
+```c#
+IHostBuilder.ConfigureOrleansDefaults()
+```
+配置
+```javascript
+{
+  "orleans": {
+    "Provider": "InMemory", //可选值InMemory、AdoNet
+    "AdoNetInvariant": "Microsoft.Data.SqlClient",
+    "AdoNetConString": "Data Source=127.0.0.1;Initial Catalog=Orleans;User Id=sa;Password=123456;",
+    "ClusterId": "", //集群Id，默认入口程序集名
+    "ServiceId": "", //服务Id，默认入口程序集名
+    "Ip": "", //本机Ip，默认自动扫描获取本机Ip
+    "Port": 11111
   }
 }
 ```
