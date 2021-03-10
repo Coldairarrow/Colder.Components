@@ -7,7 +7,7 @@ namespace Colder.Domain
     /// </summary>
     /// <typeparam name="TState">状态</typeparam>
     /// <typeparam name="TKey">标志类型</typeparam>
-    public interface IStatefulAggregateRoot<TState, TKey> : IAggregateRoot<TKey> where TState : IAggregateRoot<TKey>
+    public interface IStatefulAggregateRoot<TState, TKey> where TState : IAggregateRoot<TKey>
     {
         /// <summary>
         /// 获取状态

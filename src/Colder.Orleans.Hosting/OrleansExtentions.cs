@@ -17,7 +17,7 @@ namespace Colder.Orleans.Hosting
     public static class OrleansExtentions
     {
         /// <summary>
-        /// 配置日志
+        /// 配置Orleans
         /// </summary>
         /// <param name="hostBuilder">建造者</param>
         /// <returns></returns>

@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Colder.CommonUtil;
+﻿using Colder.CommonUtil;
 using Colder.Domain;
 using EFCore.Sharding;
 using Microsoft.EntityFrameworkCore;
@@ -24,19 +23,12 @@ namespace Colder.Infrastructure
         protected readonly IDbAccessor Db;
 
         /// <summary>
-        /// Mapper
-        /// </summary>
-        protected readonly IMapper Mapper;
-
-        /// <summary>
         /// 构造函数
         /// </summary>
         /// <param name="db">指定数据库</param>
-        /// <param name="mapper">Mapper</param>
-        protected DbRepositoryBase(IDbAccessor db, IMapper mapper)
+        protected DbRepositoryBase(IDbAccessor db)
         {
             Db = db;
-            Mapper = mapper;
         }
 
         /// <summary>
