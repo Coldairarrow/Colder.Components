@@ -21,6 +21,8 @@ namespace Colder.CommonUtil
         /// <returns></returns>
         public static async Task<T> GetOrSetAsync<T>(this IDistributedCache distributedCache, string cacheKey, Func<Task<T>> getFromDb, DistributedCacheEntryOptions options = null)
         {
+            options = options ?? new DistributedCacheEntryOptions();
+
             T resObj;
 
             var body = await distributedCache.GetStringAsync(cacheKey);
@@ -48,6 +50,8 @@ namespace Colder.CommonUtil
         /// <returns></returns>
         public static T GetOrSet<T>(this IDistributedCache distributedCache, string cacheKey, Func<T> getFromDb, DistributedCacheEntryOptions options = null)
         {
+            options = options ?? new DistributedCacheEntryOptions();
+
             T resObj;
 
             var body = distributedCache.GetString(cacheKey);
@@ -74,6 +78,8 @@ namespace Colder.CommonUtil
         /// <returns></returns>
         public static async Task<string> GetOrSetAsync(this IDistributedCache distributedCache, string cacheKey, Func<Task<string>> getFromDb, DistributedCacheEntryOptions options = null)
         {
+            options = options ?? new DistributedCacheEntryOptions();
+
             string value;
 
             var body = await distributedCache.GetStringAsync(cacheKey);
@@ -100,6 +106,8 @@ namespace Colder.CommonUtil
         /// <returns></returns>
         public static string GetOrSet(this IDistributedCache distributedCache, string cacheKey, Func<string> getFromDb, DistributedCacheEntryOptions options = null)
         {
+            options = options ?? new DistributedCacheEntryOptions();
+
             string value;
 
             var body = distributedCache.GetString(cacheKey);
