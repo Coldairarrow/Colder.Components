@@ -19,7 +19,7 @@ namespace Colder.CommonUtil
         /// <param name="getFromDb">从数据持久层获取数据</param>
         /// <param name="options">缓存参数</param>
         /// <returns></returns>
-        public static async Task<T> GetOrSetAsync<T>(this IDistributedCache distributedCache, string cacheKey, Func<Task<T>> getFromDb, DistributedCacheEntryOptions options = null)
+        public static async Task<T> GetOrSetObjectAsync<T>(this IDistributedCache distributedCache, string cacheKey, Func<Task<T>> getFromDb, DistributedCacheEntryOptions options = null)
         {
             options = options ?? new DistributedCacheEntryOptions();
 
@@ -48,7 +48,7 @@ namespace Colder.CommonUtil
         /// <param name="getFromDb">从数据持久层获取数据</param>
         /// <param name="options">缓存参数</param>
         /// <returns></returns>
-        public static T GetOrSet<T>(this IDistributedCache distributedCache, string cacheKey, Func<T> getFromDb, DistributedCacheEntryOptions options = null)
+        public static T GetOrSetObject<T>(this IDistributedCache distributedCache, string cacheKey, Func<T> getFromDb, DistributedCacheEntryOptions options = null)
         {
             options = options ?? new DistributedCacheEntryOptions();
 
@@ -76,7 +76,7 @@ namespace Colder.CommonUtil
         /// <param name="getFromDb">从数据持久层获取数据</param>
         /// <param name="options">缓存参数</param>
         /// <returns></returns>
-        public static async Task<string> GetOrSetAsync(this IDistributedCache distributedCache, string cacheKey, Func<Task<string>> getFromDb, DistributedCacheEntryOptions options = null)
+        public static async Task<string> GetOrSetStringAsync(this IDistributedCache distributedCache, string cacheKey, Func<Task<string>> getFromDb, DistributedCacheEntryOptions options = null)
         {
             options = options ?? new DistributedCacheEntryOptions();
 
@@ -104,7 +104,7 @@ namespace Colder.CommonUtil
         /// <param name="getFromDb">从数据持久层获取数据</param>
         /// <param name="options">缓存参数</param>
         /// <returns></returns>
-        public static string GetOrSet(this IDistributedCache distributedCache, string cacheKey, Func<string> getFromDb, DistributedCacheEntryOptions options = null)
+        public static string GetOrSetString(this IDistributedCache distributedCache, string cacheKey, Func<string> getFromDb, DistributedCacheEntryOptions options = null)
         {
             options = options ?? new DistributedCacheEntryOptions();
 
@@ -131,7 +131,7 @@ namespace Colder.CommonUtil
         /// <param name="distributedCache">分布式缓存对象</param>
         /// <param name="cacheKey">缓存键值</param>
         /// <returns></returns>
-        public static async Task<T> GetAsync<T>(this IDistributedCache distributedCache, string cacheKey)
+        public static async Task<T> GetObjectAsync<T>(this IDistributedCache distributedCache, string cacheKey)
         {
             var body = await distributedCache.GetStringAsync(cacheKey);
             if (string.IsNullOrEmpty(body))
@@ -151,7 +151,7 @@ namespace Colder.CommonUtil
         /// <param name="distributedCache">分布式缓存对象</param>
         /// <param name="cacheKey">缓存键值</param>
         /// <returns></returns>
-        public static T Get<T>(this IDistributedCache distributedCache, string cacheKey)
+        public static T GetObject<T>(this IDistributedCache distributedCache, string cacheKey)
         {
             var body = distributedCache.GetString(cacheKey);
             if (string.IsNullOrEmpty(body))
