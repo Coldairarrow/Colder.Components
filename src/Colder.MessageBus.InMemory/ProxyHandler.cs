@@ -35,8 +35,8 @@ namespace Colder.MessageBus.InMemory
                 SourceMachineName = context.Host.MachineName
             };
 
-            var theHandler = Cache.GetHandler(typeof(T).FullName);
-            var handlerInstance = ActivatorUtilities.CreateInstance(scop.ServiceProvider, theHandler.handlerType) as IMessageHandler<T>;
+            var theHandlerType = Cache.Message2Handler[typeof(T)];
+            var handlerInstance = ActivatorUtilities.CreateInstance(scop.ServiceProvider, theHandlerType) as IMessageHandler<T>;
             await handlerInstance.Handle(msgContext);
 
             if (msgContext.Response != null)

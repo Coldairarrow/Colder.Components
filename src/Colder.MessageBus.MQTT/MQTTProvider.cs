@@ -50,7 +50,7 @@ namespace Colder.MessageBus.MQTT
                 //Colder.MessageBus.MQTT/{SourceClientId}/{TargetClientId}/{SourceEndpoint}/{TargetEndpoint}/{MessageBodyType}/{MessageType}/{MessageId}
 
                 string topic;
-                foreach (var aMessageType in Cache.AllMessageTypes)
+                foreach (var aMessageType in Cache.MessageTypes)
                 {
                     //事件广播
                     topic = $"{Topic.RootTopic}/+/+/+/+/{aMessageType.FullName}/{MessageTypes.Event}/+";

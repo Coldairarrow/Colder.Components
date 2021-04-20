@@ -1,5 +1,4 @@
-﻿using Colder.CommonUtil;
-using System;
+﻿using System;
 using System.Linq;
 using System.Reflection;
 
@@ -12,7 +11,7 @@ namespace Colder.MessageBus.Hosting.Primitives
             HandlerClass = handlerClass;
             Method = method;
             MessageType = method.GetParameters()[0].ParameterType.GetGenericArguments()[0];
-            ChildrenMessageTypes = AssemblyHelper.AllTypes
+            ChildrenMessageTypes = Assembly.GetEntryAssembly().GetTypes()
                 .Where(x => MessageType.IsAssignableFrom(x) && x != MessageType)
                 .ToArray();
 

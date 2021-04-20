@@ -7,6 +7,7 @@ using MQTTnet;
 using MQTTnet.Client;
 using Newtonsoft.Json;
 using System;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -18,7 +19,7 @@ namespace Colder.MessageBus.MQTT
         private readonly MessageBusOptions _messageBusOptions;
         private readonly IMqttClient _mqttClient;
         public MqttMessageReceivedEventHandler(
-            IServiceProvider serviceProvider, 
+            IServiceProvider serviceProvider,
             MessageBusOptions messageBusOptions,
             IMqttClient mqttClient
             )
@@ -44,23 +45,30 @@ namespace Colder.MessageBus.MQTT
                 return;
             }
 
-            var theHandler = Cache.GetHandler(topic.MessageBodyType);
+            var messageType = Cache.MessageTypes.Where(x => x.FullName == topic.MessageBodyType).FirstOrDefault();
+            if (messageType == null)
+            {
+                return;
+            }
 
-            if (theHandler.handleMessageType != null)
+            if (Cache.Message2Handler.TryGetValue(messageType, out Type theHandlerType))
             {
                 using var scop = _serviceProvider.CreateScope();
 
-                var messageContext = Activator.CreateInstance(typeof(MessageContext<>).MakeGenericType(theHandler.handleMessageType)) as MessageContext;
-                object message = JsonConvert.DeserializeObject(payload, theHandler.realMessageType);
+                var messageContextType = typeof(MessageContext<>).MakeGenericType(messageType);
+                var messageContext = Activator.CreateInstance(messageContextType) as MessageContext;
+                object message = JsonConvert.DeserializeObject(payload, messageType);
 
                 messageContext.ServiceProvider = scop.ServiceProvider;
                 messageContext.MessageId = topic.MessageId;
                 messageContext.MessageBody = payload;
                 messageContext.SetPropertyValue("Message", message);
 
-                var handlerInstance = ActivatorUtilities.CreateInstance(scop.ServiceProvider, theHandler.handlerType);
+                var handlerInstance = ActivatorUtilities.CreateInstance(scop.ServiceProvider, theHandlerType);
 
-                var task = theHandler.handleMethod.Invoke(handlerInstance, new object[] { messageContext }) as Task;
+                var method = theHandlerType.GetMethod("Handle", new Type[] { messageContextType });
+
+                var task = method.Invoke(handlerInstance, new object[] { messageContext }) as Task;
                 await task;
 
                 //请求返回

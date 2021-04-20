@@ -44,6 +44,11 @@ namespace Colder.Extentions
         public override async Task Befor(IAOPContext context)
         {
             var container = context.ServiceProvider.GetService<TransactionContainer>();
+            if (container == null)
+            {
+                throw new Exception("请调用AddAOPTransaction注入事务");
+            }
+
             container.Depth++;
 
             if (!container.TransactionOpened)
@@ -113,7 +118,7 @@ namespace Colder.Extentions
         }
     }
 
-    internal class TransactionContainer : IScopedDependency
+    internal class TransactionContainer
     {
         public bool TransactionOpened { get; set; }
         public List<DbContext> DbContexts { get; set; }

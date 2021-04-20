@@ -29,24 +29,27 @@ namespace Colder.Tests
             var theLock = _serviceProvider.GetService<IDistributedLock>();
             string key = Guid.NewGuid().ToString();
 
-            List<Task> tasks = new List<Task>();
-            
+            List<Task<Task>> tasks = new List<Task<Task>>();
+
             int num = 0;
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < 16; i++)
             {
-                tasks.Add(Task.Run(async () =>
+                tasks.Add(Task.Factory.StartNew(async () =>
                 {
                     for (int j = 0; j < 10000; j++)
                     {
                         using var _ = await theLock.Lock(key);
                         num++;
                     }
-                }));
+                }, TaskCreationOptions.LongRunning));
             }
 
-            await Task.WhenAll(tasks);
+            foreach(var aTask in tasks)
+            {
+                await (await aTask);
+            }
 
-            Assert.AreEqual(num, 40000);
+            Assert.AreEqual(num, 160000);
         }
     }
 }

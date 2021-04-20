@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 namespace Colder.CommonUtil
 {
@@ -18,9 +19,10 @@ namespace Colder.CommonUtil
         /// 服务必须继承ITransientDependency、IScopedDependency或ISingletonDependency
         /// </summary>
         /// <param name="services">容器</param>
+        /// <param name="assemblies">注入程序集</param>
         /// <param name="minElapsedMilliseconds">调用方法耗时记录最小值，默认1000ms</param>
         /// <returns></returns>
-        public static IServiceCollection AddServices(this IServiceCollection services, int minElapsedMilliseconds = 1000)
+        public static IServiceCollection AddServices(this IServiceCollection services, Assembly[] assemblies, int minElapsedMilliseconds = 1000)
         {
             Dictionary<Type, ServiceLifetime> lifeTimeMap = new Dictionary<Type, ServiceLifetime>
             {
@@ -29,14 +31,16 @@ namespace Colder.CommonUtil
                 { typeof(ISingletonDependency),ServiceLifetime.Singleton}
             };
 
-            AssemblyHelper.AllTypes.ToList().ForEach(aImplementType =>
+            var allTypes = assemblies.SelectMany(x => x.GetTypes()).ToList();
+
+            allTypes.ForEach(aImplementType =>
             {
                 lifeTimeMap.ToList().ForEach(aMap =>
                 {
                     var theDependency = aMap.Key;
                     if (theDependency.IsAssignableFrom(aImplementType) && theDependency != aImplementType && !aImplementType.IsAbstract && aImplementType.IsClass)
                     {
-                        var interfaces = AssemblyHelper.AllTypes.Where(x => x.IsAssignableFrom(aImplementType) && x.IsInterface && x != theDependency).ToList();
+                        var interfaces = allTypes.Where(x => x.IsAssignableFrom(aImplementType) && x.IsInterface && x != theDependency).ToList();
                         //有接口则注入接口
                         if (interfaces.Count > 0)
                         {
