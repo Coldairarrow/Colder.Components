@@ -17,23 +17,27 @@ namespace Colder.DistributedLock.InMemory
         {
             timeout = timeout ?? TimeSpan.FromSeconds(10);
 
-            UsingLock theLock = _lockDic.GetOrCreate(key, cacheEntry =>
+            UsingLock theLock;
+            lock (key)
             {
-                var newLock = new UsingLock();
-
-                cacheEntry.SlidingExpiration = TimeSpan.FromSeconds(30);
-                cacheEntry.RegisterPostEvictionCallback((_, _, reason, _) =>
+                theLock = _lockDic.GetOrCreate(key, cacheEntry =>
                 {
-                    if (reason == EvictionReason.Expired
-                        || reason == EvictionReason.TokenExpired
-                        || reason == EvictionReason.Removed)
-                    {
-                        newLock.DisposeLock();
-                    }
-                });
+                    var newLock = new UsingLock();
 
-                return newLock;
-            });
+                    cacheEntry.SlidingExpiration = TimeSpan.FromSeconds(30);
+                    cacheEntry.RegisterPostEvictionCallback((_, _, reason, _) =>
+                    {
+                        if (reason == EvictionReason.Expired
+                            || reason == EvictionReason.TokenExpired
+                            || reason == EvictionReason.Removed)
+                        {
+                            newLock.DisposeLock();
+                        }
+                    });
+
+                    return newLock;
+                });
+            }
 
             await theLock.Wait(timeout.Value);
 
