@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace Colder.CommonUtil
+namespace Colder.Dependency
 {
     /// <summary>
     /// AOP基类

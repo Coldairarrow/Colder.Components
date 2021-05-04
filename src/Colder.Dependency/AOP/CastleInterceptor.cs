@@ -7,7 +7,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Colder.CommonUtil
+namespace Colder.Dependency
 {
     internal class CastleInterceptor : AsyncInterceptorBase
     {

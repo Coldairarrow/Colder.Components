@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace Colder.CommonUtil
+namespace Colder.Dependency
 {
     /// <summary>
     /// 自动注入服务扩展

@@ -1,4 +1,4 @@
-﻿using Colder.CommonUtil;
+﻿using Colder.Dependency;
 using EFCore.Sharding;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;

@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Colder.CommonUtil\Colder.CommonUtil.csproj" />
+    <ProjectReference Include="..\Colder.Dependency\Colder.Dependency.csproj" />
   </ItemGroup>
 
 </Project>

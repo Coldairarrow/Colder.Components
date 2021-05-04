@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 
-namespace Colder.CommonUtil
+namespace Colder.Dependency
 {
     /// <summary>
     /// AOP上下文

@@ -2,7 +2,7 @@
 using System;
 using System.Reflection;
 
-namespace Colder.CommonUtil
+namespace Colder.Dependency
 {
     internal class CastleAOPContext : IAOPContext
     {
