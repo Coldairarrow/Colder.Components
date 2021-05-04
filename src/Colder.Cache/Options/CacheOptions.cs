@@ -11,8 +11,9 @@
         public CacheTypes CacheType { get; set; }
 
         /// <summary>
-        /// Redis节点
+        /// Redis连接字符串
+        /// 配置参考 https://stackexchange.github.io/StackExchange.Redis/Configuration.html
         /// </summary>
-        public string[] RedisEndpoints { get; set; }
+        public string RedisConnectionString { get; set; }
     }
 }

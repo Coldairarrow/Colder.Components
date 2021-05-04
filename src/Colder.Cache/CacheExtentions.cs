@@ -29,13 +29,9 @@ namespace Colder.Cache
                     case CacheTypes.InMemory: services.AddDistributedMemoryCache(); break;
                     case CacheTypes.Redis:
                         {
-                            //将Redis分布式缓存服务添加到服务中
                             services.AddStackExchangeRedisCache(options =>
                             {
-                                //用于连接Redis的配置  Configuration.GetConnectionString("RedisConnectionString")读取配置信息的串
-                                options.Configuration = "localhost";// Configuration.GetConnectionString("RedisConnectionString");
-                                                                    //Redis实例名RedisDistributedCache
-                                options.InstanceName = "RedisDistributedCache";
+                                options.Configuration = cacheOption.RedisConnectionString;
                             });
                         }; break;
                     default: throw new Exception("缓存类型无效");
@@ -44,7 +40,6 @@ namespace Colder.Cache
 
             return hostBuilder;
         }
-
 
         /// <summary>
         /// 获取缓存，若不存在则设置缓存
