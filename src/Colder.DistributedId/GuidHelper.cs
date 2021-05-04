@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Security.Cryptography;
 
-namespace Colder.CommonUtil
+namespace Colder.DistributedId
 {
     /// <summary>
     /// Guid帮助类
