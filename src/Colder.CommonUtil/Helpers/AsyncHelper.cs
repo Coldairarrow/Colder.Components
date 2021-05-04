@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Colder.Common
+namespace Colder.CommonUtil
 {
     /// <summary>
     /// 异步转同步,防止ASP.NET中死锁

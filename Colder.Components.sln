@@ -66,7 +66,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Colder.Orleans.Hosting", "s
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo.Orleans", "demos\Demo.Orleans\Demo.Orleans.csproj", "{65F72094-B20F-4825-AEF1-81291F15E901}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Colder.DistributedId", "src\Colder.DistributedId\Colder.DistributedId.csproj", "{BC0F1419-04E2-4FF8-A8E4-33105EE0CC2C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Colder.DistributedId", "src\Colder.DistributedId\Colder.DistributedId.csproj", "{BC0F1419-04E2-4FF8-A8E4-33105EE0CC2C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Colder.Cache", "src\Colder.Cache\Colder.Cache.csproj", "{EAF82710-A521-4D7F-8114-39D1CC0A623A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -166,6 +168,10 @@ Global
 		{BC0F1419-04E2-4FF8-A8E4-33105EE0CC2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BC0F1419-04E2-4FF8-A8E4-33105EE0CC2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BC0F1419-04E2-4FF8-A8E4-33105EE0CC2C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EAF82710-A521-4D7F-8114-39D1CC0A623A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EAF82710-A521-4D7F-8114-39D1CC0A623A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EAF82710-A521-4D7F-8114-39D1CC0A623A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EAF82710-A521-4D7F-8114-39D1CC0A623A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -194,6 +200,7 @@ Global
 		{D10AB5F8-21C5-47B3-A88D-AE1A19459B5A} = {F9A5FCE5-9F2F-4F22-A618-5D11DB9E7237}
 		{65F72094-B20F-4825-AEF1-81291F15E901} = {ACCF873E-B185-4FEA-8502-D5F708E42168}
 		{BC0F1419-04E2-4FF8-A8E4-33105EE0CC2C} = {F9A5FCE5-9F2F-4F22-A618-5D11DB9E7237}
+		{EAF82710-A521-4D7F-8114-39D1CC0A623A} = {F9A5FCE5-9F2F-4F22-A618-5D11DB9E7237}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {817CE001-2A40-4054-B349-ECDB5986C92E}
