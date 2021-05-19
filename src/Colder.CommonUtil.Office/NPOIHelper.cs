@@ -1,11 +1,11 @@
-﻿using System;
-using System.Data;
-using System.IO;
-using NPOI.HSSF.UserModel;
+﻿using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
+using System;
+using System.Data;
+using System.IO;
 
-namespace Colder.CommonUtil
+namespace Colder.CommonUtil.Office
 {
     /// <summary>
     /// NPOI帮助类
