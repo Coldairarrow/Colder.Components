@@ -1,49 +1,19 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Globalization;
 using System.Linq;
 using System.Net;
-using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Xml;
 
 namespace Colder.CommonUtil
 {
-    public static partial class Extention
+    /// <summary>
+    /// 
+    /// </summary>
+    public static class StringExtentions
     {
-        /// <summary>
-        /// 转为bool
-        /// </summary>
-        /// <param name="str">字符串</param>
-        /// <returns></returns>
-        public static bool ToBool(this string str)
-        {
-            return bool.Parse(str);
-        }
-
-        /// <summary>
-        /// 转为字节数组
-        /// </summary>
-        /// <param name="base64Str">base64字符串</param>
-        /// <returns></returns>
-        public static byte[] ToBytes_FromBase64Str(this string base64Str)
-        {
-            return Convert.FromBase64String(base64Str);
-        }
-        /// <summary>
-        /// 获取邮箱服务器分类
-        /// </summary>
-        /// <param name="str">imap.sohu.com</param>
-        /// <returns>sohu</returns>
-        public static string MailType(this string str)
-        {
-            return str.Substring(str.IndexOf(".") + 1, str.LastIndexOf(".") - str.IndexOf(".") - 1).ToLower();
-        }
         /// <summary>
         /// 转换为MD5加密后的字符串（默认加密为32位）
         /// </summary>
@@ -369,151 +339,6 @@ namespace Colder.CommonUtil
         }
 
         /// <summary>
-        /// 转换为日期格式
-        /// </summary>
-        /// <param name="str"></param>
-        /// <returns></returns>
-        public static DateTime ToDateTime(this string str)
-        {
-            return Convert.ToDateTime(str);
-        }
-
-        /// <summary>
-        /// 删除Json字符串中键中的@符号
-        /// </summary>
-        /// <param name="jsonStr">json字符串</param>
-        /// <returns></returns>
-        public static string RemoveAt(this string jsonStr)
-        {
-            Regex reg = new Regex("\"@([^ \"]*)\"\\s*:\\s*\"(([^ \"]+\\s*)*)\"");
-            string strPatten = "\"$1\":\"$2\"";
-            return reg.Replace(jsonStr, strPatten);
-        }
-
-        /// <summary>
-        /// 将XML字符串反序列化为对象
-        /// </summary>
-        /// <typeparam name="T">对象类型</typeparam>
-        /// <param name="xmlStr">XML字符串</param>
-        /// <returns></returns>
-        public static T XmlStrToObject<T>(this string xmlStr)
-        {
-            XmlDocument doc = new XmlDocument();
-            doc.LoadXml(xmlStr);
-            string jsonJsonStr = JsonConvert.SerializeXmlNode(doc);
-
-            return JsonConvert.DeserializeObject<T>(jsonJsonStr);
-        }
-
-        /// <summary>
-        /// 将XML字符串反序列化为对象
-        /// </summary>
-        /// <param name="xmlStr">XML字符串</param>
-        /// <returns></returns>
-        public static JObject XmlStrToJObject(this string xmlStr)
-        {
-            XmlDocument doc = new XmlDocument();
-            doc.LoadXml(xmlStr);
-            string jsonJsonStr = JsonConvert.SerializeXmlNode(doc);
-
-            return JsonConvert.DeserializeObject<JObject>(jsonJsonStr);
-        }
-
-        /// <summary>
-        /// 将Json字符串转为List'T'
-        /// </summary>
-        /// <typeparam name="T">对象类型</typeparam>
-        /// <param name="jsonStr"></param>
-        /// <returns></returns>
-        public static List<T> ToList<T>(this string jsonStr)
-        {
-            return string.IsNullOrEmpty(jsonStr) ? null : JsonConvert.DeserializeObject<List<T>>(jsonStr);
-        }
-
-        /// <summary>
-        /// 将Json字符串转为DataTable
-        /// </summary>
-        /// <param name="jsonStr">Json字符串</param>
-        /// <returns></returns>
-        public static DataTable ToDataTable(this string jsonStr)
-        {
-            return jsonStr == null ? null : JsonConvert.DeserializeObject<DataTable>(jsonStr);
-        }
-
-        /// <summary>
-        /// 将Json字符串转为JObject
-        /// </summary>
-        /// <param name="jsonStr">Json字符串</param>
-        /// <returns></returns>
-        public static JObject ToJObject(this string jsonStr)
-        {
-            return jsonStr == null ? JObject.Parse("{}") : JObject.Parse(jsonStr.Replace("&nbsp;", ""));
-        }
-
-        /// <summary>
-        /// 将Json字符串转为JArray
-        /// </summary>
-        /// <param name="jsonStr">Json字符串</param>
-        /// <returns></returns>
-        public static JArray ToJArray(this string jsonStr)
-        {
-            return jsonStr == null ? JArray.Parse("[]") : JArray.Parse(jsonStr.Replace("&nbsp;", ""));
-        }
-
-        /// <summary>
-        /// json数据转实体类,仅仅应用于单个实体类，速度非常快
-        /// </summary>
-        /// <typeparam name="T">泛型参数</typeparam>
-        /// <param name="json">json字符串</param>
-        /// <returns></returns>
-        public static T ToEntity<T>(this string json)
-        {
-            if (json == null || json == "")
-                return default(T);
-
-            Type type = typeof(T);
-            object obj = Activator.CreateInstance(type, null);
-
-            foreach (var item in type.GetProperties())
-            {
-                PropertyInfo info = obj.GetType().GetProperty(item.Name);
-                string pattern;
-                pattern = "\"" + item.Name + "\":\"(.*?)\"";
-                foreach (Match match in Regex.Matches(json, pattern))
-                {
-                    switch (item.PropertyType.ToString())
-                    {
-                        case "System.String": info.SetValue(obj, match.Groups[1].ToString(), null); break;
-                        case "System.Int32": info.SetValue(obj, match.Groups[1].ToString().ToInt(), null); ; break;
-                        case "System.Int64": info.SetValue(obj, Convert.ToInt64(match.Groups[1].ToString()), null); ; break;
-                        case "System.DateTime": info.SetValue(obj, Convert.ToDateTime(match.Groups[1].ToString()), null); ; break;
-                    }
-                }
-            }
-            return (T)obj;
-        }
-
-        /// <summary>
-        /// 转为首字母大写
-        /// </summary>
-        /// <param name="str">字符串</param>
-        /// <returns></returns>
-        public static string ToFirstUpperStr(this string str)
-        {
-            return str.Substring(0, 1).ToUpper() + str.Substring(1);
-        }
-
-        /// <summary>
-        /// 转为首字母小写
-        /// </summary>
-        /// <param name="str">字符串</param>
-        /// <returns></returns>
-        public static string ToFirstLowerStr(this string str)
-        {
-            return str.Substring(0, 1).ToLower() + str.Substring(1);
-        }
-
-        /// <summary>
         /// 转为网络终结点IPEndPoint
         /// </summary>=
         /// <param name="str">字符串</param>
@@ -550,16 +375,6 @@ namespace Colder.CommonUtil
         }
 
         /// <summary>
-        /// 转为MurmurHash
-        /// </summary>
-        /// <param name="str">字符串</param>
-        /// <returns></returns>
-        public static uint ToMurmurHash(this string str)
-        {
-            return MurmurHash2.Hash(Encoding.UTF8.GetBytes(str));
-        }
-
-        /// <summary>
         /// 是否为弱密码
         /// 注:密码必须包含数字、小写字母、大写字母和其他符号中的两种并且长度大于8
         /// </summary>
@@ -586,7 +401,7 @@ namespace Colder.CommonUtil
         {
             string pattern = "([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\\.[a-zA-Z0-9_-]+)";
 
-            return Regex.Matches(text, pattern).Select(x => x.Groups[0].ToString().ToLower()).ToList();
+            return Regex.Matches(text, pattern).Cast<Match>().Select(x => x.Groups[0].ToString().ToLower()).ToList();
         }
     }
 }

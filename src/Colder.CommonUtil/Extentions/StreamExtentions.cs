@@ -4,7 +4,10 @@ using System.Threading.Tasks;
 
 namespace Colder.CommonUtil
 {
-    public static partial class Extention
+    /// <summary>
+    /// 
+    /// </summary>
+    public static class StreamExtentions
     {
         /// <summary>
         /// 将流读为字符串
@@ -22,9 +25,7 @@ namespace Colder.CommonUtil
             {
                 stream.Seek(0, SeekOrigin.Begin);
             }
-
-            string resStr = string.Empty;
-            resStr = await new StreamReader(stream, encoding).ReadToEndAsync();
+            string resStr = await new StreamReader(stream, encoding).ReadToEndAsync();
 
             if (stream.CanSeek)
             {
