@@ -61,7 +61,7 @@ namespace Colder.CommonUtil
                         if (dbValue != null)
                         {
                             Type memberType = theField.FieldType;
-                            dbValue = dbValue.ChangeType_ByConvert(memberType);
+                            dbValue = dbValue.ChangeTypeByConvert(memberType);
                         }
                         theField.SetValue(_t, dbValue);
                     }
@@ -75,7 +75,7 @@ namespace Colder.CommonUtil
                         if (dbValue != null)
                         {
                             Type memberType = theProperty.PropertyType;
-                            dbValue = dbValue.ChangeType_ByConvert(memberType);
+                            dbValue = dbValue.ChangeTypeByConvert(memberType);
                         }
                         theProperty.SetValue(_t, dbValue);
                     }

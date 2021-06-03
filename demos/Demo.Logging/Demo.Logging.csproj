@@ -11,5 +11,4 @@
     <ProjectReference Include="..\..\src\Colder.Logging.Serilog\Colder.Logging.Serilog.csproj" />
   </ItemGroup>
 
-
 </Project>

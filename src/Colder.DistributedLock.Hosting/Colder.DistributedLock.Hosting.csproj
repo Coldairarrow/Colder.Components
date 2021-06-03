@@ -15,5 +15,5 @@
   <ItemGroup>
     <ProjectReference Include="..\Colder.DistributedLock.Abstractions\Colder.DistributedLock.Abstractions.csproj" />
   </ItemGroup>
-
+ 
 </Project>

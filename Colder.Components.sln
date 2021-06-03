@@ -74,7 +74,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Colder.Dependency", "src\Co
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Colder.Json", "src\Colder.Json\Colder.Json.csproj", "{9BE5E09B-9AC2-46FD-8D98-A2ADA8511DBE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Colder.CommonUtil.Office", "src\Colder.CommonUtil.Office\Colder.CommonUtil.Office.csproj", "{335C810D-4D1E-422A-85BD-B61385276BA1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Colder.CommonUtil.Office", "src\Colder.CommonUtil.Office\Colder.CommonUtil.Office.csproj", "{335C810D-4D1E-422A-85BD-B61385276BA1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Colder.CommonUtil.Zip", "src\Colder.CommonUtil.Zip\Colder.CommonUtil.Zip.csproj", "{9D9CDA87-094E-48B6-AE5E-15D712813CE8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Colder.CommonUtil.Quartz", "src\Colder.CommonUtil.Quartz\Colder.CommonUtil.Quartz.csproj", "{FCAAC836-8083-4C82-B449-94A07A65A5AD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Colder.CommonUtil.QRCode", "src\Colder.CommonUtil.QRCode\Colder.CommonUtil.QRCode.csproj", "{F9AEA348-B621-49AC-831A-A6FE18E6C685}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -190,6 +196,18 @@ Global
 		{335C810D-4D1E-422A-85BD-B61385276BA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{335C810D-4D1E-422A-85BD-B61385276BA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{335C810D-4D1E-422A-85BD-B61385276BA1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9D9CDA87-094E-48B6-AE5E-15D712813CE8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9D9CDA87-094E-48B6-AE5E-15D712813CE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9D9CDA87-094E-48B6-AE5E-15D712813CE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9D9CDA87-094E-48B6-AE5E-15D712813CE8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FCAAC836-8083-4C82-B449-94A07A65A5AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FCAAC836-8083-4C82-B449-94A07A65A5AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FCAAC836-8083-4C82-B449-94A07A65A5AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FCAAC836-8083-4C82-B449-94A07A65A5AD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F9AEA348-B621-49AC-831A-A6FE18E6C685}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F9AEA348-B621-49AC-831A-A6FE18E6C685}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F9AEA348-B621-49AC-831A-A6FE18E6C685}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F9AEA348-B621-49AC-831A-A6FE18E6C685}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -222,6 +240,9 @@ Global
 		{F6C92C1B-A235-4CCE-B79E-7FDD57CF48A7} = {F9A5FCE5-9F2F-4F22-A618-5D11DB9E7237}
 		{9BE5E09B-9AC2-46FD-8D98-A2ADA8511DBE} = {F9A5FCE5-9F2F-4F22-A618-5D11DB9E7237}
 		{335C810D-4D1E-422A-85BD-B61385276BA1} = {F9A5FCE5-9F2F-4F22-A618-5D11DB9E7237}
+		{9D9CDA87-094E-48B6-AE5E-15D712813CE8} = {F9A5FCE5-9F2F-4F22-A618-5D11DB9E7237}
+		{FCAAC836-8083-4C82-B449-94A07A65A5AD} = {F9A5FCE5-9F2F-4F22-A618-5D11DB9E7237}
+		{F9AEA348-B621-49AC-831A-A6FE18E6C685} = {F9A5FCE5-9F2F-4F22-A618-5D11DB9E7237}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {817CE001-2A40-4054-B349-ECDB5986C92E}

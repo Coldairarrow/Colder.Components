@@ -10,38 +10,6 @@ namespace Colder.CommonUtil
     public static class ByteExtentions
     {
         /// <summary>
-        /// byte[]转string
-        /// 注：默认使用UTF8编码
-        /// </summary>
-        /// <param name="bytes">byte[]数组</param>
-        /// <returns></returns>
-        public static string ToString(this byte[] bytes)
-        {
-            return Encoding.UTF8.GetString(bytes);
-        }
-
-        /// <summary>
-        /// byte[]转string
-        /// </summary>
-        /// <param name="bytes">byte[]数组</param>
-        /// <param name="encoding">指定编码</param>
-        /// <returns></returns>
-        public static string ToString(this byte[] bytes, Encoding encoding)
-        {
-            return encoding.GetString(bytes);
-        }
-
-        /// <summary>
-        /// 将byte[]转为Base64字符串
-        /// </summary>
-        /// <param name="bytes">字节数组</param>
-        /// <returns></returns>
-        public static string ToBase64String(this byte[] bytes)
-        {
-            return Convert.ToBase64String(bytes);
-        }
-
-        /// <summary>
         /// 转为二进制字符串
         /// </summary>
         /// <param name="aByte">字节</param>
