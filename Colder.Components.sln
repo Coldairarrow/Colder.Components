@@ -76,11 +76,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Colder.Json", "src\Colder.J
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Colder.CommonUtil.Office", "src\Colder.CommonUtil.Office\Colder.CommonUtil.Office.csproj", "{335C810D-4D1E-422A-85BD-B61385276BA1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Colder.CommonUtil.Zip", "src\Colder.CommonUtil.Zip\Colder.CommonUtil.Zip.csproj", "{9D9CDA87-094E-48B6-AE5E-15D712813CE8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Colder.CommonUtil.Zip", "src\Colder.CommonUtil.Zip\Colder.CommonUtil.Zip.csproj", "{9D9CDA87-094E-48B6-AE5E-15D712813CE8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Colder.CommonUtil.Quartz", "src\Colder.CommonUtil.Quartz\Colder.CommonUtil.Quartz.csproj", "{FCAAC836-8083-4C82-B449-94A07A65A5AD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Colder.CommonUtil.Quartz", "src\Colder.CommonUtil.Quartz\Colder.CommonUtil.Quartz.csproj", "{FCAAC836-8083-4C82-B449-94A07A65A5AD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Colder.CommonUtil.QRCode", "src\Colder.CommonUtil.QRCode\Colder.CommonUtil.QRCode.csproj", "{F9AEA348-B621-49AC-831A-A6FE18E6C685}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Colder.CommonUtil.QRCode", "src\Colder.CommonUtil.QRCode\Colder.CommonUtil.QRCode.csproj", "{F9AEA348-B621-49AC-831A-A6FE18E6C685}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -9,10 +9,10 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="5.0.0" />
-    <PackageReference Include="Microsoft.Orleans.OrleansRuntime" Version="3.4.2" />
-    <PackageReference Include="Microsoft.Orleans.Clustering.AdoNet" Version="3.4.2" />
-    <PackageReference Include="Microsoft.Orleans.Persistence.AdoNet" Version="3.4.2" />
-    <PackageReference Include="Microsoft.Orleans.Server" Version="3.4.2" />
+    <PackageReference Include="Microsoft.Orleans.OrleansRuntime" Version="3.4.3" />
+    <PackageReference Include="Microsoft.Orleans.Clustering.AdoNet" Version="3.4.3" />
+    <PackageReference Include="Microsoft.Orleans.Persistence.AdoNet" Version="3.4.3" />
+    <PackageReference Include="Microsoft.Orleans.Server" Version="3.4.3" />
   </ItemGroup>
 
   <ItemGroup>
