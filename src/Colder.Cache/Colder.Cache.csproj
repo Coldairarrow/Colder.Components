@@ -19,8 +19,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Colder.CommonUtil\Colder.CommonUtil.csproj" />
     <ProjectReference Include="..\Colder.Json\Colder.Json.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="..\Colder.CommonUtil\Extentions\TypeExtentions.cs" />
   </ItemGroup>
 
 </Project>
