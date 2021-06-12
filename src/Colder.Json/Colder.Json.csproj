@@ -8,4 +8,8 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Include="..\Colder.CommonUtil\Helpers\TimestampHelper.cs" />
+  </ItemGroup>
+  
 </Project>

@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 
 namespace Colder.Json
@@ -9,16 +10,19 @@ namespace Colder.Json
     public static class JsonExtensions
     {
         /// <summary>
-        /// 默认配置
+        /// Iso配置，时间格式为ISO-8601
         /// </summary>
-        public static readonly JsonSerializerSettings DefaultSettings = new JsonSerializerSettings
+        /// <remarks>系统内部需要可读性时采用此序列化，例如缓存、日志打印等</remarks>
+        public static readonly JsonSerializerSettings IsoSettings = new JsonSerializerSettings
         {
-            ContractResolver = new DefaultContractResolver()
+            ContractResolver = new DefaultContractResolver(),
+            Converters = new JsonConverter[] { new IsoDateTimeConverter() }
         };
 
         /// <summary>
         /// 时间戳配置
         /// </summary>
+        /// <remarks>接口数据传输的时候使用此序列化</remarks>
         public static readonly JsonSerializerSettings TimestampSettings = new JsonSerializerSettings
         {
             ContractResolver = new DefaultContractResolver(),
@@ -34,7 +38,7 @@ namespace Colder.Json
         /// <returns></returns>
         public static string ToJson(this object obj, bool timestamp = true, JsonSerializerSettings settings = null)
         {
-            settings = settings ?? (timestamp ? TimestampSettings : DefaultSettings);
+            settings = settings ?? (timestamp ? TimestampSettings : IsoSettings);
             return JsonConvert.SerializeObject(obj, settings);
         }
 
@@ -47,7 +51,7 @@ namespace Colder.Json
         /// <returns></returns>
         public static T ToObject<T>(this string json, bool timestamp = true, JsonSerializerSettings settings = null)
         {
-            settings = settings ?? (timestamp ? TimestampSettings : DefaultSettings);
+            settings = settings ?? (timestamp ? TimestampSettings : IsoSettings);
             return JsonConvert.DeserializeObject<T>(json, settings);
         }
     }

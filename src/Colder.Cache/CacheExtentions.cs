@@ -1,9 +1,9 @@
 ﻿using Colder.CommonUtil;
+using Colder.Json;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Newtonsoft.Json;
 using System;
 using System.Threading.Tasks;
 
@@ -23,22 +23,36 @@ namespace Colder.Cache
         {
             hostBuilder.ConfigureServices((buidlerContext, services) =>
             {
-                var cacheOption = buidlerContext.Configuration.GetSection("Cache").Get<CacheOptions>();
-                switch (cacheOption.CacheType)
-                {
-                    case CacheTypes.InMemory: services.AddDistributedMemoryCache(); break;
-                    case CacheTypes.Redis:
-                        {
-                            services.AddStackExchangeRedisCache(options =>
-                            {
-                                options.Configuration = cacheOption.RedisConnectionString;
-                            });
-                        }; break;
-                    default: throw new Exception("缓存类型无效");
-                }
+                var cacheOption = buidlerContext.Configuration.GetSection("cache").Get<CacheOptions>();
+
+                services.AddCache(cacheOption);
             });
 
             return hostBuilder;
+        }
+
+        /// <summary>
+        /// 注入缓存
+        /// </summary>
+        /// <param name="services"></param>
+        /// <param name="cacheOption"></param>
+        /// <returns></returns>
+        public static IServiceCollection AddCache(this IServiceCollection services, CacheOptions cacheOption)
+        {
+            switch (cacheOption.CacheType)
+            {
+                case CacheTypes.InMemory: services.AddDistributedMemoryCache(); break;
+                case CacheTypes.Redis:
+                    {
+                        services.AddStackExchangeRedisCache(options =>
+                        {
+                            options.Configuration = cacheOption.RedisConnectionString;
+                        });
+                    }; break;
+                default: throw new Exception("缓存类型无效");
+            }
+
+            return services;
         }
 
         /// <summary>
@@ -52,7 +66,7 @@ namespace Colder.Cache
         /// <returns></returns>
         public static async Task<T> GetOrSetObjectAsync<T>(this IDistributedCache distributedCache, string cacheKey, Func<Task<T>> getFromDb, DistributedCacheEntryOptions options = null)
         {
-            options = options ?? new DistributedCacheEntryOptions();
+            options ??= new DistributedCacheEntryOptions();
 
             T resObj;
 
@@ -101,18 +115,36 @@ namespace Colder.Cache
         /// <returns></returns>
         public static async Task SetObjectAsync<T>(this IDistributedCache distributedCache, string cacheKey, T value, DistributedCacheEntryOptions options = null)
         {
+            options ??= new DistributedCacheEntryOptions();
+
             await distributedCache.SetStringAsync(cacheKey, SerializeObject(value), options);
         }
 
         private static string SerializeObject(object obj)
         {
+            if (obj == null)
+            {
+                return null;
+            }
+
+            var type = obj.GetType();
+
             if (obj.GetType().IsSimple())
             {
+                if (type == typeof(DateTime) || type == typeof(DateTime?))
+                {
+                    return ((DateTime)obj).ToString("o");
+                }
+                else if (type == typeof(DateTimeOffset) || type == typeof(DateTimeOffset?))
+                {
+                    return ((DateTimeOffset)obj).ToString("o");
+                }
+
                 return obj?.ToString();
             }
             else
             {
-                return JsonConvert.SerializeObject(obj);
+                return obj.ToJson(false);
             }
         }
 
@@ -120,11 +152,24 @@ namespace Colder.Cache
         {
             if (typeof(T).IsSimple())
             {
+                if (typeof(T) == typeof(DateTime) || typeof(T) == typeof(DateTime?))
+                {
+                    return (T)(object)DateTime.Parse(json);
+                }
+                else if (typeof(T) == typeof(DateTimeOffset) || typeof(T) == typeof(DateTimeOffset?))
+                {
+                    return (T)(object)DateTimeOffset.Parse(json);
+                }
+                else if (typeof(T) == typeof(Guid) || typeof(T) == typeof(Guid?))
+                {
+                    return (T)(object)Guid.Parse(json);
+                }
+
                 return (T)Convert.ChangeType(json, typeof(T));
             }
             else
             {
-                return JsonConvert.DeserializeObject<T>(json);
+                return json.ToObject<T>(false);
             }
         }
     }

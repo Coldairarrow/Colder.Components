@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Colder.CommonUtil\Colder.CommonUtil.csproj" />
+    <ProjectReference Include="..\Colder.Json\Colder.Json.csproj" />
   </ItemGroup>
 
 </Project>

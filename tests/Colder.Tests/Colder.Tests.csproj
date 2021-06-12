@@ -20,11 +20,13 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\demos\Demo.Common\Demo.Common.csproj" />
+    <ProjectReference Include="..\..\src\Colder.Cache\Colder.Cache.csproj" />
     <ProjectReference Include="..\..\src\Colder.CommonUtil\Colder.CommonUtil.csproj" />
     <ProjectReference Include="..\..\src\Colder.DistributedId\Colder.DistributedId.csproj" />
     <ProjectReference Include="..\..\src\Colder.DistributedLock.Hosting\Colder.DistributedLock.Hosting.csproj" />
     <ProjectReference Include="..\..\src\Colder.DistributedLock.InMemory\Colder.DistributedLock.InMemory.csproj" />
     <ProjectReference Include="..\..\src\Colder.DistributedLock.Redis\Colder.DistributedLock.Redis.csproj" />
+    <ProjectReference Include="..\..\src\Colder.Json\Colder.Json.csproj" />
     <ProjectReference Include="..\..\src\Colder.Logging.Serilog\Colder.Logging.Serilog.csproj" />
     <ProjectReference Include="..\..\src\Colder.MessageBus.MassTransit\Colder.MessageBus.RabbitMQ.csproj" />
   </ItemGroup>

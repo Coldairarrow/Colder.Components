@@ -25,6 +25,7 @@ namespace Colder.CommonUtil
               || type.Equals(typeof(decimal))
               || type.Equals(typeof(DateTime))
               || type.Equals(typeof(DateTimeOffset))
+              || type.Equals(typeof(Guid))
               ;
         }
     }
