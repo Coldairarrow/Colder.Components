@@ -143,5 +143,76 @@ namespace Colder.CommonUtil
 
             return base64UrlStr;
         }
+
+        /// <summary>
+        /// 图片添加文字，文字大小自适应
+        /// </summary>
+        /// <param name="image">图片</param>
+        /// <param name="locationLeftTop">左上角定位像素(x1,y1)</param>
+        /// <param name="locationRightBottom">右下角定位像素(x2,y2)</param>
+        /// <param name="text">文字内容</param>
+        /// <param name="color">字体颜色</param>
+        /// <param name="fontName">字体名称</param>
+        /// <returns>添加文字后的Bitmap对象</returns>
+        public static Image AddText(Image image, (int x, int y) locationLeftTop, (int x, int y) locationRightBottom, string text, Color color, string fontName = "ttf")
+        {
+            int width = image.Width;
+            int height = image.Height;
+            Bitmap bmp = new Bitmap(width, height);
+            using Graphics graph = Graphics.FromImage(bmp);
+
+            // 计算文字区域
+            // 左上角
+            float x1 = locationLeftTop.x;
+            float y1 = locationLeftTop.y;
+            // 右下角
+            float x2 = locationRightBottom.x;
+            float y2 = locationRightBottom.y;
+            // 区域宽高
+            float fontWidth = x2 - x1;
+            float fontHeight = y2 - y1;
+
+            // 初次估计先用文字区域高度作为文字字体大小，后面再做调整，单位为px
+            float fontSize = fontHeight;
+
+            Font font = new Font(fontName, fontSize, GraphicsUnit.Pixel);
+            SizeF sf = graph.MeasureString(text, font);
+
+            int times = 0;
+
+            // 调整字体大小以适应文字区域
+            if (sf.Width > fontWidth)
+            {
+                while (sf.Width > fontWidth)
+                {
+                    fontSize -= 0.1f;
+                    font = new Font(fontName, fontSize, GraphicsUnit.Pixel);
+                    sf = graph.MeasureString(text, font);
+
+                    times++;
+                }
+            }
+            else if (sf.Width < fontWidth)
+            {
+                while (sf.Width < fontWidth)
+                {
+                    fontSize += 0.1f;
+                    font = new Font(fontName, fontSize, GraphicsUnit.Pixel);
+                    sf = graph.MeasureString(text, font);
+
+                    times++;
+                }
+            }
+
+            // 最终的得出的字体所占区域一般不会刚好等于实际区域
+            // 所以根据两个区域的相差之处再把文字开始位置(左上角定位)稍微调整一下
+            x1 += (fontWidth - sf.Width) / 2;
+            y1 += (fontHeight - sf.Height) / 2;
+
+            graph.DrawImage(image, 0, 0, width, height);
+            graph.DrawString(text, font, new SolidBrush(color), x1, y1);
+
+            return bmp;
+        }
     }
 }

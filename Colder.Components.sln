@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30413.136
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31410.414
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Colder.Logging.Abstractions", "src\Colder.Logging.Abstractions\Colder.Logging.Abstractions.csproj", "{B514FF79-D143-4ADE-A1EE-1DF929188AA7}"
 EndProject
@@ -81,6 +81,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Colder.CommonUtil.Quartz", "src\Colder.CommonUtil.Quartz\Colder.CommonUtil.Quartz.csproj", "{FCAAC836-8083-4C82-B449-94A07A65A5AD}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Colder.CommonUtil.QRCode", "src\Colder.CommonUtil.QRCode\Colder.CommonUtil.QRCode.csproj", "{F9AEA348-B621-49AC-831A-A6FE18E6C685}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domo.Console", "demos\Domo.Console\Domo.Console.csproj", "{A5A11F0C-4EE0-4F08-BC1C-7CB631B3F062}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -208,6 +210,10 @@ Global
 		{F9AEA348-B621-49AC-831A-A6FE18E6C685}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F9AEA348-B621-49AC-831A-A6FE18E6C685}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F9AEA348-B621-49AC-831A-A6FE18E6C685}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A5A11F0C-4EE0-4F08-BC1C-7CB631B3F062}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A5A11F0C-4EE0-4F08-BC1C-7CB631B3F062}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A5A11F0C-4EE0-4F08-BC1C-7CB631B3F062}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A5A11F0C-4EE0-4F08-BC1C-7CB631B3F062}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -243,6 +249,7 @@ Global
 		{9D9CDA87-094E-48B6-AE5E-15D712813CE8} = {F9A5FCE5-9F2F-4F22-A618-5D11DB9E7237}
 		{FCAAC836-8083-4C82-B449-94A07A65A5AD} = {F9A5FCE5-9F2F-4F22-A618-5D11DB9E7237}
 		{F9AEA348-B621-49AC-831A-A6FE18E6C685} = {F9A5FCE5-9F2F-4F22-A618-5D11DB9E7237}
+		{A5A11F0C-4EE0-4F08-BC1C-7CB631B3F062} = {ACCF873E-B185-4FEA-8502-D5F708E42168}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {817CE001-2A40-4054-B349-ECDB5986C92E}
