@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Colder.CommonUtil
+namespace Colder.CommonUtil.Primitives
 {
     /// <summary>
     /// 管道

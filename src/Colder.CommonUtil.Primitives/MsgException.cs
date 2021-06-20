@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Colder.CommonUtil
+namespace Colder.CommonUtil.Primitives
 {
     /// <summary>
     /// 业务异常
@@ -38,6 +38,17 @@ namespace Colder.CommonUtil
         /// <param name="code">错误代码</param>
         public MsgException(string message, int code)
             : base(message)
+        {
+            Code = code;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="code"></param>
+        /// <param name="innerException"></param>
+        public MsgException(string message, int code, Exception innerException) : base(message, innerException)
         {
             Code = code;
         }

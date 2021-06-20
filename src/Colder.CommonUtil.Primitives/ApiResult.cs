@@ -1,4 +1,4 @@
-﻿namespace Colder.CommonUtil
+﻿namespace Colder.CommonUtil.Primitives
 {
     /// <summary>
     /// Api请求结果
