@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Colder.CommonUtil
+namespace Colder.CommonUtil.Primitives
 {
     /// <summary>
     /// 分页查询基类
