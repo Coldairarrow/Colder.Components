@@ -8,11 +8,11 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="10.1.1" />
-    <PackageReference Include="EFCore.Sharding" Version="5.0.13" />
+    <PackageReference Include="EFCore.Sharding" Version="5.0.14" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Colder.CommonUtil\Colder.CommonUtil.csproj" />
+    <ProjectReference Include="..\Colder.Common\Colder.Common.csproj" />
     <ProjectReference Include="..\Colder.Domain.Abstractions\Colder.Domain.Abstractions.csproj" />
   </ItemGroup>
 

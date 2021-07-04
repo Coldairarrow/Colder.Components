@@ -15,15 +15,11 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="5.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="StackExchange.Redis" Version="2.2.4" />
+    <PackageReference Include="StackExchange.Redis" Version="2.2.62" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Colder.Json\Colder.Json.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Include="..\Colder.CommonUtil\Extentions\TypeExtentions.cs" />
   </ItemGroup>
 
 </Project>

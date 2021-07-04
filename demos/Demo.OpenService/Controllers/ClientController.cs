@@ -1,4 +1,4 @@
-﻿using Colder.CommonUtil.Primitives;
+﻿using Colder.Common;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;

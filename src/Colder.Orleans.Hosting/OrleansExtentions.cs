@@ -1,4 +1,4 @@
-﻿using Colder.CommonUtil;
+﻿using Colder.Common;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;

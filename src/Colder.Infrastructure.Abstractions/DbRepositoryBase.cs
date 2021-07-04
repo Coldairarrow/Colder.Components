@@ -1,4 +1,4 @@
-﻿using Colder.CommonUtil;
+﻿using Colder.Common;
 using Colder.Domain;
 using EFCore.Sharding;
 using Microsoft.EntityFrameworkCore;

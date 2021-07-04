@@ -14,7 +14,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\Colder.Logging.Serilog\Colder.Logging.Serilog.csproj" />
-    <ProjectReference Include="..\..\src\Colder.MessageBus.MassTransit\Colder.MessageBus.RabbitMQ.csproj" />
     <ProjectReference Include="..\..\src\Colder.MessageBus.MQTT\Colder.MessageBus.MQTT.csproj" />
     <ProjectReference Include="..\Demo.Common\Demo.Common.csproj" />
   </ItemGroup>

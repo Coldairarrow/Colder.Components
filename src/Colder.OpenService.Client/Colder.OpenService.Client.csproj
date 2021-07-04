@@ -12,10 +12,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="..\Colder.CommonUtil\Extentions\ReflectionExtentions.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Colder.Json\Colder.Json.csproj" />
     <ProjectReference Include="..\Colder.OpenService.Abstractions\Colder.OpenService.Abstractions.csproj" />
   </ItemGroup>

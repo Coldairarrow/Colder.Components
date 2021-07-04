@@ -1,5 +1,5 @@
 ﻿using Castle.DynamicProxy;
-using Colder.CommonUtil.Primitives;
+using Colder.Common;
 using Colder.Json;
 using Colder.OpenService.Abstractions;
 using Microsoft.Extensions.DependencyInjection;

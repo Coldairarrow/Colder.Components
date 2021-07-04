@@ -1,4 +1,4 @@
-﻿using Colder.CommonUtil.Primitives;
+﻿using Colder.Common;
 using System.Threading.Tasks;
 
 namespace Colder.OpenService.Abstractions

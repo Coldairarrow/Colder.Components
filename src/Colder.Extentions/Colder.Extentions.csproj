@@ -8,11 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="EFCore.Sharding" Version="5.0.13" />
+    <PackageReference Include="EFCore.Sharding" Version="5.0.14" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Colder.CommonUtil\Colder.CommonUtil.csproj" />
     <ProjectReference Include="..\Colder.Dependency\Colder.Dependency.csproj" />
   </ItemGroup>
 

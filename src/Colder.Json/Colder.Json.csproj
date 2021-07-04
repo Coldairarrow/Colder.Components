@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="..\Colder.CommonUtil\Helpers\TimestampHelper.cs" />
+    <ProjectReference Include="..\Colder.Common\Colder.Common.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,4 +1,4 @@
-﻿using Colder.CommonUtil;
+﻿using Colder.Common;
 using Colder.Json;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;

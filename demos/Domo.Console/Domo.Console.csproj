@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Colder.CommonUtil\Colder.CommonUtil.csproj" />
+    <ProjectReference Include="..\..\src\Colder.Common\Colder.Common.csproj" />
   </ItemGroup>
 
 </Project>
