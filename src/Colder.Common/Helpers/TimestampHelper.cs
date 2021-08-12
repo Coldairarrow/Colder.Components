@@ -42,7 +42,7 @@ namespace Colder.Common
                 timestamp = _maxTimestamp;
             }
 
-            return DateTimeOffset.FromUnixTimeSeconds(timestamp);
+            return DateTimeOffset.FromUnixTimeMilliseconds(timestamp);
         }
     }
 }
