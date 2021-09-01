@@ -27,7 +27,7 @@ namespace Colder.MessageBus.MQTT
             var host = Options.Host.Split(':');
 
             var options = new MqttClientOptionsBuilder()
-                .WithClientId($"{Options.Endpoint}.{Environment.MachineName}")
+                .WithClientId(Guid.NewGuid().ToString())
                 .WithTcpServer(host[0], int.Parse(host[1]))
                 .Build();
 
@@ -46,8 +46,7 @@ namespace Colder.MessageBus.MQTT
             mqttClient.UseConnectedHandler(async e =>
             {
                 //Topic格式
-                //ClientId={Endpoint}.{MachineName}
-                //Colder.MessageBus.MQTT/{SourceClientId}/{TargetClientId}/{SourceEndpoint}/{TargetEndpoint}/{MessageBodyType}/{MessageType}/{MessageId}
+                //RootTopic/{SourceClientId}/{TargetClientId}/{SourceEndpoint}/{TargetEndpoint}/{MessageBodyType}/{MessageType}/{MessageId}
 
                 string topic;
                 foreach (var aMessageType in Cache.MessageTypes)
