@@ -1,6 +1,8 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
+using System.Linq;
 
 namespace Colder.Json
 {
@@ -53,6 +55,42 @@ namespace Colder.Json
         {
             settings = settings ?? (timestamp ? TimestampSettings : IsoSettings);
             return JsonConvert.DeserializeObject<T>(json, settings);
+        }
+
+        /// <summary>
+        /// josn中属性排序
+        /// </summary>
+        /// <param name="json"></param>
+        /// <returns></returns>
+        public static string SortJson(string json)
+        {
+            var jObj = JsonConvert.DeserializeObject<JObject>(json);
+            Sort(jObj);
+
+            return JsonConvert.SerializeObject(jObj);
+
+            void Sort(JObject jObj)
+            {
+                var props = jObj.Properties().ToList();
+                foreach (var prop in props)
+                {
+                    prop.Remove();
+                }
+
+                foreach (var prop in props.OrderBy(p => p.Name))
+                {
+                    jObj.Add(prop);
+                    if (prop.Value is JObject)
+                        Sort((JObject)prop.Value);
+                    if (prop.Value is JArray)
+                    {
+                        int iCount = prop.Value.Count();
+                        for (int iIterator = 0; iIterator < iCount; iIterator++)
+                            if (prop.Value[iIterator] is JObject)
+                                Sort((JObject)prop.Value[iIterator]);
+                    }
+                }
+            }
         }
     }
 }
