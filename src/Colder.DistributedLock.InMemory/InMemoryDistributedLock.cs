@@ -1,6 +1,7 @@
 ﻿using Colder.DistributedLock.Abstractions;
 using Microsoft.Extensions.Caching.Memory;
 using System;
+using System.Collections.Concurrent;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -13,12 +14,13 @@ namespace Colder.DistributedLock.InMemory
             //及时过期
             ExpirationScanFrequency = TimeSpan.FromSeconds(1)
         });
+        private readonly ConcurrentDictionary<string, object> _internelLock = new ConcurrentDictionary<string, object>();
         public async Task<IDisposable> Lock(string key, TimeSpan? timeout)
         {
             timeout = timeout ?? TimeSpan.FromSeconds(10);
 
             UsingLock theLock;
-            lock (key)
+            lock (_internelLock.GetOrAdd(key, new object()))
             {
                 theLock = _lockDic.GetOrCreate(key, cacheEntry =>
                 {
@@ -32,6 +34,7 @@ namespace Colder.DistributedLock.InMemory
                             || reason == EvictionReason.Removed)
                         {
                             newLock.DisposeLock();
+                            _internelLock.TryRemove(key, out _);
                         }
                     });
 

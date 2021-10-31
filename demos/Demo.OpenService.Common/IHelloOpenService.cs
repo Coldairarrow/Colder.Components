@@ -2,7 +2,7 @@
 using Colder.OpenService.Abstractions;
 using System.Threading.Tasks;
 
-namespace Demo.OpenService
+namespace Demo.OpenService.Common
 {
     /// <summary>
     /// 

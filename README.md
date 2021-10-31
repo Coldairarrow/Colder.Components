@@ -7,7 +7,9 @@
   - [自动注入](#自动注入)
   - [消息总线](#消息总线)
   - [Orleans](#orleans)
+  - [OpenService(RPC调用)](#openservicerpc调用)
 # 通用基础组件
+**完整使用案例见源码中demos**
 ## 日志
 
 nuget包：`Colder.Logging.Serilog`
@@ -152,4 +154,64 @@ IHostBuilder.ConfigureOrleansDefaults()
     "Port": 11111
   }
 }
+```
+
+## OpenService(RPC调用)
+
+nuget包：
+- `Colder.OpenService.Abstractions`
+- `Colder.OpenService.Client`
+- `Colder.OpenService.Hosting`
+
+接口定义
+```c#
+/// <summary>
+    /// 
+    /// </summary>
+    [Route("hello")]
+    public interface IHelloOpenService : IOpenService
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="idInput"></param>
+        /// <returns></returns>
+        [Route("say")]
+        Task<string> SayHello(IdInput<string> idInput);
+    }
+```
+
+服务端
+```c#
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                .ConfigureServices((host, services) =>
+                {
+                    services.AddOpenServiceClient(Assembly.GetEntryAssembly(), new OpenServiceOptions
+                    {
+                        BaseUrl="http://localhost:5000/api/"
+                    });
+                })
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.UseStartup<Startup>();
+                });
+```
+
+客户端
+```c#
+        static async Task Main(string[] args)
+        {
+            IServiceCollection services = new ServiceCollection();
+            services.AddOpenServiceClient(typeof(IHelloOpenService).Assembly, new OpenServiceOptions
+            {
+                BaseUrl = "http://localhost:5000/api/"
+            });
+            IServiceProvider serviceProvider = services.BuildServiceProvider();
+            IHelloOpenService helloOpenService = serviceProvider.GetService<IHelloOpenService>();
+            var response = await helloOpenService.SayHello(new IdInput<string> { Id = "Hello World" });
+            Console.WriteLine($"请求成功 返回参:{response}");
+
+            Console.ReadLine();
+        }
 ```

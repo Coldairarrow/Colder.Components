@@ -1,5 +1,6 @@
 ﻿using Colder.Common;
 using Colder.OpenService.Hosting;
+using Demo.OpenService.Common;
 using System.Threading.Tasks;
 
 namespace Demo.OpenService.Controllers

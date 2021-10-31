@@ -403,5 +403,20 @@ namespace Colder.Common
 
             return Regex.Matches(text, pattern).Cast<Match>().Select(x => x.Groups[0].ToString().ToLower()).ToList();
         }
+
+        private static readonly Encoding _utf8Encoder = Encoding.GetEncoding(
+            "UTF-8",
+            new EncoderReplacementFallback(string.Empty),
+            new DecoderExceptionFallback()
+        );
+        /// <summary>
+        /// 移除非utf8字符
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        public static string RemoveNotUtf8(this string str)
+        {
+            return _utf8Encoder.GetString(_utf8Encoder.GetBytes(str));
+        }
     }
 }
