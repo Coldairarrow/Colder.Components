@@ -11,6 +11,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 
 namespace Colder.Logging.Serilog
 {
@@ -79,6 +80,7 @@ namespace Colder.Logging.Serilog
                 serilogConfig.Enrich.WithProperty("MachineName", Environment.MachineName);
                 serilogConfig.Enrich.WithProperty("ApplicationName", Assembly.GetEntryAssembly().GetName().Name);
                 serilogConfig.Enrich.WithProperty("ApplicationVersion", Assembly.GetEntryAssembly().GetName().Version);
+                serilogConfig.Enrich.WithProperty("ThreadId", Thread.CurrentThread.ManagedThreadId);
                 var httpContext = serviceProvider.GetService<IHttpContextAccessor>()?.HttpContext;
                 if (httpContext != null)
                 {
