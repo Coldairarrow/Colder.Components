@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31410.357
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Colder.Logging.Abstractions", "src\Colder.Logging.Abstractions\Colder.Logging.Abstractions.csproj", "{B514FF79-D143-4ADE-A1EE-1DF929188AA7}"
 EndProject
@@ -88,7 +88,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo.OpenService.Server", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo.OpenService.Common", "demos\Demo.OpenService.Common\Demo.OpenService.Common.csproj", "{928234B9-38E2-4B6F-827C-BFD26EB5EEEA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.OpenService.Client", "demos\Demo.OpenService.Client\Demo.OpenService.Client.csproj", "{F681E5E1-7117-44ED-8C22-8E64168C0FA0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo.OpenService.Client", "demos\Demo.OpenService.Client\Demo.OpenService.Client.csproj", "{F681E5E1-7117-44ED-8C22-8E64168C0FA0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Colder.WebSockets.Abstractions", "src\Colder.WebSockets.Abstractions\Colder.WebSockets.Abstractions.csproj", "{30819D89-EB6F-4DD7-8588-78B2C252E68F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Colder.WebSockets.Server", "src\Colder.WebSockets.Server\Colder.WebSockets.Server.csproj", "{07F78768-F25F-48B4-99DA-787B98F2F126}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.WebSockets.Server", "demos\Demo.WebSockets.Server\Demo.WebSockets.Server.csproj", "{DCD29614-7882-4C25-AF9C-EDEE60D326E4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -232,6 +238,18 @@ Global
 		{F681E5E1-7117-44ED-8C22-8E64168C0FA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F681E5E1-7117-44ED-8C22-8E64168C0FA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F681E5E1-7117-44ED-8C22-8E64168C0FA0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{30819D89-EB6F-4DD7-8588-78B2C252E68F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{30819D89-EB6F-4DD7-8588-78B2C252E68F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{30819D89-EB6F-4DD7-8588-78B2C252E68F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{30819D89-EB6F-4DD7-8588-78B2C252E68F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{07F78768-F25F-48B4-99DA-787B98F2F126}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{07F78768-F25F-48B4-99DA-787B98F2F126}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{07F78768-F25F-48B4-99DA-787B98F2F126}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{07F78768-F25F-48B4-99DA-787B98F2F126}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DCD29614-7882-4C25-AF9C-EDEE60D326E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DCD29614-7882-4C25-AF9C-EDEE60D326E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DCD29614-7882-4C25-AF9C-EDEE60D326E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DCD29614-7882-4C25-AF9C-EDEE60D326E4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -271,6 +289,9 @@ Global
 		{E999AD9F-E3AE-4DE2-A314-6EC78F6F1CB7} = {ACCF873E-B185-4FEA-8502-D5F708E42168}
 		{928234B9-38E2-4B6F-827C-BFD26EB5EEEA} = {ACCF873E-B185-4FEA-8502-D5F708E42168}
 		{F681E5E1-7117-44ED-8C22-8E64168C0FA0} = {ACCF873E-B185-4FEA-8502-D5F708E42168}
+		{30819D89-EB6F-4DD7-8588-78B2C252E68F} = {F9A5FCE5-9F2F-4F22-A618-5D11DB9E7237}
+		{07F78768-F25F-48B4-99DA-787B98F2F126} = {F9A5FCE5-9F2F-4F22-A618-5D11DB9E7237}
+		{DCD29614-7882-4C25-AF9C-EDEE60D326E4} = {ACCF873E-B185-4FEA-8502-D5F708E42168}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {817CE001-2A40-4054-B349-ECDB5986C92E}

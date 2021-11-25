@@ -1,11 +1,14 @@
-using Colder.OpenService.Hosting;
+using Colder.WebSockets.Server;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using System;
+using System.Threading.Tasks;
 
-namespace Demo.OpenService
+namespace Demo.WebSockets.Server
 {
     internal class Startup
     {
@@ -19,13 +22,20 @@ namespace Demo.OpenService
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers().AddOpenServiceHost();
-            services.AddHttpClient();
-
-            //swagger
-            services.AddOpenApiDocument(settings =>
+            services.AddControllers();
+            services.AddWebSocketServer(x =>
             {
-                settings.AllowReferencesWithProperties = true;
+                x.OnConnected = async (serviceProvider, connection) =>
+                {
+                    connection.Id = DateTime.Now.ToString();
+                    await Task.CompletedTask;
+                };
+                x.OnReceive = async (serviceProvider, connection, msg) =>
+                {
+                    var logger = serviceProvider.GetService<ILoggerFactory>().CreateLogger(GetType());
+                    logger.LogInformation("收到来自 {Id} 的消息:{Msg}", connection.Id, msg);
+                    await Task.CompletedTask;
+                };
             });
         }
 
@@ -37,6 +47,9 @@ namespace Demo.OpenService
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
+
             app.UseRouting();
 
             app.UseAuthorization();
@@ -46,8 +59,7 @@ namespace Demo.OpenService
                 endpoints.MapControllers();
             });
 
-            app.UseOpenApi()//添加swagger生成api文档（默认路由文档 /swagger/v1/swagger.json）
-                .UseSwaggerUi3();//添加Swagger UI到请求管道中(默认路由: /swagger).
+            app.UseWebSocketServer();
         }
     }
 }

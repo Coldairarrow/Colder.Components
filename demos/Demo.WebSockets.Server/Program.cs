@@ -1,9 +1,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
-using Colder.OpenService.Client;
-using System.Reflection;
 
-namespace Demo.OpenService
+namespace Demo.WebSockets.Server
 {
     internal class Program
     {
@@ -14,13 +12,6 @@ namespace Demo.OpenService
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                .ConfigureServices((host, services) =>
-                {
-                    services.AddOpenServiceClient(Assembly.GetEntryAssembly(), new OpenServiceOptions
-                    {
-                        BaseUrl="http://localhost:5000/api/"
-                    });
-                })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();

@@ -8,6 +8,7 @@
   - [消息总线](#消息总线)
   - [Orleans](#orleans)
   - [OpenService(RPC调用)](#openservicerpc调用)
+  - [WebSocket服务端](#websocket服务端)
 # 通用基础组件
 **完整使用案例见源码中demos**
 ## 日志
@@ -214,4 +215,28 @@ nuget包：
 
             Console.ReadLine();
         }
+```
+
+## WebSocket服务端
+
+nuget包：`Colder.WebSockets.Server`
+
+使用方式
+```c#
+services.AddWebSocketServer(x =>
+{
+    x.OnConnected = async (serviceProvider, connection) =>
+    {
+        connection.Id = DateTime.Now.ToString();
+        await Task.CompletedTask;
+    };
+    x.OnReceive = async (serviceProvider, connection, msg) =>
+    {
+        var logger = serviceProvider.GetService<ILoggerFactory>().CreateLogger(GetType());
+        logger.LogInformation("收到来自 {Id} 的消息:{Msg}", connection.Id, msg);
+        await Task.CompletedTask;
+    };
+});
+
+app.UseWebSocketServer();
 ```
