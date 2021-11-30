@@ -67,17 +67,15 @@ namespace Colder.WebSockets.Server
                     logger.LogInformation("收到新的连接 当前连接数:{Count}", webSocketServer.GetAllConnections().Length);
 
                     List<byte> bytes = new List<byte>();
-                    while (true)
+                    try
                     {
-                        try
+                        while (true)
                         {
                             var buffer = new byte[1024];
                             WebSocketReceiveResult result = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), cancellationTokenSource.Token);
                             if (result.CloseStatus.HasValue)
                             {
                                 await webSocket.CloseAsync(result.CloseStatus.Value, result.CloseStatusDescription, CancellationToken.None);
-                                webSocketServer.RemoveConnection(connection);
-                                logger.LogInformation("连接关闭 当前连接数:{Count}", webSocketServer.GetAllConnections().Length);
 
                                 break;
                             }
@@ -97,11 +95,15 @@ namespace Colder.WebSockets.Server
                                 bytes.Clear();
                             }
                         }
-                        catch (Exception ex)
-                        {
-                            logger.LogError(ex, ex.Message);
-                            break;
-                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        logger.LogInformation(ex, ex.Message);
+                    }
+                    finally
+                    {
+                        webSocketServer.RemoveConnection(connection);
+                        logger.LogInformation("连接关闭[{ConnectionId}] 当前连接数:{Count}", connection.Id, webSocketServer.GetAllConnections().Length);
                     }
                 }
                 else
