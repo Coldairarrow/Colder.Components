@@ -27,13 +27,13 @@ namespace Demo.WebSockets.Server
             {
                 x.OnConnected = async (serviceProvider, connection) =>
                 {
-                    connection.Id = DateTime.Now.ToString();
+                    connection.Id = Guid.NewGuid().ToString();
                     await Task.CompletedTask;
                 };
                 x.OnReceive = async (serviceProvider, connection, msg) =>
                 {
                     var logger = serviceProvider.GetService<ILoggerFactory>().CreateLogger(GetType());
-                    logger.LogInformation("收到来自 {Id} 的消息:{Msg}", connection.Id, msg);
+                    logger.LogInformation("{Time} 收到来自 {Id} 的消息:{Msg}", DateTime.Now, connection.Id, msg);
                     await Task.CompletedTask;
                 };
             });
@@ -42,6 +42,8 @@ namespace Demo.WebSockets.Server
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseWebSocketServer();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -58,8 +60,6 @@ namespace Demo.WebSockets.Server
             {
                 endpoints.MapControllers();
             });
-
-            app.UseWebSocketServer();
         }
     }
 }

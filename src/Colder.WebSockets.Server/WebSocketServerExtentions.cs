@@ -54,7 +54,7 @@ namespace Colder.WebSockets.Server
             hostApplicationLifetime.ApplicationStopping.Register(() => cancellationTokenSource.Cancel());
             app.Use(async (context, next) =>
             {
-                if (context.Request.Path == "/ws")
+                if (context.WebSockets.IsWebSocketRequest)
                 {
                     using WebSocket webSocket = await context.WebSockets.AcceptWebSocketAsync();
                     WebSocketConnection connection = new WebSocketConnection(
@@ -103,6 +103,10 @@ namespace Colder.WebSockets.Server
                             break;
                         }
                     }
+                }
+                else
+                {
+                    await next();
                 }
             });
 

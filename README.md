@@ -238,5 +238,5 @@ services.AddWebSocketServer(x =>
     };
 });
 
-app.UseWebSocketServer();
+app.UseWebSocketServer();//放到最前面
 ```

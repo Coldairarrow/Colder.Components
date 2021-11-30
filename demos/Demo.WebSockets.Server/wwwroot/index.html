@@ -7,7 +7,7 @@
     <script type="text/javascript">
         function WebSocketTest() {
             if ("WebSocket" in window) {
-                var ws = new WebSocket("ws://127.0.0.1:5000/ws");
+                var ws = new WebSocket("ws://localhost:5000");
 
                 ws.onopen = function () {
                     console.log('连上服务端');
