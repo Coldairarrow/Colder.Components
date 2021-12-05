@@ -1,8 +1,6 @@
-﻿using Colder.MessageBus.Abstractions;
-
-namespace Demo.Common
+﻿namespace Demo.Common
 {
-    public class ResponseMessage : IMessage
+    public class ResponseMessage
     {
         public string Text { get; set; }
     }

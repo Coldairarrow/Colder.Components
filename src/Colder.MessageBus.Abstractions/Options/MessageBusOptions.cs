@@ -51,5 +51,10 @@ namespace Colder.MessageBus.Abstractions
         /// 并发处理数（默认根据逻辑处理器数量自动分配）
         /// </summary>
         public ushort Concurrency { get; set; }
+
+        /// <summary>
+        /// IMessageHandler所在程序集，默认为入口程序集，作用于全局
+        /// </summary>
+        public static Assembly[] Assemblies { get; set; } = new Assembly[] { Assembly.GetEntryAssembly() };
     }
 }

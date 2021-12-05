@@ -20,7 +20,7 @@ namespace Colder.MessageBus.InMemory
             return new Uri($"{_options.Host}{endpoint}");
         }
 
-        public async Task Publish<TMessage>(TMessage message, string endpoint) where TMessage : class, IMessage
+        public async Task Publish<TMessage>(TMessage message, string endpoint) where TMessage : class
         {
             using CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
             cancellationTokenSource.CancelAfter(TimeSpan.FromSeconds(_options.SendMessageTimeout));
@@ -37,7 +37,7 @@ namespace Colder.MessageBus.InMemory
             }
         }
         public async Task<TResponse> Request<TRequest, TResponse>(TRequest message, string endpoint)
-            where TRequest : class, IMessage
+            where TRequest : class
            where TResponse : class
         {
             var reqTimeout = RequestTimeout.After(0, 0, 0, _options.SendMessageTimeout);

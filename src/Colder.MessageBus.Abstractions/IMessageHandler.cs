@@ -6,7 +6,7 @@ namespace Colder.MessageBus.Abstractions
     /// 消费者接口
     /// </summary>
     /// <typeparam name="TMessage"></typeparam>
-    public interface IMessageHandler<TMessage> where TMessage : class, IMessage
+    public interface IMessageHandler<TMessage> where TMessage : class
     {
         /// <summary>
         /// 消费消息

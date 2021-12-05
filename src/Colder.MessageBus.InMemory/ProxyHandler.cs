@@ -17,7 +17,7 @@ namespace Colder.MessageBus.InMemory
             _serviceProvider = serviceProvider;
         }
 
-        public async Task Handle<T>(ConsumeContext<T> context) where T : class, IMessage
+        public async Task Handle<T>(ConsumeContext<T> context) where T : class
         {
             using var scop = _serviceProvider.CreateScope();
 

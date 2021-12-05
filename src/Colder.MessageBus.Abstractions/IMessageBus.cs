@@ -14,7 +14,7 @@ namespace Colder.MessageBus.Abstractions
         /// <param name="message">消息</param>
         /// <param name="endpoint">指定消费节点</param>
         /// <returns></returns>
-        Task Publish<TMessage>(TMessage message, string endpoint = null) where TMessage : class, IMessage;
+        Task Publish<TMessage>(TMessage message, string endpoint = null) where TMessage : class;
 
         /// <summary>
         /// 发送请求
@@ -25,7 +25,7 @@ namespace Colder.MessageBus.Abstractions
         /// <param name="endpoint">指定消费节点</param>
         /// <returns></returns>
         Task<TResponse> Request<TRequest, TResponse>(TRequest message, string endpoint)
-           where TRequest : class, IMessage
+           where TRequest : class
            where TResponse : class;
     }
 }

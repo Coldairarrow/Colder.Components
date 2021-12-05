@@ -20,7 +20,7 @@ namespace Colder.MessageBus.MQTT
             _mqttClient = mqttClient;
         }
 
-        public async Task Publish<TMessage>(TMessage message, string endpoint) where TMessage : class, IMessage
+        public async Task Publish<TMessage>(TMessage message, string endpoint) where TMessage : class
         {
             Topic topic = new Topic
             {
@@ -42,7 +42,7 @@ namespace Colder.MessageBus.MQTT
         }
 
         public async Task<TResponse> Request<TRequest, TResponse>(TRequest message, string endpoint)
-            where TRequest : class, IMessage
+            where TRequest : class
             where TResponse : class
         {
             Topic topic = new Topic

@@ -18,6 +18,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Colder.Common\Colder.Common.csproj" />
     <ProjectReference Include="..\Colder.MessageBus.Hosting\Colder.MessageBus.Hosting.csproj" />
+    <ProjectReference Include="..\Colder.MessageBus.RabbitMQ\Colder.MessageBus.RabbitMQ.csproj" />
   </ItemGroup>
 
 </Project>

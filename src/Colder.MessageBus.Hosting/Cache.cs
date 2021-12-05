@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 
 namespace Colder.MessageBus.Hosting
 {
@@ -10,11 +9,11 @@ namespace Colder.MessageBus.Hosting
     {
         static Cache()
         {
-            HanlderTypes = Assembly.GetEntryAssembly().GetTypes().Where(x =>
-                 x.IsClass
-                 && !x.IsAbstract
-                 && x.GetInterfaces().Any(y =>
-                     y.IsGenericType && y.GetGenericTypeDefinition() == typeof(IMessageHandler<>))
+            HanlderTypes = MessageBusOptions.Assemblies.SelectMany(x => x.GetTypes()).Where(x =>
+                   x.IsClass
+                   && !x.IsAbstract
+                   && x.GetInterfaces().Any(y =>
+                       y.IsGenericType && y.GetGenericTypeDefinition() == typeof(IMessageHandler<>))
                 ).ToList();
 
             MessageTypes = HanlderTypes
