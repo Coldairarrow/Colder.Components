@@ -30,6 +30,12 @@ namespace Colder.Logging.Serilog
             var rootPath = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
             var path = Path.Combine(rootPath, "logs", "log.txt");
             SelfLog.Enable(Console.Error);
+
+            hostBuilder.ConfigureServices((host, services) =>
+            {
+                services.AddHostedService<Bootstrapper>();
+            });
+
             return hostBuilder.UseSerilog((hostingContext, serviceProvider, serilogConfig) =>
             {
                 var envConfig = hostingContext.Configuration;
