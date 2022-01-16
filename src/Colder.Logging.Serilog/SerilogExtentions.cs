@@ -29,7 +29,14 @@ namespace Colder.Logging.Serilog
         {
             var rootPath = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
             var path = Path.Combine(rootPath, "logs", "log.txt");
-            SelfLog.Enable(Console.Error);
+            SelfLog.Enable(log =>
+            {
+                string msg = $"{DateTimeOffset.Now}:Serilog自己异常 {log}";
+                Console.WriteLine(msg);
+
+                var selfLogPath = Path.Combine(rootPath, "logs", "selflog.txt");
+                File.WriteAllText(selfLogPath, msg);
+            });
 
             hostBuilder.ConfigureServices((host, services) =>
             {
@@ -78,7 +85,7 @@ namespace Colder.Logging.Serilog
                     {
                         IndexFormat = logConfig.Elasticsearch.IndexFormat,
                         AutoRegisterTemplate = true,
-                        AutoRegisterTemplateVersion = AutoRegisterTemplateVersion.ESv7,
+                        AutoRegisterTemplateVersion = AutoRegisterTemplateVersion.ESv7
                     });
                 }
 
