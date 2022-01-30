@@ -68,13 +68,16 @@ namespace Colder.Logging.Serilog
                 {
                     string template = "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level:u3} {SourceContext:l}] {Message:lj}{NewLine}{Exception}";
 
+                    //最大日志文件10M,每天滚动,保留31天
                     serilogConfig.WriteTo.File(
-                        path,
+                        path: path,
                         outputTemplate: template,
                         rollingInterval: RollingInterval.Day,
                         shared: true,
                         fileSizeLimitBytes: 10 * 1024 * 1024,
-                        rollOnFileSizeLimit: true
+                        retainedFileTimeLimit: TimeSpan.FromDays(31),
+                        rollOnFileSizeLimit: true,
+                        retainedFileCountLimit: null
                         );
                 }
                 if (logConfig.Elasticsearch.Enabled)
