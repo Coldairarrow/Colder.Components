@@ -29,7 +29,20 @@ namespace Colder.Logging.Serilog
         {
             var rootPath = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
             var path = Path.Combine(rootPath, "logs", "log.txt");
-            SelfLog.Enable(Console.Error);
+            SelfLog.Enable(log =>
+            {
+                string msg = $"{DateTimeOffset.Now}:Serilog自己异常 {log}";
+                Console.WriteLine(msg);
+
+                var selfLogPath = Path.Combine(rootPath, "logs", "selflog.txt");
+                File.WriteAllText(selfLogPath, msg);
+            });
+
+            hostBuilder.ConfigureServices((host, services) =>
+            {
+                services.AddHostedService<Bootstrapper>();
+            });
+
             return hostBuilder.UseSerilog((hostingContext, serviceProvider, serilogConfig) =>
             {
                 var envConfig = hostingContext.Configuration;
@@ -55,13 +68,16 @@ namespace Colder.Logging.Serilog
                 {
                     string template = "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level:u3} {SourceContext:l}] {Message:lj}{NewLine}{Exception}";
 
+                    //最大日志文件10M,每天滚动,保留31天
                     serilogConfig.WriteTo.File(
-                        path,
+                        path: path,
                         outputTemplate: template,
                         rollingInterval: RollingInterval.Day,
                         shared: true,
                         fileSizeLimitBytes: 10 * 1024 * 1024,
-                        rollOnFileSizeLimit: true
+                        retainedFileTimeLimit: TimeSpan.FromDays(31),
+                        rollOnFileSizeLimit: true,
+                        retainedFileCountLimit: null
                         );
                 }
                 if (logConfig.Elasticsearch.Enabled)
@@ -72,7 +88,7 @@ namespace Colder.Logging.Serilog
                     {
                         IndexFormat = logConfig.Elasticsearch.IndexFormat,
                         AutoRegisterTemplate = true,
-                        AutoRegisterTemplateVersion = AutoRegisterTemplateVersion.ESv7,
+                        AutoRegisterTemplateVersion = AutoRegisterTemplateVersion.ESv7
                     });
                 }
 
