@@ -35,7 +35,7 @@ IHostBuilder.ConfigureLoggingDefaults()
     },
     "elasticsearch": {
       "enabled": false,
-      "nodes": [ "http://localhost:9200/" ],
+      "nodes": [ "http://elastic:123456@localhost:9200/" ],
       "indexformat": "Demo-Logging-{0:yyyyMM}"
     },
     "overrides": [ //重写日志输出级别
