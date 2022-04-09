@@ -38,7 +38,13 @@ namespace Colder.DistributedId
         /// <returns></returns>
         public static IServiceCollection AddDistributedId(this IServiceCollection services, DistributedIdOptions distributedIdOption)
         {
-            services.ConfigureOptions(distributedIdOption);
+            services.AddOptions<DistributedIdOptions>().Configure(x =>
+            {
+                x.GetType().GetProperties().ToList().ForEach(aProperty =>
+                {
+                    aProperty.SetValue(x, aProperty.GetValue(distributedIdOption));
+                });
+            });
 
             return services.AddSingleton<IDistributedId, DistributedId>();
         }
