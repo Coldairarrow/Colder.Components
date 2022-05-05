@@ -8,9 +8,22 @@ namespace Colder.DistributedId
     public interface IDistributedId
     {
         /// <summary>
-        /// 生成有序Guid
+        /// 生成有序Guid,使用默认排序类型
         /// </summary>
         /// <returns></returns>
-        public Guid NewGuid();
+        Guid NewGuid();
+
+        /// <summary>
+        /// 生成有序Guid,指定排序类型
+        /// </summary>
+        /// <param name="sequentialGuidType">排序类型</param>
+        /// <returns></returns>
+        Guid NewGuid(SequentialGuidType sequentialGuidType);
+
+        /// <summary>
+        /// 生成有序LongId
+        /// </summary>
+        /// <returns></returns>
+        long NewLongId();
     }
 }

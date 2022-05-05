@@ -45,7 +45,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".solution", ".solution", "{
 		.gitignore = .gitignore
 		Directory.Build.props = Directory.Build.props
 		gitversion.yml = gitversion.yml
-		global.json = global.json
 		LICENSE = LICENSE
 		README.md = README.md
 	EndProjectSection
@@ -98,7 +97,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo.WebSockets.Server", "d
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Colder.Api.Abstractions", "src\Colder.Api.Abstractions\Colder.Api.Abstractions.csproj", "{607EE5E5-D6C2-46CF-B3C1-E5377A2BFB25}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.AspnetCore", "demos\Demo.AspnetCore\Demo.AspnetCore.csproj", "{6A9C5392-A373-4A28-94FE-4FAEAC1F3801}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo.AspnetCore", "demos\Demo.AspnetCore\Demo.AspnetCore.csproj", "{6A9C5392-A373-4A28-94FE-4FAEAC1F3801}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.DistributedId", "demos\Demo.DistributedId\Demo.DistributedId.csproj", "{E9F77A7A-5207-46EB-B0F7-221F50F58077}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -262,6 +263,10 @@ Global
 		{6A9C5392-A373-4A28-94FE-4FAEAC1F3801}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6A9C5392-A373-4A28-94FE-4FAEAC1F3801}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6A9C5392-A373-4A28-94FE-4FAEAC1F3801}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E9F77A7A-5207-46EB-B0F7-221F50F58077}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E9F77A7A-5207-46EB-B0F7-221F50F58077}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E9F77A7A-5207-46EB-B0F7-221F50F58077}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E9F77A7A-5207-46EB-B0F7-221F50F58077}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -306,6 +311,7 @@ Global
 		{DCD29614-7882-4C25-AF9C-EDEE60D326E4} = {ACCF873E-B185-4FEA-8502-D5F708E42168}
 		{607EE5E5-D6C2-46CF-B3C1-E5377A2BFB25} = {73124509-E735-4527-A516-E406F86902C2}
 		{6A9C5392-A373-4A28-94FE-4FAEAC1F3801} = {ACCF873E-B185-4FEA-8502-D5F708E42168}
+		{E9F77A7A-5207-46EB-B0F7-221F50F58077} = {ACCF873E-B185-4FEA-8502-D5F708E42168}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {817CE001-2A40-4054-B349-ECDB5986C92E}

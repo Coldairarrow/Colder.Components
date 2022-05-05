@@ -19,7 +19,6 @@ namespace Demo.DistributedLock
             });
 
             var serviceProvider = services.BuildServiceProvider();
-            var cache = serviceProvider.GetService<IDistributedCache>();
 
             var theLock = serviceProvider.GetService<IDistributedLock>();
             string key = Guid.NewGuid().ToString();
