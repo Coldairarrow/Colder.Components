@@ -93,7 +93,17 @@ nuget包：`Colder.DistributedId`
 
 使用方式
 ```c#
-IHostBuilder.AddDistributedId()
+IHostBuilder.ConfigureDistributedIdDefaults()
+```
+
+```javascript
+{
+  "distributedid": {
+    "Distributed":false,//是否为分布式(即多实例部署),若开启则需要提前配置分布式缓存(Colder.Cache)与分布式锁(Colder.DistributedLock),多实例部署并且使用LongId(即雪花Id)时建议开启此选项
+    "GuidType": "AtBegin",//GUID序列类型，可选值：AtBegin、AtEnd，默认为AtBegin，建议SQLServer配置为AtEnd，其余数据库配置为AtBegin
+    "WorkderId": 0 //指定机器Id,范围1-1023,若不指定则在范围内随机取
+  }
+}
 ```
 
 ## 自动注入

@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 
 namespace Colder.Logging.Abstractions
@@ -8,6 +9,17 @@ namespace Colder.Logging.Abstractions
     /// </summary>
     public class LogOptions
     {
+        private string _instance;
+
+        /// <summary>
+        /// 实例名,默认为机器名
+        /// </summary>
+        public string Instance
+        {
+            get => string.IsNullOrEmpty(_instance) ? Environment.MachineName : _instance;
+            set => _instance = value;
+        }
+
         /// <summary>
         /// 最低日志输出级别
         /// </summary>

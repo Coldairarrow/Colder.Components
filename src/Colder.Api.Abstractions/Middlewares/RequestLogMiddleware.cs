@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
@@ -28,6 +29,7 @@ namespace Colder.Api.Abstractions
             Stream originalResponseBody = context.Response.Body;
             using var memStream = new MemoryStream();
             context.Response.Body = memStream;
+            Exception theEx = null;
 
             try
             {
@@ -39,8 +41,9 @@ namespace Colder.Api.Abstractions
                 memStream.Position = 0;
                 await memStream.CopyToAsync(originalResponseBody);
             }
-            catch
+            catch (Exception ex)
             {
+                theEx = ex;
                 throw;
             }
             finally
@@ -73,7 +76,9 @@ StatusCode:{StatusCode}
 
 Response:{Response}
 ";
-                _logger.LogInformation(
+                _logger.Log(
+                    theEx == null ? LogLevel.Information : LogLevel.Error,
+                    theEx,
                     log,
                     context.Request.Path,
                     (int)watch.ElapsedMilliseconds,

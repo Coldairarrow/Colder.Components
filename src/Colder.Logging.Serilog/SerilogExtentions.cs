@@ -93,6 +93,7 @@ namespace Colder.Logging.Serilog
                 }
 
                 //自定义属性
+                serilogConfig.Enrich.WithProperty("Instance", logConfig.Instance);
                 serilogConfig.Enrich.WithProperty("MachineName", Environment.MachineName);
                 serilogConfig.Enrich.WithProperty("ApplicationName", Assembly.GetEntryAssembly().GetName().Name);
                 serilogConfig.Enrich.WithProperty("ApplicationVersion", Assembly.GetEntryAssembly().GetName().Version);
