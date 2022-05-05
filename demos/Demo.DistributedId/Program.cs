@@ -2,11 +2,7 @@
 using Colder.DistributedId;
 using Colder.DistributedLock.Abstractions;
 using Colder.DistributedLock.Hosting;
-using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace Demo.DistributedId
 {
@@ -18,12 +14,17 @@ namespace Demo.DistributedId
             services.AddDistributedLock(x =>
             {
                 x.LockType = LockTypes.InMemory;
+                x.RedisEndPoints = new string[] { "localhost:6379" };
             });
             services.AddCache(new CacheOptions
             {
-                CacheType = CacheTypes.InMemory
+                CacheType = CacheTypes.Redis,
+                RedisConnectionString = "localhost:6379"
             });
-            services.AddDistributedId(new DistributedIdOptions { });
+            services.AddDistributedId(new DistributedIdOptions
+            {
+                Distributed = true
+            });
 
             var serviceProvider = services.BuildServiceProvider();
             var distributedId = serviceProvider.GetRequiredService<IDistributedId>();
