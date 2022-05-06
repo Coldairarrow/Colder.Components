@@ -17,5 +17,10 @@
         /// </summary>
         /// <returns></returns>
         IWebSocketConnection[] GetAllConnections();
+
+        /// <summary>
+        /// 连接数
+        /// </summary>
+        public int ConnectionCount { get; }
     }
 }

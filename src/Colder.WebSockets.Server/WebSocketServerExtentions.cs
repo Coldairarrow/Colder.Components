@@ -64,7 +64,7 @@ namespace Colder.WebSockets.Server
                     {
                         await option.OnConnected(serviceProvider, connection);
                     }
-                    logger.LogInformation("收到新的连接 当前连接数:{Count}", webSocketServer.GetAllConnections().Length);
+                    logger.LogInformation("收到新的连接 当前连接数:{Count}", webSocketServer.ConnectionCount);
 
                     List<byte> bytes = new List<byte>();
                     try
@@ -98,12 +98,19 @@ namespace Colder.WebSockets.Server
                     }
                     catch (Exception ex)
                     {
-                        logger.LogInformation(ex, ex.Message);
+                        if (ex is WebSocketException webSocketException && webSocketException.WebSocketErrorCode == WebSocketError.ConnectionClosedPrematurely)
+                        {
+                            //忽略
+                        }
+                        else
+                        {
+                            logger.LogError(ex, ex.Message);
+                        }
                     }
                     finally
                     {
                         webSocketServer.RemoveConnection(connection);
-                        logger.LogInformation("连接关闭[{ConnectionId}] 当前连接数:{Count}", connection.Id, webSocketServer.GetAllConnections().Length);
+                        logger.LogInformation("连接关闭[{ConnectionId}] 当前连接数:{Count}", connection.Id, webSocketServer.ConnectionCount);
                     }
                 }
                 else
