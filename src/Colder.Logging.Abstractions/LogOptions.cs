@@ -46,6 +46,11 @@ namespace Colder.Logging.Abstractions
         public ElasticsearchOption Elasticsearch { get; set; } = new ElasticsearchOption();
 
         /// <summary>
+        /// 输出到Kafka
+        /// </summary>
+        public KafkaOption Kafka { get; set; } = new KafkaOption();
+
+        /// <summary>
         /// 重写日志级别 
         /// </summary>
         public List<OverrideOption> Overrides { get; set; } = new List<OverrideOption>();

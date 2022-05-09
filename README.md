@@ -36,7 +36,14 @@ IHostBuilder.ConfigureLoggingDefaults()
     "elasticsearch": {
       "enabled": false,
       "nodes": [ "http://elastic:123456@localhost:9200/" ],
-      "indexformat": "Demo-Logging-{0:yyyyMM}"
+      "indexformat": "log-{0:yyyyMMdd}"
+    },
+    "kafka": {
+      "enabled": false,
+      "brokers": "192.168.56.201:9092",
+      "userName": "user",
+      "password": "bitnami",
+      "topic": "log"
     },
     "overrides": [ //重写日志输出级别
       {

@@ -6,7 +6,7 @@
     public class EnableOption
     {
         /// <summary>
-        /// 是否已启动
+        /// 是否启用
         /// </summary>
         public bool Enabled { get; set; }
     }

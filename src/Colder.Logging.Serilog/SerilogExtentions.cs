@@ -1,4 +1,5 @@
 ﻿using Colder.Logging.Abstractions;
+using Confluent.Kafka;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -6,8 +7,11 @@ using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Debugging;
 using Serilog.Events;
+using Serilog.Formatting.Elasticsearch;
 using Serilog.Sinks.Elasticsearch;
+using Serilog.Sinks.Kafka;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -91,12 +95,25 @@ namespace Colder.Logging.Serilog
                         AutoRegisterTemplateVersion = AutoRegisterTemplateVersion.ESv7
                     });
                 }
+                if (logConfig.Kafka.Enabled)
+                {
+                    serilogConfig.WriteTo.Kafka(
+                        bootstrapServers: logConfig.Kafka.Brokers,
+                        topic: logConfig.Kafka.Topic,
+                        saslUsername: logConfig.Kafka.UserName,
+                        saslPassword: logConfig.Kafka.Password,
+                        securityProtocol: string.IsNullOrEmpty(logConfig.Kafka.UserName)
+                            ? SecurityProtocol.Plaintext : SecurityProtocol.SaslPlaintext,
+                        formatter: new ElasticsearchJsonFormatter()
+                    );
+                }
 
                 //自定义属性
                 serilogConfig.Enrich.WithProperty("Instance", logConfig.Instance);
                 serilogConfig.Enrich.WithProperty("MachineName", Environment.MachineName);
                 serilogConfig.Enrich.WithProperty("ApplicationName", Assembly.GetEntryAssembly().GetName().Name);
                 serilogConfig.Enrich.WithProperty("ApplicationVersion", Assembly.GetEntryAssembly().GetName().Version);
+                serilogConfig.Enrich.WithProperty("ProcessId", Process.GetCurrentProcess().Id);
                 serilogConfig.Enrich.WithProperty("ThreadId", Thread.CurrentThread.ManagedThreadId);
                 var httpContext = serviceProvider.GetService<IHttpContextAccessor>()?.HttpContext;
                 if (httpContext != null)
