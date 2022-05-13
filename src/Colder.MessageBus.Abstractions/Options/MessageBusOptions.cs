@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 
 namespace Colder.MessageBus.Abstractions
 {
@@ -47,10 +48,16 @@ namespace Colder.MessageBus.Abstractions
         /// </summary>
         public int RetryIntervalMilliseconds { get; set; } = 1000;
 
+        private int _concurrency;
+
         /// <summary>
-        /// 并发处理数（默认根据逻辑处理器数量自动分配）
+        /// 并发处理数（默认根据逻辑处理器数量自动分配,cpu线程数*2）
         /// </summary>
-        public ushort Concurrency { get; set; }
+        public int Concurrency
+        {
+            get => _concurrency == 0 ? Environment.ProcessorCount * 2 : _concurrency;
+            set => _concurrency = value;
+        }
 
         /// <summary>
         /// IMessageHandler所在程序集，默认为入口程序集，作用于全局

@@ -88,7 +88,7 @@ IHostBuilder.ConfigureDistributedLockDefaults()
 ```javascript
 {
   "distributedLock": {
-    "LockTypes": "InMemory",//可选值：InMemory、Redis
+    "LockType": "InMemory",//可选值：InMemory、Redis
     "RedisEndPoints": ["localhost:6379"] //Redis节点
   }
 }
@@ -130,6 +130,7 @@ nuget包：
 - `Colder.MessageBus.InMemory` 
 - `Colder.MessageBus.RabbitMQ`
 - `Colder.MessageBus.MQTT`
+- `Colder.MessageBus.Redis`
 
 使用方式
 ```c#
@@ -139,7 +140,7 @@ IHostBuilder.ConfigureMessageBusDefaults()
 ```javascript
 {
   "messagebus": {
-    "Transport": "RabbitMQ",
+    "Transport": "RabbitMQ",//可选值:InMemory,RabbitMQ,MQTT,Redis
     "Host": "amqp://localhost:5672/",
     "Username": "guest",
     "Password": "guest",

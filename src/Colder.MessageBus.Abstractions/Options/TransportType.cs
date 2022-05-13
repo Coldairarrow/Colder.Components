@@ -18,6 +18,11 @@
         /// <summary>
         /// MQTT
         /// </summary>
-        MQTT = 3
+        MQTT = 3,
+
+        /// <summary>
+        /// Redis
+        /// </summary>
+        Redis = 4
     }
 }

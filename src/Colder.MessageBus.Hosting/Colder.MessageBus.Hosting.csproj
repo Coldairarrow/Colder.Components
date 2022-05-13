@@ -12,19 +12,6 @@
     <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="5.0.0" />
   </ItemGroup>
-  <ItemGroup>
-    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
-      <_Parameter1>Colder.MessageBus.InMemory</_Parameter1>
-    </AssemblyAttribute>
-    
-    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
-      <_Parameter1>Colder.MessageBus.MQTT</_Parameter1>
-    </AssemblyAttribute>
-
-    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
-      <_Parameter1>Colder.MessageBus.RabbitMQ</_Parameter1>
-    </AssemblyAttribute>
-  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Colder.MessageBus.Abstractions\Colder.MessageBus.Abstractions.csproj" />

@@ -10,6 +10,8 @@ namespace Demo.DistributedId
     {
         static async Task Main(string[] args)
         {
+            await Task.CompletedTask;
+
             IServiceCollection services = new ServiceCollection();
             services.AddDistributedLock(x =>
             {

@@ -5,7 +5,10 @@ using System.Linq;
 
 namespace Colder.MessageBus.Hosting
 {
-    internal static class Cache
+    /// <summary>
+    /// 
+    /// </summary>
+    public static class Cache
     {
         static Cache()
         {
@@ -36,8 +39,19 @@ namespace Colder.MessageBus.Hosting
             });
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public static readonly List<Type> HanlderTypes = new List<Type>();
+
+        /// <summary>
+        /// 
+        /// </summary>
         public static readonly List<Type> MessageTypes = new List<Type>();
+
+        /// <summary>
+        /// 
+        /// </summary>
         public static readonly Dictionary<Type, Type> Message2Handler = new Dictionary<Type, Type>();
     }
 }
