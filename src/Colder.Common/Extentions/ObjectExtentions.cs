@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections;
 using System.ComponentModel;
 using System.Linq;
 
@@ -72,7 +72,7 @@ namespace Colder.Common
             {
                 return !string.IsNullOrEmpty(str);
             }
-            if (obj is IEnumerable<string> enumerable)
+            if (obj is IEnumerable enumerable)
             {
                 return enumerable.Cast<object>().Count() >= 1;
             }
