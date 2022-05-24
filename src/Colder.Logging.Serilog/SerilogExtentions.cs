@@ -32,13 +32,20 @@ namespace Colder.Logging.Serilog
         public static IHostBuilder ConfigureLoggingDefaults(this IHostBuilder hostBuilder)
         {
             var rootPath = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
-            var path = Path.Combine(rootPath, "logs", "log.txt");
+            var logDir = Path.Combine(rootPath, "logs");
+            var path = Path.Combine(logDir, "log.txt");
+
             SelfLog.Enable(log =>
             {
+                if (!Directory.Exists(logDir))
+                {
+                    Directory.CreateDirectory(logDir);
+                }
+
                 string msg = $"{DateTimeOffset.Now}:Serilog自己异常 {log}";
                 Console.WriteLine(msg);
 
-                var selfLogPath = Path.Combine(rootPath, "logs", "selflog.txt");
+                var selfLogPath = Path.Combine(logDir, "selflog.txt");
                 File.WriteAllText(selfLogPath, msg);
             });
 
