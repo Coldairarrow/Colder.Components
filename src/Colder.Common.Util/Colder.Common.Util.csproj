@@ -8,6 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Castle.Core.AsyncInterceptor" Version="2.1.0" />
+    <PackageReference Include="NEST" Version="7.17.4" />
     <PackageReference Include="NPOI" Version="2.5.3" />
     <PackageReference Include="QRCoder" Version="1.4.1" />
     <PackageReference Include="Quartz" Version="3.3.2" />

@@ -17,7 +17,12 @@ namespace Colder.Api.Abstractions
 
         public async Task Invoke(HttpContext context)
         {
-            if ((context.Request.ContentType ?? string.Empty).Contains("application/json"))
+            var contentType = (context.Request.ContentType ?? string.Empty).ToLower();
+            if (contentType.Contains("text")
+                || contentType.Contains("xml")
+                || contentType.Contains("json")
+                || contentType.Contains("x-www-form-urlencoded")
+                || contentType.Contains("form-data"))
             {
                 context.Request.EnableBuffering();
                 string body = await context.Request.Body?.ReadToStringAsync(Encoding.UTF8);
