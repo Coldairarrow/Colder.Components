@@ -1,5 +1,6 @@
 ﻿using Castle.DynamicProxy;
 using System;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace Colder.Common.Util;
@@ -39,16 +40,22 @@ public static class ProxyHelper
 
         protected override async Task<TResult> InterceptAsync<TResult>(IInvocation invocation, IInvocationProceedInfo proceedInfo, Func<IInvocation, IInvocationProceedInfo, Task<TResult>> proceed)
         {
-            TResult? result = default;
+            TResult result = default;
 
             await _filter(invocation, async () =>
             {
                 result = await proceed(invocation, proceedInfo);
+                if (typeof(Task).IsAssignableFrom(invocation.Method.ReturnType))
+                {
+                    invocation.ReturnValue = Task.FromResult(result);
+                }
+                else
+                {
+                    invocation.ReturnValue = result;
+                }
             });
 
-#pragma warning disable CS8603 // 可能返回 null 引用。
             return result;
-#pragma warning restore CS8603 // 可能返回 null 引用。
         }
     }
 }
