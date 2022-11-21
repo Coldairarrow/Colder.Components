@@ -18,7 +18,7 @@ namespace Colder.Json
         public static readonly JsonSerializerSettings IsoSettings = new JsonSerializerSettings
         {
             ContractResolver = new DefaultContractResolver(),
-            Converters = new JsonConverter[] { new IsoDateTimeConverter() }
+            Converters = new JsonConverter[] { new IsoDateTimeConverter(), new LongToStringConverter() }
         };
 
         /// <summary>
@@ -28,7 +28,7 @@ namespace Colder.Json
         public static readonly JsonSerializerSettings TimestampSettings = new JsonSerializerSettings
         {
             ContractResolver = new DefaultContractResolver(),
-            Converters = new JsonConverter[] { new TimestampConverter() }
+            Converters = new JsonConverter[] { new TimestampConverter(), new LongToStringConverter() }
         };
 
         /// <summary>

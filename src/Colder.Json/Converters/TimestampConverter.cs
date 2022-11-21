@@ -1,6 +1,7 @@
 ﻿using Colder.Common;
 using Newtonsoft.Json;
 using System;
+using System.Globalization;
 
 namespace Colder.Json
 {
@@ -38,12 +39,19 @@ namespace Colder.Json
                 return reader.Value;
             }
 
-            if (reader.TokenType != JsonToken.Integer)
+            long timestamp = 0;
+            if (reader.TokenType == JsonToken.Integer)
             {
-                throw new Exception($"序列化失败：必须为时间戳 {reader.Value}");
+                timestamp = (long)reader.Value;
             }
-
-            var timestamp = (long)reader.Value;
+            else if (long.TryParse(reader.Value.ToString(), out long t))
+            {
+                timestamp = t;
+            }
+            else if (DateTime.TryParse(reader.Value.ToString(), null, DateTimeStyles.AssumeLocal, out DateTime dt))
+            {
+                timestamp = new DateTimeOffset(dt).ToUnixTimeMilliseconds();
+            }
 
             var date = TimestampHelper.FromUnixTimeMilliseconds(timestamp);
 
