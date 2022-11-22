@@ -1,4 +1,5 @@
 ﻿using Colder.Common;
+using Colder.DistributedId;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Demo.AspnetCore.Controllers
@@ -7,11 +8,18 @@ namespace Demo.AspnetCore.Controllers
     [Route("[controller]")]
     public class HomeController : ControllerBase
     {
+        private readonly IDistributedId _distributedId;
+        public HomeController(IDistributedId distributedId)
+        {
+            _distributedId = distributedId;
+        }
+
         [HttpPost]
         [Route("test")]
+        //[AllowAnonymous]
         public string Test(IdInput<string> id)
         {
-            return id.Id;
+            return _distributedId.NewLongId().ToString();
         }
     }
 }

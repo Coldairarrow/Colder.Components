@@ -23,22 +23,31 @@ namespace Colder.Logging.Abstractions
         /// <summary>
         /// 最低日志输出级别
         /// </summary>
-        public LogLevel MinLevel { get; set; }
+        public LogLevel MinLevel { get; set; } = LogLevel.Information;
 
         /// <summary>
         /// 输出到控制台
         /// </summary>
-        public EnableOption Console { get; set; } = new EnableOption();
+        public EnableOption Console { get; set; } = new EnableOption
+        {
+            Enabled = true
+        };
 
         /// <summary>
         /// 输出到调试
         /// </summary>
-        public EnableOption Debug { get; set; } = new EnableOption();
+        public EnableOption Debug { get; set; } = new EnableOption
+        {
+            Enabled = true
+        };
 
         /// <summary>
         /// 输出到文件
         /// </summary>
-        public EnableOption File { get; set; } = new EnableOption();
+        public EnableOption File { get; set; } = new EnableOption
+        {
+            Enabled = true
+        };
 
         /// <summary>
         /// 输出到ES
