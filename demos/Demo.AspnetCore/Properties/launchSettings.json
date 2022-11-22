@@ -3,7 +3,6 @@
   "profiles": {
     "Demo.AspnetCore": {
       "commandName": "Project",
-      "dotnetRunMessages": "true",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

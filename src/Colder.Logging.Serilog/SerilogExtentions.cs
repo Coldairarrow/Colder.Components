@@ -1,9 +1,9 @@
 ﻿using Colder.Logging.Abstractions;
 using Confluent.Kafka;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using Serilog;
 using Serilog.Debugging;
 using Serilog.Events;
@@ -51,14 +51,33 @@ namespace Colder.Logging.Serilog
 
             hostBuilder.ConfigureServices((host, services) =>
             {
+                services.AddOptions<LogOptions>();
+                var theConfig = host.Configuration.GetChildren().Where(x => x.Key.ToLower() == "log").FirstOrDefault();
+                if (theConfig == null)
+                {
+                    LogOptions logOption = new LogOptions();
+                    services.Configure<LogOptions>(x =>
+                    {
+                        typeof(LogOptions).GetProperties().ToList().ForEach(aProperty =>
+                        {
+                            if (aProperty.CanWrite)
+                            {
+                                aProperty.SetValue(x, aProperty.GetValue(logOption));
+                            }
+                        });
+                    });
+                }
+                else
+                {
+                    services.Configure<LogOptions>(theConfig);
+                }
+
                 services.AddHostedService<Bootstrapper>();
             });
 
             return hostBuilder.UseSerilog((hostingContext, serviceProvider, serilogConfig) =>
             {
-                var envConfig = hostingContext.Configuration;
-                LogOptions logConfig = new LogOptions();
-                envConfig.GetSection("log").Bind(logConfig);
+                LogOptions logConfig = serviceProvider.GetRequiredService<IOptions<LogOptions>>().Value;
 
                 logConfig.Overrides.ForEach(aOverride =>
                 {
