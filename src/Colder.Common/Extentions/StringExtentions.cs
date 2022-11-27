@@ -1,6 +1,4 @@
-﻿using Org.BouncyCastle.Crypto.Parameters;
-using Org.BouncyCastle.Security;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -419,45 +417,6 @@ namespace Colder.Common
         public static string RemoveNotUtf8(this string str)
         {
             return _utf8Encoder.GetString(_utf8Encoder.GetBytes(str));
-        }
-
-        /// <summary>
-        /// RSA SHA256签名
-        /// </summary>
-        /// <param name="str">字符串</param>
-        /// <param name="privateKey">私钥(PKCS1 若是JAVA的PKCS8则需要使用RSAPrivateKeyJavaToDotNet转换)</param>
-        /// <returns></returns>
-        public static string RSASign(string str, string privateKey)
-        {
-            //根据需要加签时的哈希算法转化成对应的hash字符节
-            byte[] bt = Encoding.GetEncoding("utf-8").GetBytes(str);
-            var sha256 = new SHA256CryptoServiceProvider();
-            byte[] rgbHash = sha256.ComputeHash(bt);
-            RSACryptoServiceProvider key = new RSACryptoServiceProvider();
-            key.FromXmlString(privateKey);
-            RSAPKCS1SignatureFormatter formatter = new RSAPKCS1SignatureFormatter(key);
-            formatter.SetHashAlgorithm("SHA256"); //此处是你需要加签的hash算法，需要和上边你计算的hash值的算法一致，不然会报错。
-            byte[] inArray = formatter.CreateSignature(rgbHash);
-            return Convert.ToBase64String(inArray);
-        }
-
-        /// <summary>    
-        /// RSA私钥格式转换，java 2 .net    
-        /// </summary>    
-        /// <param name="privateKey">java生成的RSA私钥</param>    
-        /// <returns></returns>  
-        public static string RSAPrivateKeyJavaToDotNet(string privateKey)
-        {
-            RsaPrivateCrtKeyParameters privateKeyParam = (RsaPrivateCrtKeyParameters)PrivateKeyFactory.CreateKey(Convert.FromBase64String(privateKey));
-            return string.Format("<RSAKeyValue><Modulus>{0}</Modulus><Exponent>{1}</Exponent><P>{2}</P><Q>{3}</Q><DP>{4}</DP><DQ>{5}</DQ><InverseQ>{6}</InverseQ><D>{7}</D></RSAKeyValue>",
-              Convert.ToBase64String(privateKeyParam.Modulus.ToByteArrayUnsigned()),
-              Convert.ToBase64String(privateKeyParam.PublicExponent.ToByteArrayUnsigned()),
-              Convert.ToBase64String(privateKeyParam.P.ToByteArrayUnsigned()),
-              Convert.ToBase64String(privateKeyParam.Q.ToByteArrayUnsigned()),
-              Convert.ToBase64String(privateKeyParam.DP.ToByteArrayUnsigned()),
-              Convert.ToBase64String(privateKeyParam.DQ.ToByteArrayUnsigned()),
-              Convert.ToBase64String(privateKeyParam.QInv.ToByteArrayUnsigned()),
-              Convert.ToBase64String(privateKeyParam.Exponent.ToByteArrayUnsigned()));
         }
     }
 }
