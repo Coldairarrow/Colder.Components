@@ -1,8 +1,8 @@
 ﻿using Colder.Common;
+using Colder.Common.Helpers;
 using Colder.Domain;
 using EFCore.Sharding;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
@@ -35,17 +35,6 @@ namespace Colder.Infrastructure
         /// 主键字段
         /// </summary>
         protected virtual string KeyField => "Id";
-
-        /// <summary>
-        /// 跟踪
-        /// </summary>
-        /// <param name="dbData"></param>
-        /// <param name="newData"></param>
-        /// <returns></returns>
-        protected virtual (List<object> added, List<object> updated, List<object> removed) Tracking(TAggregateRoot dbData, TAggregateRoot newData)
-        {
-            return TrackingHelper.Tracking(dbData, newData);
-        }
 
         /// <summary>
         /// 获取IQueryable
@@ -88,7 +77,7 @@ namespace Colder.Infrastructure
             var dbData = aggregateRoot.DeepClone();
             await Db.InsertAsync(dbData, true);
 
-            Tracking(aggregateRoot, dbData);
+            TrackingHelper.Tracking(aggregateRoot, dbData, null, null);
         }
 
         /// <summary>
@@ -100,15 +89,16 @@ namespace Colder.Infrastructure
         {
             var dbData = await GetDbData(aggregateRoot.Id);
 
-            var (added, updated, removed) = Tracking(dbData, aggregateRoot);
-            added.ForEach(aAdded =>
-            {
-                Db.Entry(aAdded).State = EntityState.Added;
-            });
+            TrackingHelper.Tracking(
+                dbData,
+                aggregateRoot,
+                obj => Db.Entry(obj).State = EntityState.Added,
+                obj => Db.Entry(obj).State = EntityState.Deleted
+                );
 
             await Db.SaveChangesAsync();
 
-            Tracking(aggregateRoot, dbData);
+            TrackingHelper.Tracking(aggregateRoot, dbData, null, null);
         }
 
         /// <summary>
