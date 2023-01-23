@@ -11,12 +11,10 @@ namespace Colder.DistributedLock.InMemory
         {
             o.PoolSize = 20;
             o.PoolInitialFill = 1;
-            o.MaxCount = 160_000;
         });
 
         public async Task<IDisposable> Lock(string key, TimeSpan? timeout)
         {
-            //_asyncKeyedLocker.GetOrAdd(key);
             var releaser = (AsyncKeyedLockTimeoutReleaser<string>)await _asyncKeyedLocker.LockAsync(key, timeout ?? TimeSpan.FromSeconds(10)).ConfigureAwait(false);
 
             if (!releaser.EnteredSemaphore)
