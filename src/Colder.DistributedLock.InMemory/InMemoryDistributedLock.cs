@@ -15,7 +15,7 @@ namespace Colder.DistributedLock.InMemory
 
         public async Task<IDisposable> Lock(string key, TimeSpan? timeout)
         {
-            var releaser = (AsyncKeyedLockTimeoutReleaser<string>)await _asyncKeyedLocker.LockAsync(key, timeout ?? TimeSpan.FromSeconds(10)).ConfigureAwait(false);
+            var releaser = await _asyncKeyedLocker.LockAsync(key, timeout ?? TimeSpan.FromSeconds(10)).ConfigureAwait(false);
 
             if (!releaser.EnteredSemaphore)
             {
