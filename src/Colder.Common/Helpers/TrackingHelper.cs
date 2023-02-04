@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Colder.Common;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -7,7 +8,7 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
-namespace Colder.Common.Helpers;
+namespace Colder.Common;
 
 /// <summary>
 /// 跟踪帮助类
@@ -27,6 +28,16 @@ public static class TrackingHelper
     /// <param name="remove">删除</param>
     public static (List<object> added, List<object> updated, List<object> removed) Tracking<TEntity>(TEntity dbData, TEntity newData, Action<object> add, Action<object> remove)
     {
+        return InternleTracking(dbData, newData, add, remove, new List<object>(), dbData);
+    }
+
+    private static (List<object> added, List<object> updated, List<object> removed) InternleTracking<TEntity>(TEntity dbData, TEntity newData, Action<object> add, Action<object> remove, List<object> accessedObjs, object partentEntity)
+    {
+        if (accessedObjs.Contains(dbData))
+        {
+            return (new List<object>(), new List<object>(), new List<object>());
+        }
+
         if (dbData == null)
         {
             throw new Exception($"{nameof(dbData)}不能为Null");
@@ -41,6 +52,7 @@ public static class TrackingHelper
     {
         dbData
     };
+        accessedObjs.Add(dbData);
         var removed = new List<object>();
 
         //普通属性跟踪
@@ -71,7 +83,7 @@ public static class TrackingHelper
                 var addValue = newValue.DeepClone();
                 aProperty.SetValue(dbData, addValue);
 
-                var children = GetAllChildren(addValue);
+                var children = GetAllChildren(addValue, accessedObjs);
                 children.ForEach(item => add?.Invoke(item));
 
                 added.AddRange(children);
@@ -79,7 +91,7 @@ public static class TrackingHelper
             //删除
             else if (dbValue != null && newValue == null)
             {
-                var children = GetAllChildren(dbValue);
+                var children = GetAllChildren(dbValue, accessedObjs);
                 children.Reverse();
                 children.ForEach(item => remove?.Invoke(item));
 
@@ -91,10 +103,16 @@ public static class TrackingHelper
             else if (dbValue != null && newValue != null)
             {
                 //递归
-                var res = Tracking(dbValue, newValue, add, remove);
+                var res = InternleTracking(dbValue, newValue, add, remove, accessedObjs, dbData);
                 added.AddRange(res.added);
                 updated.AddRange(res.updated);
                 removed.AddRange(res.removed);
+            }
+
+            //若该类型为主表实体
+            if (aProperty.PropertyType == partentEntity.GetType())
+            {
+                aProperty.SetValue(dbData, partentEntity);
             }
         });
 
@@ -119,12 +137,12 @@ public static class TrackingHelper
                 .ToList()
                 .ForEach(aItem =>
                 {
-                    var addItem = aItem.DeepClone();
+                    var addItem = DeepCloneExtensions.DeepClone(aItem);
                     var addMethod = aProperty.PropertyType.GetMethod("Add", new Type[] { itemType });
 
                     addMethod.Invoke(dbProperty, new object[] { addItem });
 
-                    var children = GetAllChildren(addItem);
+                    var children = GetAllChildren(addItem, accessedObjs);
                     children.ForEach(item => add?.Invoke(item));
 
                     added.AddRange(children);
@@ -136,7 +154,7 @@ public static class TrackingHelper
                 .ToList()
                 .ForEach(aItem =>
                 {
-                    var children = GetAllChildren(aItem);
+                    var children = GetAllChildren(aItem, accessedObjs);
                     children.Reverse();
                     children.ForEach(item => remove?.Invoke(item));
 
@@ -156,7 +174,7 @@ public static class TrackingHelper
                     var newItem = newCollection.Where(x => GetPropertyOrFieldValue(x, idField)?.ToString() == itemId).FirstOrDefault();
 
                     //递归
-                    var res = Tracking(aItem, newItem, add, remove);
+                    var res = InternleTracking(aItem, newItem, add, remove, accessedObjs, dbData);
                     added.AddRange(res.added);
                     updated.AddRange(res.updated);
                     removed.AddRange(res.removed);
@@ -166,12 +184,18 @@ public static class TrackingHelper
         return (added, updated, removed);
     }
 
-    private static List<object> GetAllChildren(object obj)
+    private static List<object> GetAllChildren(object obj, List<object> accessedObjs)
     {
+        if (accessedObjs.Contains(obj))
+        {
+            return new List<object>();
+        }
+
         var childrenList = new List<object>()
     {
         obj
     };
+        accessedObjs.Add(obj);
 
         //类属性跟踪
         var properties = obj.GetType().GetPropertyOrFields().Where(x =>
@@ -183,7 +207,7 @@ public static class TrackingHelper
             var value = aPropperty.GetValue(obj);
             if (value != null)
             {
-                childrenList.AddRange(GetAllChildren(value));
+                childrenList.AddRange(GetAllChildren(value, accessedObjs));
             }
         });
 
@@ -199,7 +223,7 @@ public static class TrackingHelper
             {
                 value.Cast<object>().ToList().ForEach(aItem =>
                 {
-                    childrenList.AddRange(GetAllChildren(aItem));
+                    childrenList.AddRange(GetAllChildren(aItem, accessedObjs));
                 });
             }
         });
@@ -219,7 +243,7 @@ public static class TrackingHelper
 
         if (type is PropertyInfo property)
         {
-            needTracking = needTracking && property.CanWrite && NeedTracking(property.PropertyType);
+            needTracking = needTracking && property.CanWrite;
         }
 
         return needTracking;
