@@ -93,17 +93,20 @@ public class MiraiClient
 
     private async Task<JObject> Request(string path, object body)
     {
+        var jsonObj = JObject.FromObject(body);
+
         var httpClient = _httpClientFactory.CreateClient();
         httpClient.BaseAddress = new Uri(_baseUrl);
 
-        var responseJson = await httpClient.PostJson(path, ToJson(body));
+        var responseJson = await httpClient.PostJson(path, ToJson(jsonObj));
         var responseObj = JObject.Parse(responseJson);
 
         if ((int)responseObj["code"] != 0)
         {
             RefreshSessionKey();
 
-            responseJson = await httpClient.PostJson(path, ToJson(body));
+            jsonObj["sessionKey"] = GetSessionKey();
+            responseJson = await httpClient.PostJson(path, ToJson(jsonObj));
             responseObj = JObject.Parse(responseJson);
         }
 
