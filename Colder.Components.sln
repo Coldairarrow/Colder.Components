@@ -44,9 +44,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".solution", ".solution", "{
 		.gitattributes = .gitattributes
 		.gitignore = .gitignore
 		Directory.Build.props = Directory.Build.props
-		gitversion.yml = gitversion.yml
 		LICENSE = LICENSE
 		README.md = README.md
+		version.json = version.json
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Colder.Domain.Abstractions", "src\Colder.Domain.Abstractions\Colder.Domain.Abstractions.csproj", "{58F85FDC-929C-4C27-B405-ADC1E3C8A8D1}"
