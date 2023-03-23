@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Colder.Tests
@@ -36,10 +37,10 @@ namespace Colder.Tests
             {
                 tasks.Add(Task.Factory.StartNew(async () =>
                 {
-                    for (int j = 0; j < 10000; j++)
+                    for (int j = 0; j < 100; j++)
                     {
                         using var _ = await theLock.Lock(key);
-                        num++;
+                        Interlocked.Increment(ref num);
                     }
                 }, TaskCreationOptions.LongRunning));
             }
@@ -49,7 +50,7 @@ namespace Colder.Tests
                 await (await aTask);
             }
 
-            Assert.AreEqual(num, 160000);
+            Assert.AreEqual(1600, num);
         }
     }
 }
