@@ -70,28 +70,27 @@ namespace Colder.DistributedId
             for (int i = 1; i < 1024; i++)
             {
                 var lockKey = $"{GetType().FullName}:WorkerIdLock:{i}";
-                using (await distributedLock.Lock(lockKey))
+                using var _ = distributedLock.Lock(lockKey);
+
+                var key = $"{GetType().FullName}:WorkerId:{i}";
+                var value = await distributedCache.GetStringAsync(key);
+                if (string.IsNullOrEmpty(value))
                 {
-                    var key = $"{GetType().FullName}:WorkerId:{i}";
-                    var value = await distributedCache.GetStringAsync(key);
-                    if (string.IsNullOrEmpty(value))
+                    await distributedCache.SetStringAsync(key, DateTimeOffset.Now.ToString(), new DistributedCacheEntryOptions
                     {
-                        await distributedCache.SetStringAsync(key, DateTimeOffset.Now.ToString(), new DistributedCacheEntryOptions
+                        AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10)
+                    });
+
+                    //定时刷新，心跳
+                    _timer = new Timer(state =>
+                    {
+                        distributedCache.SetString(key, DateTimeOffset.Now.ToString(), new DistributedCacheEntryOptions
                         {
                             AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10)
                         });
+                    }, null, 0, 1000);
 
-                        //定时刷新，心跳
-                        _timer = new Timer(state =>
-                        {
-                            distributedCache.SetString(key, DateTimeOffset.Now.ToString(), new DistributedCacheEntryOptions
-                            {
-                                AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10)
-                            });
-                        }, null, 0, 1000);
-
-                        return i;
-                    }
+                    return i;
                 }
             }
 

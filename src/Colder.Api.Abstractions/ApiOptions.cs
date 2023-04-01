@@ -13,7 +13,7 @@ public class ApiOptions
     /// <summary>
     /// Jwt密钥
     /// </summary>
-    public string JwtSecret { get; set; } = "08LTxQVb4Z0Zlfio";
+    public string JwtSecret { get; set; }
 
     /// <summary>
     /// 启用Swagger
