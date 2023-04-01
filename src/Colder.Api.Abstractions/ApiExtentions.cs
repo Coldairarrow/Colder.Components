@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using NSwag;
 using System;
 using System.Linq;
@@ -102,8 +103,12 @@ public static class ApiExtentions
                 });
             });
 
-            //jwt
-            services.AddJwt(apiOption);
+            if (apiOption.EnableJwt)
+            {
+                //jwt
+                services.AddJwt(apiOption);
+            }
+
             services.AddHttpClient();
             services.AddHttpContextAccessor();
         });
@@ -129,6 +134,8 @@ public static class ApiExtentions
     /// <returns></returns>
     public static IApplicationBuilder UseWebApiDefaults(this IApplicationBuilder app)
     {
+        ApiOptions apiOption = app.ApplicationServices.GetService<IOptions<ApiOptions>>().Value;
+
         app.UseApiLog();
 
         app.UseCors();
@@ -144,8 +151,11 @@ public static class ApiExtentions
             endpoints.MapControllers();
         });
 
-        app.UseOpenApi()//添加swagger生成api文档（默认路由文档 /swagger/v1/swagger.json）
+        if (apiOption.EnableSwagger)
+        {
+            app.UseOpenApi()//添加swagger生成api文档（默认路由文档 /swagger/v1/swagger.json）
             .UseSwaggerUi3();//添加Swagger UI到请求管道中(默认路由: /swagger).
+        }
 
         return app;
     }

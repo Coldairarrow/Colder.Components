@@ -1,5 +1,6 @@
 [![Build Status](https://coldairarrow.visualstudio.com/Colder/_apis/build/status/Colder.Components-ci?branchName=master)](https://coldairarrow.visualstudio.com/Colder/_build/latest?definitionId=3&branchName=master)
 - [通用基础组件](#通用基础组件)
+  - [Api快速启动](#api快速启动)
   - [日志](#日志)
   - [分布式缓存](#分布式缓存)
   - [分布式锁](#分布式锁)
@@ -11,6 +12,30 @@
   - [WebSocket服务端](#websocket服务端)
 # 通用基础组件
 **完整使用案例见源码中demos**
+
+## Api快速启动
+
+nuget包：`Colder.Api.Abstractions`
+
+使用方式
+```c#
+WebApplication.CreateBuilder(args).RunWebApiDefaults(services =>
+{
+    
+});
+```
+配置
+```javascript
+{
+  "api": {
+    "EnableSwagger": false,
+    "EnableJwt": true,
+    "JwtSecret": null
+  }
+}
+
+```
+
 ## 日志
 
 nuget包：`Colder.Logging.Serilog`
