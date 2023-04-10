@@ -1,4 +1,5 @@
-﻿using MailKit;
+﻿using AsyncKeyedLock;
+using MailKit;
 using MailKit.Net.Imap;
 using MailKit.Security;
 using Microsoft.Extensions.Logging;
@@ -20,7 +21,8 @@ public class IdleClient : IDisposable
     CancellationTokenSource _cancel;
     CancellationTokenSource _done;
     ImapClient _client;
-
+    private readonly StripedAsyncKeyedLocker<string> _asyncKeyedLocker = new();
+    private readonly string _lockKey = Guid.NewGuid().ToString();
     /// <summary>
     /// 
     /// </summary>
@@ -88,6 +90,8 @@ public class IdleClient : IDisposable
 
     private async Task ConnectAsync()
     {
+        using var theLock = await _asyncKeyedLocker.LockAsync(_lockKey);
+
         _logger?.LogInformation("IdleClient开始连接 {Host}:{Port} {UserName}", Host, Port, UserName);
 
         if (!_client.IsConnected)
@@ -108,6 +112,11 @@ public class IdleClient : IDisposable
             _existsUids ??= (await GetAllUids()).ToList();
         }
 
+        if (!_client.Inbox.IsOpen)
+        {
+            await _client.Inbox.OpenAsync(FolderAccess.ReadOnly, _cancel.Token);
+        }
+
         _logger?.LogInformation("IdleClient连接成功 {Host}:{Port} {UserName}", Host, Port, UserName);
     }
     private async Task<UniqueId[]> GetAllUids()
@@ -118,8 +127,6 @@ public class IdleClient : IDisposable
         }
 
         var uids = await _client.Inbox.FetchAsync(0, -1, MessageSummaryItems.UniqueId);
-
-        await _client.Inbox.CloseAsync();
 
         return uids.Select(x => x.UniqueId).ToArray();
     }
@@ -136,6 +143,11 @@ public class IdleClient : IDisposable
 
         _client.Disconnected += async (e, state) =>
         {
+            if (_done?.IsCancellationRequested == false)
+            {
+                _done.Cancel();
+            }
+
             while (true)
             {
                 try
@@ -166,7 +178,11 @@ public class IdleClient : IDisposable
                     }
 
                     //先检查数据
-                    var nowUids = await GetAllUids();
+                    UniqueId[] nowUids;
+                    using (await _asyncKeyedLocker.LockAsync(_lockKey))
+                    {
+                        nowUids = await GetAllUids();
+                    }
                     var newUids = from a in nowUids
                                   join b in _existsUids on a equals b into ab
                                   from b in ab.DefaultIfEmpty()
