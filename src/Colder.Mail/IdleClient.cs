@@ -160,6 +160,11 @@ public class IdleClient : IDisposable
             {
                 try
                 {
+                    if (!_client.IsConnected || !_client.IsAuthenticated)
+                    {
+                        continue;
+                    }
+
                     //先检查数据
                     var nowUids = await GetAllUids();
                     var newUids = from a in nowUids
@@ -209,6 +214,9 @@ public class IdleClient : IDisposable
                 catch (Exception ex)
                 {
                     _logger?.LogWarning(ex, ex.Message);
+                }
+                finally
+                {
                     await Task.Delay(1000);
                 }
             }
