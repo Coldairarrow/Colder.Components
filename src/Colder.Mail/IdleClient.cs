@@ -105,8 +105,6 @@ public class IdleClient : IDisposable
         if (!_client.IsAuthenticated)
         {
             await _client.AuthenticateAsync(UserName, Password, _cancel.Token);
-
-            await _client.Inbox.OpenAsync(FolderAccess.ReadOnly, _cancel.Token);
             _existsUids ??= (await GetAllUids()).ToList();
         }
 
@@ -114,8 +112,16 @@ public class IdleClient : IDisposable
     }
     private async Task<UniqueId[]> GetAllUids()
     {
-        return (await _client.Inbox.FetchAsync(0, -1, MessageSummaryItems.UniqueId))
-            .Select(x => x.UniqueId).ToArray();
+        if (!_client.Inbox.IsOpen)
+        {
+            await _client.Inbox.OpenAsync(FolderAccess.ReadOnly, _cancel.Token);
+        }
+
+        var uids = await _client.Inbox.FetchAsync(0, -1, MessageSummaryItems.UniqueId);
+
+        await _client.Inbox.CloseAsync();
+
+        return uids.Select(x => x.UniqueId).ToArray();
     }
 
     /// <summary>
