@@ -21,7 +21,7 @@ namespace Colder.Json
         {
             JToken jt = JValue.ReadFrom(reader);
 
-            return jt.Value<long>();
+            return typeof(long).Equals(objectType) ? jt.Value<long>() : jt.Value<long?>();
         }
 
         /// <summary>
