@@ -88,15 +88,15 @@ namespace Colder.Logging.Serilog
                 serilogConfig.MinimumLevel.Is((LogEventLevel)logConfig.MinLevel);
                 if (logConfig.Console.Enabled)
                 {
-                    serilogConfig.WriteTo.Console();
+                    serilogConfig.WriteTo.Console(outputTemplate: logConfig.Console.Template);
                 }
                 if (logConfig.Debug.Enabled)
                 {
-                    serilogConfig.WriteTo.Debug();
+                    serilogConfig.WriteTo.Debug(outputTemplate: logConfig.Debug.Template);
                 }
                 if (logConfig.File.Enabled)
                 {
-                    string template = "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level:u3} {SourceContext:l}] {Message:lj}{NewLine}{Exception}";
+                    string template = logConfig.File.Template; // "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level:u3} {SourceContext:l}] {Message:lj}{NewLine}{Exception}";
 
                     //最大日志文件10M,每天滚动,保留31天
                     serilogConfig.WriteTo.Async(a => a.File(

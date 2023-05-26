@@ -28,7 +28,7 @@ namespace Colder.Logging.Abstractions
         /// <summary>
         /// 输出到控制台
         /// </summary>
-        public EnableOption Console { get; set; } = new EnableOption
+        public OutputOption Console { get; set; } = new OutputOption
         {
             Enabled = true
         };
@@ -36,7 +36,7 @@ namespace Colder.Logging.Abstractions
         /// <summary>
         /// 输出到调试
         /// </summary>
-        public EnableOption Debug { get; set; } = new EnableOption
+        public OutputOption Debug { get; set; } = new OutputOption
         {
             Enabled = true
         };
@@ -44,7 +44,7 @@ namespace Colder.Logging.Abstractions
         /// <summary>
         /// 输出到文件
         /// </summary>
-        public EnableOption File { get; set; } = new EnableOption
+        public OutputOption File { get; set; } = new OutputOption
         {
             Enabled = true
         };
