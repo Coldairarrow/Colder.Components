@@ -26,13 +26,16 @@ public static class TrackingHelper
     /// <param name="newData">新数据</param>
     /// <param name="add">添加</param>
     /// <param name="remove">删除</param>
-    public static (List<object> added, List<object> updated, List<object> removed) Tracking<TEntity>(TEntity dbData, TEntity newData, Action<object> add, Action<object> remove)
+    /// <param name="ignoreMember">忽略的成员</param>
+    public static (List<object> added, List<object> updated, List<object> removed) Tracking<TEntity>(TEntity dbData, TEntity newData, Action<object> add, Action<object> remove, Func<MemberInfo, bool> ignoreMember = null)
     {
-        return InternleTracking(dbData, newData, add, remove, new List<object>(), dbData);
+        return InternleTracking(dbData, newData, add, remove, ignoreMember, new List<object>(), dbData);
     }
 
-    private static (List<object> added, List<object> updated, List<object> removed) InternleTracking<TEntity>(TEntity dbData, TEntity newData, Action<object> add, Action<object> remove, List<object> accessedObjs, object partentEntity)
+    private static (List<object> added, List<object> updated, List<object> removed) InternleTracking<TEntity>(TEntity dbData, TEntity newData, Action<object> add, Action<object> remove, Func<MemberInfo, bool> ignoreMember, List<object> accessedObjs, object partentEntity)
     {
+        ignoreMember ??= x => false;
+
         if (accessedObjs.Contains(dbData))
         {
             return (new List<object>(), new List<object>(), new List<object>());
@@ -49,9 +52,9 @@ public static class TrackingHelper
 
         var added = new List<object>();
         var updated = new List<object>
-    {
-        dbData
-    };
+        {
+            dbData
+        };
         accessedObjs.Add(dbData);
         var removed = new List<object>();
 
@@ -60,6 +63,7 @@ public static class TrackingHelper
             NeedTracking(x.MemberInfo)
             && !IsEntityClass(x.PropertyType)
             && !IsEntityCollection(x.PropertyType)
+            && !ignoreMember(x.MemberInfo)
             ).ToList();
         properties.ForEach(aProperty =>
         {
@@ -70,6 +74,7 @@ public static class TrackingHelper
         properties = dbData.GetType().GetPropertyOrFields().Where(x =>
             NeedTracking(x.MemberInfo)
             && IsEntityClass(x.PropertyType)
+            && !ignoreMember(x.MemberInfo)
             ).ToList();
 
         properties.ForEach(aProperty =>
@@ -83,7 +88,7 @@ public static class TrackingHelper
                 var addValue = newValue.DeepClone();
                 aProperty.SetValue(dbData, addValue);
 
-                var children = GetAllChildren(addValue, accessedObjs);
+                var children = GetAllChildren(addValue, accessedObjs, ignoreMember);
                 children.ForEach(item => add?.Invoke(item));
 
                 added.AddRange(children);
@@ -91,7 +96,7 @@ public static class TrackingHelper
             //删除
             else if (dbValue != null && newValue == null)
             {
-                var children = GetAllChildren(dbValue, accessedObjs);
+                var children = GetAllChildren(dbValue, accessedObjs, ignoreMember);
                 children.Reverse();
                 children.ForEach(item => remove?.Invoke(item));
 
@@ -103,7 +108,7 @@ public static class TrackingHelper
             else if (dbValue != null && newValue != null)
             {
                 //递归
-                var res = InternleTracking(dbValue, newValue, add, remove, accessedObjs, dbData);
+                var res = InternleTracking(dbValue, newValue, add, remove, ignoreMember, accessedObjs, dbData);
                 added.AddRange(res.added);
                 updated.AddRange(res.updated);
                 removed.AddRange(res.removed);
@@ -120,6 +125,7 @@ public static class TrackingHelper
         properties = dbData.GetType().GetPropertyOrFields().Where(x =>
             NeedTracking(x.MemberInfo)
             && IsEntityCollection(x.PropertyType)
+            && !ignoreMember(x.MemberInfo)
             ).ToList();
         properties.ForEach(aProperty =>
         {
@@ -137,12 +143,12 @@ public static class TrackingHelper
                 .ToList()
                 .ForEach(aItem =>
                 {
-                    var addItem = DeepCloneExtensions.DeepClone(aItem);
+                    var addItem = aItem.DeepClone();
                     var addMethod = aProperty.PropertyType.GetMethod("Add", new Type[] { itemType });
 
                     addMethod.Invoke(dbProperty, new object[] { addItem });
 
-                    var children = GetAllChildren(addItem, accessedObjs);
+                    var children = GetAllChildren(addItem, accessedObjs, ignoreMember);
                     children.ForEach(item => add?.Invoke(item));
 
                     added.AddRange(children);
@@ -154,7 +160,7 @@ public static class TrackingHelper
                 .ToList()
                 .ForEach(aItem =>
                 {
-                    var children = GetAllChildren(aItem, accessedObjs);
+                    var children = GetAllChildren(aItem, accessedObjs, ignoreMember);
                     children.Reverse();
                     children.ForEach(item => remove?.Invoke(item));
 
@@ -172,9 +178,8 @@ public static class TrackingHelper
                 {
                     var itemId = GetPropertyOrFieldValue(aItem, idField).ToString();
                     var newItem = newCollection.Where(x => GetPropertyOrFieldValue(x, idField)?.ToString() == itemId).FirstOrDefault();
-
                     //递归
-                    var res = InternleTracking(aItem, newItem, add, remove, accessedObjs, dbData);
+                    var res = InternleTracking(aItem, newItem, add, remove, ignoreMember, accessedObjs, dbData);
                     added.AddRange(res.added);
                     updated.AddRange(res.updated);
                     removed.AddRange(res.removed);
@@ -184,7 +189,7 @@ public static class TrackingHelper
         return (added, updated, removed);
     }
 
-    private static List<object> GetAllChildren(object obj, List<object> accessedObjs)
+    private static List<object> GetAllChildren(object obj, List<object> accessedObjs, Func<MemberInfo, bool> ignoreMember)
     {
         if (accessedObjs.Contains(obj))
         {
@@ -192,22 +197,23 @@ public static class TrackingHelper
         }
 
         var childrenList = new List<object>()
-    {
-        obj
-    };
+        {
+            obj
+        };
         accessedObjs.Add(obj);
 
         //类属性跟踪
         var properties = obj.GetType().GetPropertyOrFields().Where(x =>
             NeedTracking(x.MemberInfo)
             && IsEntityClass(x.PropertyType)
+            && !ignoreMember(x.MemberInfo)
             ).ToList();
         properties.ForEach(aPropperty =>
         {
             var value = aPropperty.GetValue(obj);
             if (value != null)
             {
-                childrenList.AddRange(GetAllChildren(value, accessedObjs));
+                childrenList.AddRange(GetAllChildren(value, accessedObjs, ignoreMember));
             }
         });
 
@@ -215,17 +221,15 @@ public static class TrackingHelper
         properties = obj.GetType().GetPropertyOrFields().Where(x =>
             NeedTracking(x.MemberInfo)
             && IsEntityCollection(x.PropertyType)
+            && !ignoreMember(x.MemberInfo)
             ).ToList();
         properties.ForEach(aProperty =>
         {
             var value = (IEnumerable)aProperty.GetValue(obj);
-            if (value != null)
+            value?.Cast<object>().ToList().ForEach(aItem =>
             {
-                value.Cast<object>().ToList().ForEach(aItem =>
-                {
-                    childrenList.AddRange(GetAllChildren(aItem, accessedObjs));
-                });
-            }
+                childrenList.AddRange(GetAllChildren(aItem, accessedObjs, ignoreMember));
+            });
         });
 
         return childrenList;
