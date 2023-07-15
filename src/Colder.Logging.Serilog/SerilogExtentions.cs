@@ -37,16 +37,23 @@ namespace Colder.Logging.Serilog
 
             SelfLog.Enable(log =>
             {
-                if (!Directory.Exists(logDir))
+                try
                 {
-                    Directory.CreateDirectory(logDir);
+                    if (!Directory.Exists(logDir))
+                    {
+                        Directory.CreateDirectory(logDir);
+                    }
+
+                    string msg = $"{DateTimeOffset.Now}:Serilog自己异常 {log}";
+                    Console.WriteLine(msg);
+
+                    var selfLogPath = Path.Combine(logDir, "selflog.txt");
+                    File.WriteAllText(selfLogPath, msg);
                 }
-
-                string msg = $"{DateTimeOffset.Now}:Serilog自己异常 {log}";
-                Console.WriteLine(msg);
-
-                var selfLogPath = Path.Combine(logDir, "selflog.txt");
-                File.WriteAllText(selfLogPath, msg);
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex);
+                }
             });
 
             hostBuilder.ConfigureServices((host, services) =>
