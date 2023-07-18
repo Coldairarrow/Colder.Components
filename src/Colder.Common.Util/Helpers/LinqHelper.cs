@@ -51,7 +51,7 @@ namespace Colder.Common.Util
         /// 构建动态表达式
         /// </summary>
         /// <returns></returns>
-        public static Expression<Func<T, TResult>> BuildDynamicExpression<T, TResult>(string expressionStr, params string[] paramterNames)
+        public static Expression<Func<T, TResult>> BuildDynamicExpression<T, TResult>(string[] paramterNames, string expressionStr, params (string name, object value)[] variables)
         {
             var interpreter = new Interpreter();
             if (EFCore != null)
@@ -63,7 +63,11 @@ namespace Colder.Common.Util
             {
                 interpreter.Reference(EFCoreNpgsql.GetType("Microsoft.EntityFrameworkCore.NpgsqlDbFunctionsExtensions"));
             }
-            
+            foreach (var (name, value) in variables)
+            {
+                interpreter.SetVariable(name, value);
+            }
+
             return interpreter.ParseAsExpression<Func<T, TResult>>(expressionStr, paramterNames);
         }
     }
