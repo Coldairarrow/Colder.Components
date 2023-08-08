@@ -1,4 +1,6 @@
-﻿namespace Colder.Api.Abstractions;
+﻿using System;
+
+namespace Colder.Api.Abstractions.Options;
 
 /// <summary>
 /// 
@@ -19,4 +21,9 @@ public class ApiOptions
     /// 启用Swagger
     /// </summary>
     public bool EnableSwagger { get; set; } = true;
+
+    /// <summary>
+    /// 文档分组
+    /// </summary>
+    public SwaggerDocumentOptions[] Documents { get; set; } = Array.Empty<SwaggerDocumentOptions>();
 }

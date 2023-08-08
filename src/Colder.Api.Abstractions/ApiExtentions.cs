@@ -1,4 +1,5 @@
-﻿using Colder.DistributedId;
+﻿using Colder.Api.Abstractions.Options;
+using Colder.DistributedId;
 using Colder.Json;
 using Colder.Logging.Serilog;
 using Logistics.Api;
@@ -9,6 +10,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using NSwag;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Colder.Api.Abstractions;
@@ -51,6 +53,7 @@ public static class ApiExtentions
                     x.EnableSwagger = apiOption.EnableSwagger;
                     x.EnableJwt = apiOption.EnableJwt;
                     x.JwtSecret = apiOption.JwtSecret;
+                    x.Documents = apiOption.Documents;
                 });
             }
             else
@@ -90,18 +93,45 @@ public static class ApiExtentions
             });
 
             //swagger
-            services.AddOpenApiDocument(settings =>
+            List<SwaggerDocumentOptions> documents = apiOption.Documents?.ToList() ?? new List<SwaggerDocumentOptions>();
+            if (documents.Count == 0)
             {
-                settings.AllowReferencesWithProperties = true;
-                settings.AddSecurity("身份认证Token", Enumerable.Empty<string>(), new OpenApiSecurityScheme()
+                documents.Add(new SwaggerDocumentOptions());
+            }
+
+            apiOption.Documents = documents.ToArray();
+
+            foreach (var config in apiOption.Documents)
+            {
+                services.AddOpenApiDocument(options =>
                 {
-                    Scheme = "bearer",
-                    Description = "Authorization:Bearer {your JWT token}",
-                    Name = "Authorization",
-                    In = OpenApiSecurityApiKeyLocation.Header,
-                    Type = OpenApiSecuritySchemeType.Http
+                    if (!string.IsNullOrEmpty(config.Title))
+                    {
+                        options.Title = config.Title;
+                    }
+                    if (!string.IsNullOrEmpty(config.DocumentName))
+                    {
+                        options.DocumentName = config.DocumentName;
+                    }
+                    if (config.ApiGroupNames.Length > 0)
+                    {
+                        options.ApiGroupNames = config.ApiGroupNames;
+                    }
+
+                    options.SchemaProcessors.Add(new EnumSchemaProcessor());
+                    //解决枚举无法展示问题
+                    options.AllowReferencesWithProperties = true;
+
+                    options.AddSecurity("身份认证Token", Enumerable.Empty<string>(), new OpenApiSecurityScheme()
+                    {
+                        Scheme = "bearer",
+                        Description = "Authorization:Bearer {your JWT token}",
+                        Name = "Authorization",
+                        In = OpenApiSecurityApiKeyLocation.Header,
+                        Type = OpenApiSecuritySchemeType.Http
+                    });
                 });
-            });
+            }
 
             if (apiOption.EnableJwt)
             {

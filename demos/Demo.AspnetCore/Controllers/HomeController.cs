@@ -6,6 +6,7 @@ namespace Demo.AspnetCore.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [ApiExplorerSettings(GroupName = "default")]
     public class HomeController : ControllerBase
     {
         private readonly IDistributedId _distributedId;

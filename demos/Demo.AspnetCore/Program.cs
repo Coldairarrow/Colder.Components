@@ -1,5 +1,4 @@
 using Colder.Api.Abstractions;
-using Demo.AspnetCore;
 using Demo.AspnetCore.Entities;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +9,4 @@ WebApplication.CreateBuilder(args).RunWebApiDefaults(services =>
 {
     services.AddDbContext<DemoDbContext>(x => x.UseSqlite("Data Source=db.db"));
     services.AddAutoMapper(Assembly.GetExecutingAssembly());
-
-    services.AddHostedService<MailService>();
 });

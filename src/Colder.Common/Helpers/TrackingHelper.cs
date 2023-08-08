@@ -245,7 +245,7 @@ public static class TrackingHelper
         var needTracking = type.GetCustomAttribute<NotMappedAttribute>() == null
             && type.GetCustomAttribute<ConcurrencyCheckAttribute>() == null;
 
-        if (type is PropertyInfo property)
+        if (type is PropertyInfo property && !IsEntityClass(property.PropertyType) && !IsEntityCollection(property.PropertyType))
         {
             needTracking = needTracking && property.CanWrite;
         }
