@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild Condition="'$(Configuration)'=='Release'">true</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="PDFiumSharpV2" Version="1.0.1" />
+    <PackageReference Include="PDFium.LinuxV2" Version="1.0.2" />
+    <PackageReference Include="PDFium.WindowsV2" Version="1.0.2" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="2.1.4" />
+  </ItemGroup>
+</Project>

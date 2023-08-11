@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>$(DemoNetVersion)</TargetFramework>
     <DocumentationFile></DocumentationFile>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <NoWarn>1701;1702;CS1591</NoWarn>
