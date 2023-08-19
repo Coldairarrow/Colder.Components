@@ -63,9 +63,12 @@ namespace Colder.Common.Util
             {
                 interpreter.Reference(EFCoreNpgsql.GetType("Microsoft.EntityFrameworkCore.NpgsqlDbFunctionsExtensions"));
             }
-            foreach (var (name, value) in variables)
+            if (variables != null)
             {
-                interpreter.SetVariable(name, value);
+                foreach (var (name, value) in variables)
+                {
+                    interpreter.SetVariable(name, value);
+                }
             }
 
             return interpreter.ParseAsExpression<Func<T, TResult>>(expressionStr, paramterNames);
