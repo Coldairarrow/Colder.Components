@@ -7,8 +7,8 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
+using System.Threading;
 
 namespace Colder.Mail;
 
@@ -23,6 +23,7 @@ public class IdleClient : IDisposable
     ImapClient _client;
     private readonly StripedAsyncKeyedLocker<string> _asyncKeyedLocker = new();
     private readonly string _lockKey = Guid.NewGuid().ToString();
+    private bool _disposed;
     /// <summary>
     /// 
     /// </summary>
@@ -90,6 +91,11 @@ public class IdleClient : IDisposable
 
     private async Task ConnectAsync()
     {
+        if (_disposed)
+        {
+            return;
+        }
+
         using var theLock = await _asyncKeyedLocker.LockAsync(_lockKey);
 
         _logger?.LogInformation("IdleClient开始连接 {Host}:{Port} {UserName}", Host, Port, UserName);
@@ -250,6 +256,10 @@ public class IdleClient : IDisposable
     /// </summary>
     public void Dispose()
     {
+        _disposed = true;
+
+        _logger?.LogWarning("IdleClient释放 {Host}:{Port} {UserName}", Host, Port, UserName);
+
         _cancel.Cancel();
         _cancel.Dispose();
 

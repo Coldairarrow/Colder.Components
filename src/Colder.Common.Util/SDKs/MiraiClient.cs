@@ -11,25 +11,21 @@ namespace Colder.Common;
 /// </summary>
 public class MiraiClient
 {
-    private readonly string _qqNumber;
     private readonly string _baseUrl;
     private readonly string _verifyKey;
     private readonly IHttpClientFactory _httpClientFactory;
-    private string _sessionKey;
-    private readonly object _lockObj = new object();
 
     /// <summary>
     /// 
     /// </summary>
-    public MiraiClient(IHttpClientFactory httpClientFactory, string qqNumber, string baseUrl, string verifyKey)
+    public MiraiClient(IHttpClientFactory httpClientFactory, string baseUrl, string verifyKey)
     {
         _httpClientFactory = httpClientFactory;
-        _qqNumber = qqNumber;
         _baseUrl = baseUrl;
         _verifyKey = verifyKey;
     }
 
-    private void RefreshSessionKey()
+    private string GetSessionKey(string qqNumber)
     {
         var body = new
         {
@@ -42,42 +38,29 @@ public class MiraiClient
         var responseJson = AsyncHelper.RunSync(() => httpClient.PostJson("verify", JsonConvert.SerializeObject(body)));
         var responseObj = JObject.Parse(responseJson);
 
-        _sessionKey = responseObj["session"].ToString();
+        var sessionKey = responseObj["session"].ToString();
 
         AsyncHelper.RunSync(() => httpClient.PostJson("bind", ToJson(new
         {
-            sessionKey = _sessionKey,
-            qq = _qqNumber
+            sessionKey,
+            qq = qqNumber
         })));
-    }
 
-    private string GetSessionKey()
-    {
-        if (string.IsNullOrEmpty(_sessionKey))
-        {
-            lock (_lockObj)
-            {
-                if (string.IsNullOrEmpty(_sessionKey))
-                {
-                    RefreshSessionKey();
-                }
-            }
-        }
-
-        return _sessionKey;
+        return sessionKey;
     }
 
     /// <summary>
     /// 
     /// </summary>
+    /// <param name="qqNumber"></param>
     /// <param name="groupNumber"></param>
     /// <param name="message"></param>
     /// <returns></returns>
-    public async Task SendGroupMessage(string groupNumber, string message)
+    public async Task SendGroupMessage(string qqNumber, string groupNumber, string message)
     {
         var body = new
         {
-            sessionKey = GetSessionKey(),
+            sessionKey = GetSessionKey(qqNumber),
             target = groupNumber,
             messageChain = new object[] {
                 new
@@ -100,15 +83,6 @@ public class MiraiClient
 
         var responseJson = await httpClient.PostJson(path, ToJson(jsonObj));
         var responseObj = JObject.Parse(responseJson);
-
-        if ((int)responseObj["code"] != 0)
-        {
-            RefreshSessionKey();
-
-            jsonObj["sessionKey"] = GetSessionKey();
-            responseJson = await httpClient.PostJson(path, ToJson(jsonObj));
-            responseObj = JObject.Parse(responseJson);
-        }
 
         return responseObj;
     }
