@@ -16,9 +16,10 @@ public static class ImageSharpHelper
     /// <param name="imageBytes"></param>
     /// <param name="width"></param>
     /// <returns></returns>
-    public static byte[] CompressImage(byte[] imageBytes, int width = 1080)
+    public static byte[] CompressImage(byte[] imageBytes, int width = 1920)
     {
-        var image = Image.Load(imageBytes);
+        using var imageMs = new MemoryStream(imageBytes);
+        var image = Image.Load(imageMs);
         image.Metadata.ExifProfile = null;
 
         if (image.Width > width)

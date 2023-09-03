@@ -44,7 +44,7 @@ namespace Colder.Logging.Abstractions
         /// <summary>
         /// 输出到文件
         /// </summary>
-        public EnableOption File { get; set; } = new EnableOption
+        public FileOption File { get; set; } = new FileOption
         {
             Enabled = true
         };

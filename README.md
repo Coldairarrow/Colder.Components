@@ -56,7 +56,8 @@ IHostBuilder.ConfigureLoggingDefaults()
       "enabled": true
     },
     "file": {
-      "enabled": true
+      "enabled": true,
+      "RetainedFileDays": 30
     },
     "elasticsearch": {
       "enabled": false,
