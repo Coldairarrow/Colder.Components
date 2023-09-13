@@ -1,4 +1,5 @@
-﻿using Colder.Api.Abstractions.Options;
+﻿using Colder.Api.Abstractions.Middlewares;
+using Colder.Api.Abstractions.Options;
 using Colder.DistributedId;
 using Colder.Json;
 using Colder.Logging.Serilog;
@@ -165,6 +166,8 @@ public static class ApiExtentions
     public static IApplicationBuilder UseWebApiDefaults(this IApplicationBuilder app)
     {
         ApiOptions apiOption = app.ApplicationServices.GetService<IOptions<ApiOptions>>().Value;
+
+        app.UseMiddleware<RealIpMiddleware>();
 
         app.UseApiLog();
 
