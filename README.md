@@ -58,7 +58,7 @@ IHostBuilder.ConfigureLoggingDefaults()
     "file": {
       "enabled": true,
       "RetainedFileDays": 30,
-      "FileSizeLimitBytes": 10 //限制文件滚动字节（默认10M，单位是M）
+      "FileSizeLimitBytes": 10 //日志文件限制大小（默认10M，单位是M）
     },
     "elasticsearch": {
       "enabled": false,
