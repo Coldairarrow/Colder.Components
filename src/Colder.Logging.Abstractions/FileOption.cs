@@ -9,10 +9,5 @@
         /// 保留天数
         /// </summary>
         public int RetainedFileDays { get; set; } = 30;
-
-        /// <summary>
-        /// 限制字节（默认10M，单位是M）
-        /// </summary>
-        public int FileSizeLimitBytes { get; set; } = 10;
     }
 }

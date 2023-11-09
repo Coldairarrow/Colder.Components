@@ -111,7 +111,7 @@ namespace Colder.Logging.Serilog
                         outputTemplate: template,
                         rollingInterval: RollingInterval.Day,
                         shared: true,
-                        fileSizeLimitBytes: logConfig.File.FileSizeLimitBytes * 1024 * 1024,
+                        fileSizeLimitBytes: 10 * 1024 * 1024,
                         retainedFileTimeLimit: TimeSpan.FromDays(logConfig.File.RetainedFileDays),
                         rollOnFileSizeLimit: true,
                         retainedFileCountLimit: null
