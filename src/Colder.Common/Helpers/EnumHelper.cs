@@ -33,13 +33,8 @@ public static class EnumHelper
                     return (T)field.GetRawConstantValue();
                 }
             }
-
-            if (field.Name == enumDescription)
-            {
-                return (T)field.GetRawConstantValue();
-            }
         }
 
-        return default;
+        throw new Exception($"{enumDescription} 转换为{typeof(T).FullName} 失败");
     }
 }

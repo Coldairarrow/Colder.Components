@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 
 namespace Colder.Common
 {
@@ -96,223 +97,224 @@ namespace Colder.Common
 
         #region 拓展BuildExtendSelectExpre方法
 
+
         /// <summary>
-        /// 组合继承属性选择表达式树,无拓展参数
-        /// TResult将继承TBase的所有属性
+        /// 组合继承属性选择表达式树,无拓展参数 TResult将继承TBase的所有属性
         /// </summary>
-        /// <typeparam name="TBase">原数据类型</typeparam>
-        /// <typeparam name="TResult">返回类型</typeparam>
-        /// <param name="expression">拓展表达式</param>
-        /// <returns></returns>
-        public static Expression<Func<TBase, TResult>> BuildExtendSelectExpre<TBase, TResult>(this Expression<Func<TBase, TResult>> expression)
+        /// <typeparam name="TBase"> 原数据类型 </typeparam>
+        /// <typeparam name="TResult"> 返回类型 </typeparam>
+        /// <param name="expression"> 拓展表达式 </param>
+        /// <param name="exclude"> 排除字段 </param>
+        /// <returns> </returns>
+        public static Expression<Func<TBase, TResult>> BuildExtendSelectExpre<TBase, TResult>(this Expression<Func<TBase, TResult>> expression, params string[] exclude)
         {
-            return GetExtendSelectExpre<TBase, TResult, Func<TBase, TResult>>(expression);
+            return GetExtendSelectExpre<TBase, TResult, Func<TBase, TResult>>(expression, exclude);
         }
 
         /// <summary>
-        /// 组合继承属性选择表达式树,1个拓展参数
-        /// TResult将继承TBase的所有属性
+        /// 组合继承属性选择表达式树,1个拓展参数 TResult将继承TBase的所有属性
         /// </summary>
-        /// <typeparam name="TBase">原数据类型</typeparam>
-        /// <typeparam name="T1">拓展类型1</typeparam>
-        /// <typeparam name="TResult">返回类型</typeparam>
-        /// <param name="expression">拓展表达式</param>
-        /// <returns></returns>
-        public static Expression<Func<TBase, T1, TResult>> BuildExtendSelectExpre<TBase, T1, TResult>(this Expression<Func<TBase, T1, TResult>> expression)
+        /// <typeparam name="TBase"> 原数据类型 </typeparam>
+        /// <typeparam name="T1"> 拓展类型1 </typeparam>
+        /// <typeparam name="TResult"> 返回类型 </typeparam>
+        /// <param name="expression"> 拓展表达式 </param>
+        /// <param name="exclude"> 排除字段 </param>
+        /// <returns> </returns>
+        public static Expression<Func<TBase, T1, TResult>> BuildExtendSelectExpre<TBase, T1, TResult>(this Expression<Func<TBase, T1, TResult>> expression, params string[] exclude)
         {
-            return GetExtendSelectExpre<TBase, TResult, Func<TBase, T1, TResult>>(expression);
+            return GetExtendSelectExpre<TBase, TResult, Func<TBase, T1, TResult>>(expression, exclude);
         }
 
         /// <summary>
-        /// 组合继承属性选择表达式树,2个拓展参数
-        /// TResult将继承TBase的所有属性
+        /// 组合继承属性选择表达式树,2个拓展参数 TResult将继承TBase的所有属性
         /// </summary>
-        /// <typeparam name="TBase">原数据类型</typeparam>
-        /// <typeparam name="T1">拓展类型1</typeparam>
-        /// <typeparam name="T2">拓展类型2</typeparam>
-        /// <typeparam name="TResult">返回类型</typeparam>
-        /// <param name="expression">拓展表达式</param>
-        /// <returns></returns>
-        public static Expression<Func<TBase, T1, T2, TResult>> BuildExtendSelectExpre<TBase, T1, T2, TResult>(this Expression<Func<TBase, T1, T2, TResult>> expression)
+        /// <typeparam name="TBase"> 原数据类型 </typeparam>
+        /// <typeparam name="T1"> 拓展类型1 </typeparam>
+        /// <typeparam name="T2"> 拓展类型2 </typeparam>
+        /// <typeparam name="TResult"> 返回类型 </typeparam>
+        /// <param name="expression"> 拓展表达式 </param>
+        /// <param name="exclude"> 排除字段 </param>
+        /// <returns> </returns>
+        public static Expression<Func<TBase, T1, T2, TResult>> BuildExtendSelectExpre<TBase, T1, T2, TResult>(this Expression<Func<TBase, T1, T2, TResult>> expression, params string[] exclude)
         {
-            return GetExtendSelectExpre<TBase, TResult, Func<TBase, T1, T2, TResult>>(expression);
+            return GetExtendSelectExpre<TBase, TResult, Func<TBase, T1, T2, TResult>>(expression, exclude);
         }
 
         /// <summary>
-        /// 组合继承属性选择表达式树,3个拓展参数
-        /// TResult将继承TBase的所有属性
+        /// 组合继承属性选择表达式树,3个拓展参数 TResult将继承TBase的所有属性
         /// </summary>
-        /// <typeparam name="TBase">原数据类型</typeparam>
-        /// <typeparam name="T1">拓展类型1</typeparam>
-        /// <typeparam name="T2">拓展类型2</typeparam>
-        /// <typeparam name="T3">拓展类型3</typeparam>
-        /// <typeparam name="TResult">返回类型</typeparam>
-        /// <param name="expression">拓展表达式</param>
-        /// <returns></returns>
-        public static Expression<Func<TBase, T1, T2, T3, TResult>> BuildExtendSelectExpre<TBase, T1, T2, T3, TResult>(this Expression<Func<TBase, T1, T2, T3, TResult>> expression)
+        /// <typeparam name="TBase"> 原数据类型 </typeparam>
+        /// <typeparam name="T1"> 拓展类型1 </typeparam>
+        /// <typeparam name="T2"> 拓展类型2 </typeparam>
+        /// <typeparam name="T3"> 拓展类型3 </typeparam>
+        /// <typeparam name="TResult"> 返回类型 </typeparam>
+        /// <param name="expression"> 拓展表达式 </param>
+        /// <param name="exclude"> 排除字段 </param>
+        /// <returns> </returns>
+        public static Expression<Func<TBase, T1, T2, T3, TResult>> BuildExtendSelectExpre<TBase, T1, T2, T3, TResult>(this Expression<Func<TBase, T1, T2, T3, TResult>> expression, params string[] exclude)
         {
-            return GetExtendSelectExpre<TBase, TResult, Func<TBase, T1, T2, T3, TResult>>(expression);
+            return GetExtendSelectExpre<TBase, TResult, Func<TBase, T1, T2, T3, TResult>>(expression, exclude);
         }
 
         /// <summary>
-        /// 组合继承属性选择表达式树,4个拓展参数
-        /// TResult将继承TBase的所有属性
+        /// 组合继承属性选择表达式树,4个拓展参数 TResult将继承TBase的所有属性
         /// </summary>
-        /// <typeparam name="TBase">原数据类型</typeparam>
-        /// <typeparam name="T1">拓展类型1</typeparam>
-        /// <typeparam name="T2">拓展类型2</typeparam>
-        /// <typeparam name="T3">拓展类型3</typeparam>
-        /// <typeparam name="T4">拓展类型4</typeparam>
-        /// <typeparam name="TResult">返回类型</typeparam>
-        /// <param name="expression">拓展表达式</param>
-        /// <returns></returns>
-        public static Expression<Func<TBase, T1, T2, T3, T4, TResult>> BuildExtendSelectExpre<TBase, T1, T2, T3, T4, TResult>(this Expression<Func<TBase, T1, T2, T3, T4, TResult>> expression)
+        /// <typeparam name="TBase"> 原数据类型 </typeparam>
+        /// <typeparam name="T1"> 拓展类型1 </typeparam>
+        /// <typeparam name="T2"> 拓展类型2 </typeparam>
+        /// <typeparam name="T3"> 拓展类型3 </typeparam>
+        /// <typeparam name="T4"> 拓展类型4 </typeparam>
+        /// <typeparam name="TResult"> 返回类型 </typeparam>
+        /// <param name="expression"> 拓展表达式 </param>
+        /// <param name="exclude"> 排除字段 </param>
+        /// <returns> </returns>
+        public static Expression<Func<TBase, T1, T2, T3, T4, TResult>> BuildExtendSelectExpre<TBase, T1, T2, T3, T4, TResult>(this Expression<Func<TBase, T1, T2, T3, T4, TResult>> expression, params string[] exclude)
         {
-            return GetExtendSelectExpre<TBase, TResult, Func<TBase, T1, T2, T3, T4, TResult>>(expression);
+            return GetExtendSelectExpre<TBase, TResult, Func<TBase, T1, T2, T3, T4, TResult>>(expression, exclude);
         }
 
         /// <summary>
-        /// 组合继承属性选择表达式树,5个拓展参数
-        /// TResult将继承TBase的所有属性
+        /// 组合继承属性选择表达式树,5个拓展参数 TResult将继承TBase的所有属性
         /// </summary>
-        /// <typeparam name="TBase">原数据类型</typeparam>
-        /// <typeparam name="T1">拓展类型1</typeparam>
-        /// <typeparam name="T2">拓展类型2</typeparam>
-        /// <typeparam name="T3">拓展类型3</typeparam>
-        /// <typeparam name="T4">拓展类型4</typeparam>
-        /// <typeparam name="T5">拓展类型5</typeparam>
-        /// <typeparam name="TResult">返回类型</typeparam>
-        /// <param name="expression">拓展表达式</param>
-        /// <returns></returns>
-        public static Expression<Func<TBase, T1, T2, T3, T4, T5, TResult>> BuildExtendSelectExpre<TBase, T1, T2, T3, T4, T5, TResult>(this Expression<Func<TBase, T1, T2, T3, T4, T5, TResult>> expression)
+        /// <typeparam name="TBase"> 原数据类型 </typeparam>
+        /// <typeparam name="T1"> 拓展类型1 </typeparam>
+        /// <typeparam name="T2"> 拓展类型2 </typeparam>
+        /// <typeparam name="T3"> 拓展类型3 </typeparam>
+        /// <typeparam name="T4"> 拓展类型4 </typeparam>
+        /// <typeparam name="T5"> 拓展类型5 </typeparam>
+        /// <typeparam name="TResult"> 返回类型 </typeparam>
+        /// <param name="expression"> 拓展表达式 </param>
+        /// <param name="exclude"> 排除字段 </param>
+        /// <returns> </returns>
+        public static Expression<Func<TBase, T1, T2, T3, T4, T5, TResult>> BuildExtendSelectExpre<TBase, T1, T2, T3, T4, T5, TResult>(this Expression<Func<TBase, T1, T2, T3, T4, T5, TResult>> expression, params string[] exclude)
         {
-            return GetExtendSelectExpre<TBase, TResult, Func<TBase, T1, T2, T3, T4, T5, TResult>>(expression);
+            return GetExtendSelectExpre<TBase, TResult, Func<TBase, T1, T2, T3, T4, T5, TResult>>(expression, exclude);
         }
 
         /// <summary>
-        /// 组合继承属性选择表达式树,6个拓展参数
-        /// TResult将继承TBase的所有属性
+        /// 组合继承属性选择表达式树,6个拓展参数 TResult将继承TBase的所有属性
         /// </summary>
-        /// <typeparam name="TBase">原数据类型</typeparam>
-        /// <typeparam name="T1">拓展类型1</typeparam>
-        /// <typeparam name="T2">拓展类型2</typeparam>
-        /// <typeparam name="T3">拓展类型3</typeparam>
-        /// <typeparam name="T4">拓展类型4</typeparam>
-        /// <typeparam name="T5">拓展类型5</typeparam>
-        /// <typeparam name="T6">拓展类型6</typeparam>
-        /// <typeparam name="TResult">返回类型</typeparam>
-        /// <param name="expression">拓展表达式</param>
-        /// <returns></returns>
-        public static Expression<Func<TBase, T1, T2, T3, T4, T5, T6, TResult>> BuildExtendSelectExpre<TBase, T1, T2, T3, T4, T5, T6, TResult>(this Expression<Func<TBase, T1, T2, T3, T4, T5, T6, TResult>> expression)
+        /// <typeparam name="TBase"> 原数据类型 </typeparam>
+        /// <typeparam name="T1"> 拓展类型1 </typeparam>
+        /// <typeparam name="T2"> 拓展类型2 </typeparam>
+        /// <typeparam name="T3"> 拓展类型3 </typeparam>
+        /// <typeparam name="T4"> 拓展类型4 </typeparam>
+        /// <typeparam name="T5"> 拓展类型5 </typeparam>
+        /// <typeparam name="T6"> 拓展类型6 </typeparam>
+        /// <typeparam name="TResult"> 返回类型 </typeparam>
+        /// <param name="expression"> 拓展表达式 </param>
+        /// <param name="exclude"> 排除字段 </param>
+        /// <returns> </returns>
+        public static Expression<Func<TBase, T1, T2, T3, T4, T5, T6, TResult>> BuildExtendSelectExpre<TBase, T1, T2, T3, T4, T5, T6, TResult>(this Expression<Func<TBase, T1, T2, T3, T4, T5, T6, TResult>> expression, params string[] exclude)
         {
-            return GetExtendSelectExpre<TBase, TResult, Func<TBase, T1, T2, T3, T4, T5, T6, TResult>>(expression);
+            return GetExtendSelectExpre<TBase, TResult, Func<TBase, T1, T2, T3, T4, T5, T6, TResult>>(expression, exclude);
         }
 
         /// <summary>
-        /// 组合继承属性选择表达式树,7个拓展参数
-        /// TResult将继承TBase的所有属性
+        /// 组合继承属性选择表达式树,7个拓展参数 TResult将继承TBase的所有属性
         /// </summary>
-        /// <typeparam name="TBase">原数据类型</typeparam>
-        /// <typeparam name="T1">拓展类型1</typeparam>
-        /// <typeparam name="T2">拓展类型2</typeparam>
-        /// <typeparam name="T3">拓展类型3</typeparam>
-        /// <typeparam name="T4">拓展类型4</typeparam>
-        /// <typeparam name="T5">拓展类型5</typeparam>
-        /// <typeparam name="T6">拓展类型6</typeparam>
-        /// <typeparam name="T7">拓展类型7</typeparam>
-        /// <typeparam name="TResult">返回类型</typeparam>
-        /// <param name="expression">拓展表达式</param>
-        /// <returns></returns>
-        public static Expression<Func<TBase, T1, T2, T3, T4, T5, T6, T7, TResult>> BuildExtendSelectExpre<TBase, T1, T2, T3, T4, T5, T6, T7, TResult>(this Expression<Func<TBase, T1, T2, T3, T4, T5, T6, T7, TResult>> expression)
+        /// <typeparam name="TBase"> 原数据类型 </typeparam>
+        /// <typeparam name="T1"> 拓展类型1 </typeparam>
+        /// <typeparam name="T2"> 拓展类型2 </typeparam>
+        /// <typeparam name="T3"> 拓展类型3 </typeparam>
+        /// <typeparam name="T4"> 拓展类型4 </typeparam>
+        /// <typeparam name="T5"> 拓展类型5 </typeparam>
+        /// <typeparam name="T6"> 拓展类型6 </typeparam>
+        /// <typeparam name="T7"> 拓展类型7 </typeparam>
+        /// <typeparam name="TResult"> 返回类型 </typeparam>
+        /// <param name="expression"> 拓展表达式 </param>
+        /// <param name="exclude"> 排除字段 </param>
+        /// <returns> </returns>
+        public static Expression<Func<TBase, T1, T2, T3, T4, T5, T6, T7, TResult>> BuildExtendSelectExpre<TBase, T1, T2, T3, T4, T5, T6, T7, TResult>(this Expression<Func<TBase, T1, T2, T3, T4, T5, T6, T7, TResult>> expression, params string[] exclude)
         {
-            return GetExtendSelectExpre<TBase, TResult, Func<TBase, T1, T2, T3, T4, T5, T6, T7, TResult>>(expression);
+            return GetExtendSelectExpre<TBase, TResult, Func<TBase, T1, T2, T3, T4, T5, T6, T7, TResult>>(expression, exclude);
         }
 
         /// <summary>
-        /// 组合继承属性选择表达式树,8个拓展参数
-        /// TResult将继承TBase的所有属性
+        /// 组合继承属性选择表达式树,8个拓展参数 TResult将继承TBase的所有属性
         /// </summary>
-        /// <typeparam name="TBase">原数据类型</typeparam>
-        /// <typeparam name="T1">拓展类型1</typeparam>
-        /// <typeparam name="T2">拓展类型2</typeparam>
-        /// <typeparam name="T3">拓展类型3</typeparam>
-        /// <typeparam name="T4">拓展类型4</typeparam>
-        /// <typeparam name="T5">拓展类型5</typeparam>
-        /// <typeparam name="T6">拓展类型6</typeparam>
-        /// <typeparam name="T7">拓展类型7</typeparam>
-        /// <typeparam name="T8">拓展类型8</typeparam>
-        /// <typeparam name="TResult">返回类型</typeparam>
-        /// <param name="expression">拓展表达式</param>
-        /// <returns></returns>
-        public static Expression<Func<TBase, T1, T2, T3, T4, T5, T6, T7, T8, TResult>> BuildExtendSelectExpre<TBase, T1, T2, T3, T4, T5, T6, T7, T8, TResult>(this Expression<Func<TBase, T1, T2, T3, T4, T5, T6, T7, T8, TResult>> expression)
+        /// <typeparam name="TBase"> 原数据类型 </typeparam>
+        /// <typeparam name="T1"> 拓展类型1 </typeparam>
+        /// <typeparam name="T2"> 拓展类型2 </typeparam>
+        /// <typeparam name="T3"> 拓展类型3 </typeparam>
+        /// <typeparam name="T4"> 拓展类型4 </typeparam>
+        /// <typeparam name="T5"> 拓展类型5 </typeparam>
+        /// <typeparam name="T6"> 拓展类型6 </typeparam>
+        /// <typeparam name="T7"> 拓展类型7 </typeparam>
+        /// <typeparam name="T8"> 拓展类型8 </typeparam>
+        /// <typeparam name="TResult"> 返回类型 </typeparam>
+        /// <param name="expression"> 拓展表达式 </param>
+        /// <param name="exclude"> 排除字段 </param>
+        /// <returns> </returns>
+        public static Expression<Func<TBase, T1, T2, T3, T4, T5, T6, T7, T8, TResult>> BuildExtendSelectExpre<TBase, T1, T2, T3, T4, T5, T6, T7, T8, TResult>(this Expression<Func<TBase, T1, T2, T3, T4, T5, T6, T7, T8, TResult>> expression, params string[] exclude)
         {
-            return GetExtendSelectExpre<TBase, TResult, Func<TBase, T1, T2, T3, T4, T5, T6, T7, T8, TResult>>(expression);
+            return GetExtendSelectExpre<TBase, TResult, Func<TBase, T1, T2, T3, T4, T5, T6, T7, T8, TResult>>(expression, exclude);
         }
 
         /// <summary>
-        /// 组合继承属性选择表达式树,9个拓展参数
-        /// TResult将继承TBase的所有属性
+        /// 组合继承属性选择表达式树,9个拓展参数 TResult将继承TBase的所有属性
         /// </summary>
-        /// <typeparam name="TBase">原数据类型</typeparam>
-        /// <typeparam name="T1">拓展类型1</typeparam>
-        /// <typeparam name="T2">拓展类型2</typeparam>
-        /// <typeparam name="T3">拓展类型3</typeparam>
-        /// <typeparam name="T4">拓展类型4</typeparam>
-        /// <typeparam name="T5">拓展类型5</typeparam>
-        /// <typeparam name="T6">拓展类型6</typeparam>
-        /// <typeparam name="T7">拓展类型7</typeparam>
-        /// <typeparam name="T8">拓展类型8</typeparam>
-        /// <typeparam name="T9">拓展类型9</typeparam>
-        /// <typeparam name="TResult">返回类型</typeparam>
-        /// <param name="expression">拓展表达式</param>
-        /// <returns></returns>
-        public static Expression<Func<TBase, T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>> BuildExtendSelectExpre<TBase, T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>(this Expression<Func<TBase, T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>> expression)
+        /// <typeparam name="TBase"> 原数据类型 </typeparam>
+        /// <typeparam name="T1"> 拓展类型1 </typeparam>
+        /// <typeparam name="T2"> 拓展类型2 </typeparam>
+        /// <typeparam name="T3"> 拓展类型3 </typeparam>
+        /// <typeparam name="T4"> 拓展类型4 </typeparam>
+        /// <typeparam name="T5"> 拓展类型5 </typeparam>
+        /// <typeparam name="T6"> 拓展类型6 </typeparam>
+        /// <typeparam name="T7"> 拓展类型7 </typeparam>
+        /// <typeparam name="T8"> 拓展类型8 </typeparam>
+        /// <typeparam name="T9"> 拓展类型9 </typeparam>
+        /// <typeparam name="TResult"> 返回类型 </typeparam>
+        /// <param name="expression"> 拓展表达式 </param>
+        /// <param name="exclude"> 排除字段 </param>
+        /// <returns> </returns>
+        public static Expression<Func<TBase, T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>> BuildExtendSelectExpre<TBase, T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>(this Expression<Func<TBase, T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>> expression, params string[] exclude)
         {
-            return GetExtendSelectExpre<TBase, TResult, Func<TBase, T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>>(expression);
+            return GetExtendSelectExpre<TBase, TResult, Func<TBase, T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>>(expression, exclude);
         }
 
-        #endregion
 
         #region 私有成员
 
-        private static Expression<TDelegate> GetExtendSelectExpre<TBase, TResult, TDelegate>(Expression<TDelegate> expression)
+        private static Expression<TDelegate> GetExtendSelectExpre<TBase, TResult, TDelegate>(Expression<TDelegate> expression, params string[] exclude)
         {
             NewExpression newBody = Expression.New(typeof(TResult));
             MemberInitExpression oldExpression = (MemberInitExpression)expression.Body;
-
             ParameterExpression[] oldParamters = expression.Parameters.ToArray();
-            List<string> existsProperties = new List<string>();
-            oldExpression.Bindings.ToList().ForEach(aBinding =>
-            {
-                existsProperties.Add(aBinding.Member.Name);
-            });
+            List<string> exisProperties = oldExpression.Bindings.ToList().Select(a => a.Member.Name).ToList();
 
-            List<MemberBinding> newBindings = new List<MemberBinding>();
-            typeof(TBase).GetProperties().Where(x => !existsProperties.Contains(x.Name)).ToList().ForEach(aProperty =>
+            List<PropertyInfo> existsPropertieslist = exisProperties.Count > 0
+                ? typeof(TBase).GetProperties().Where(x => !exisProperties.Contains(x.Name) && x.CanWrite).ToList()
+                : typeof(TBase).GetProperties().Where(x => x.CanWrite).ToList();
+            if (exclude != null && exclude.Length > 0)
             {
-                if (typeof(TResult).GetMembers().Any(x => x.Name == aProperty.Name))
+                existsPropertieslist = existsPropertieslist.Where(x => !exclude.Contains(x.Name)).ToList();
+            }
+            List<MemberBinding> newBindings = new();
+            MemberBinding newMemberBinding = null;
+            MemberExpression valueExpre = null;
+            MemberInfo[] ddt = typeof(TResult).GetMembers();
+            bool cct = typeof(TBase).IsAssignableFrom(typeof(TResult));
+            existsPropertieslist.ForEach(aProperty =>
+            {
+                if (ddt.Any(x => x.Name == aProperty.Name))
                 {
-                    MemberBinding newMemberBinding = null;
-                    var valueExpre = Expression.Property(oldParamters[0], aProperty.Name);
-                    if (typeof(TBase).IsAssignableFrom(typeof(TResult)))
-                    {
-                        newMemberBinding = Expression.Bind(aProperty, valueExpre);
-                    }
-                    else
-                    {
-                        newMemberBinding = Expression.Bind(typeof(TResult).GetProperty(aProperty.Name), valueExpre);
-                    }
+                    valueExpre = Expression.Property(oldParamters[0], aProperty.Name);
+                    newMemberBinding = cct
+                        ? Expression.Bind(aProperty, valueExpre)
+                        : (MemberBinding)Expression.Bind(typeof(TResult).GetProperty(aProperty.Name), valueExpre);
                     newBindings.Add(newMemberBinding);
                 }
             });
-
             newBindings.AddRange(oldExpression.Bindings);
 
-            var body = Expression.MemberInit(newBody, newBindings.ToArray());
-            var resExpression = Expression.Lambda<TDelegate>(body, oldParamters);
+            MemberInitExpression body = Expression.MemberInit(newBody, newBindings.ToArray());
+            Expression<TDelegate> resExpression = Expression.Lambda<TDelegate>(body, oldParamters);
 
             return resExpression;
         }
+
+        #endregion 私有成员
 
         /// <summary>
         /// 继承ExpressionVisitor类，实现参数替换统一
