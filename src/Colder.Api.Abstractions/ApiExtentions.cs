@@ -119,9 +119,9 @@ public static class ApiExtentions
                         options.ApiGroupNames = config.ApiGroupNames;
                     }
 
-                    options.SchemaProcessors.Add(new EnumSchemaProcessor());
+                    options.SchemaSettings.SchemaProcessors.Add(new EnumSchemaProcessor());
                     //解决枚举无法展示问题
-                    options.AllowReferencesWithProperties = true;
+                    options.SchemaSettings.AllowReferencesWithProperties = true;
 
                     options.AddSecurity("身份认证Token", Enumerable.Empty<string>(), new OpenApiSecurityScheme()
                     {
@@ -186,8 +186,8 @@ public static class ApiExtentions
 
         if (apiOption.EnableSwagger)
         {
-            app.UseOpenApi()//添加swagger生成api文档（默认路由文档 /swagger/v1/swagger.json）
-            .UseSwaggerUi3();//添加Swagger UI到请求管道中(默认路由: /swagger).
+            app.UseOpenApi(); // serve OpenAPI/Swagger documents
+            app.UseSwaggerUi(); // serve Swagger UI
         }
 
         return app;
