@@ -1,5 +1,6 @@
 ﻿using Colder.Api.Abstractions.Middlewares;
 using Colder.Api.Abstractions.Options;
+using Colder.Api.Abstractions.Swagger;
 using Colder.DistributedId;
 using Colder.Json;
 using Colder.Logging.Serilog;
@@ -136,6 +137,7 @@ public static class ApiExtentions
                         options.ApiGroupNames = config.ApiGroupNames;
                     }
 
+                    options.OperationProcessors.Insert(0, new ControllerFilterProcessor());
                     options.SchemaSettings.SchemaProcessors.Add(new EnumSchemaProcessor());
                     //解决枚举无法展示问题
                     options.SchemaSettings.AllowReferencesWithProperties = true;
