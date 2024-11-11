@@ -1,10 +1,13 @@
 ﻿using Colder.Api.Abstractions.Middlewares;
 using Colder.Api.Abstractions.Options;
+using Colder.Api.Abstractions.Swagger;
 using Colder.DistributedId;
 using Colder.Json;
 using Colder.Logging.Serilog;
 using Logistics.Api;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -76,6 +79,21 @@ public static class ApiExtentions
                     aProperty.SetValue(options.SerializerSettings, value);
                 });
             });
+
+            //取消请求体大小限制
+            services.Configure<FormOptions>(options =>
+            {
+                options.ValueLengthLimit = int.MaxValue;
+                options.MultipartBodyLengthLimit = int.MaxValue;
+                options.MultipartHeadersLengthLimit = int.MaxValue;
+            });
+
+            //取消请求体大小限制
+            services.Configure<KestrelServerOptions>(options =>
+            {
+                options.Limits.MaxRequestBodySize = int.MaxValue;
+            });
+
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             services.AddEndpointsApiExplorer();
 
@@ -119,9 +137,10 @@ public static class ApiExtentions
                         options.ApiGroupNames = config.ApiGroupNames;
                     }
 
-                    options.SchemaProcessors.Add(new EnumSchemaProcessor());
+                    options.OperationProcessors.Insert(0, new ControllerFilterProcessor());
+                    options.SchemaSettings.SchemaProcessors.Add(new EnumSchemaProcessor());
                     //解决枚举无法展示问题
-                    options.AllowReferencesWithProperties = true;
+                    options.SchemaSettings.AllowReferencesWithProperties = true;
 
                     options.AddSecurity("身份认证Token", Enumerable.Empty<string>(), new OpenApiSecurityScheme()
                     {
@@ -186,8 +205,8 @@ public static class ApiExtentions
 
         if (apiOption.EnableSwagger)
         {
-            app.UseOpenApi()//添加swagger生成api文档（默认路由文档 /swagger/v1/swagger.json）
-            .UseSwaggerUi3();//添加Swagger UI到请求管道中(默认路由: /swagger).
+            app.UseOpenApi(); // serve OpenAPI/Swagger documents
+            app.UseSwaggerUi(); // serve Swagger UI
         }
 
         return app;

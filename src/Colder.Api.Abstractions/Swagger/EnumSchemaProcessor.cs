@@ -4,12 +4,12 @@ using System;
 using System.Linq;
 using System.Text;
 
-namespace Colder.Api.Abstractions;
+namespace Colder.Api.Abstractions.Swagger;
 
 /// <summary>
 /// 
 /// </summary>
-public class EnumSchemaProcessor : ISchemaProcessor
+internal class EnumSchemaProcessor : ISchemaProcessor
 {
     /// <summary>
     /// 
