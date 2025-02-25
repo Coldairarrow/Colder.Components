@@ -24,6 +24,7 @@ public class IdleClient : IDisposable
     private readonly StripedAsyncKeyedLocker<string> _asyncKeyedLocker = new();
     private readonly string _lockKey = Guid.NewGuid().ToString();
     private bool _disposed;
+    private readonly TimeSpan _idleTimeout = TimeSpan.FromMinutes(1);
     /// <summary>
     /// 
     /// </summary>
@@ -61,7 +62,8 @@ public class IdleClient : IDisposable
     /// <param name="userName"></param>
     /// <param name="password"></param>
     /// <param name="loggerFactory"></param>
-    public IdleClient(string host, int port, string userName, string password, ILoggerFactory loggerFactory = null)
+    /// <param name="idleTimeout"></param>
+    public IdleClient(string host, int port, string userName, string password, ILoggerFactory loggerFactory = null, TimeSpan? idleTimeout = null)
     {
         _client = new ImapClient();
 
@@ -72,6 +74,10 @@ public class IdleClient : IDisposable
         UserName = userName;
         Password = password;
         _logger = loggerFactory?.CreateLogger<IdleClient>();
+        if (idleTimeout != null)
+        {
+            _idleTimeout = idleTimeout.Value;
+        }
 
         _idleTask = Task.Factory.StartNew(async () =>
         {
@@ -214,7 +220,7 @@ public class IdleClient : IDisposable
                         // Note: IMAP servers are only supposed to drop the connection after 30 minutes, so normally
                         // we'd IDLE for a max of, say, ~29 minutes... but GMail seems to drop idle connections after
                         // about 10 minutes, so we'll only idle for 9 minutes.
-                        _done = new CancellationTokenSource(new TimeSpan(0, 9, 0));
+                        _done = new CancellationTokenSource(_idleTimeout);
                         try
                         {
                             await _client.IdleAsync(_done.Token, _cancel.Token);
