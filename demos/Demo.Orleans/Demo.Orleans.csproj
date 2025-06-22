@@ -15,7 +15,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Colder.Logging.Serilog\Colder.Logging.Serilog.csproj" />
-    <ProjectReference Include="..\..\src\Colder.Orleans.Hosting\Colder.Orleans.Hosting.csproj" />
   </ItemGroup>
 
   <ItemGroup>

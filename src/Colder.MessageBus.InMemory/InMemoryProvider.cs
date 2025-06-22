@@ -21,7 +21,7 @@ namespace Colder.MessageBus.InMemory
                     //并发数配置
                     if (Options.Concurrency != 0)
                     {
-                        endpointBuilder.ConcurrencyLimit = Options.Concurrency;
+                        endpointBuilder.UseConcurrencyLimit(Options.Concurrency);
                     }
 
                     ConfigEndpoint(endpointBuilder);

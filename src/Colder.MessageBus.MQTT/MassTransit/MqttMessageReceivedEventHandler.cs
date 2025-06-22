@@ -4,7 +4,7 @@ using Colder.MessageBus.Hosting;
 using Colder.MessageBus.MQTT.Primitives;
 using Microsoft.Extensions.DependencyInjection;
 using MQTTnet;
-using MQTTnet.Client;
+using MQTTnet.Protocol;
 using Newtonsoft.Json;
 using System;
 using System.Linq;
@@ -87,7 +87,7 @@ namespace Colder.MessageBus.MQTT
 
                     var responsePayload = new MqttApplicationMessageBuilder()
                         .WithPayload(JsonConvert.SerializeObject(messageContext.Response))
-                        .WithAtLeastOnceQoS()
+                        .WithQualityOfServiceLevel(MqttQualityOfServiceLevel.AtLeastOnce)
                         .WithTopic(responseTopic.ToString());
 
                     await _mqttClient.PublishAsync(responsePayload.Build());

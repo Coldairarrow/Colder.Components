@@ -13,7 +13,6 @@
     <PackageReference Include="NEST" Version="7.17.5" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="NPOI" Version="2.7.3" />
-    <PackageReference Include="QRCoder" Version="1.6.0" />
     <PackageReference Include="Quartz" Version="3.14.0" />
   </ItemGroup>
 

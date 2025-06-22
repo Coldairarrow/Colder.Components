@@ -5,9 +5,8 @@ using Colder.MessageBus.MQTT.Primitives;
 using MassTransit;
 using Microsoft.Extensions.Logging;
 using MQTTnet;
-using MQTTnet.Client;
-using MQTTnet.Client.Options;
 using System;
+using System.Buffers;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -31,19 +30,18 @@ namespace Colder.MessageBus.MQTT
                 .WithTcpServer(host[0], int.Parse(host[1]))
                 .Build();
 
-            var factory = new MqttFactory();
+            var factory = new MqttClientFactory();
             var mqttClient = factory.CreateMqttClient();
-
-            mqttClient.UseApplicationMessageReceivedHandler(async e =>
+            mqttClient.ApplicationMessageReceivedAsync += async e =>
             {
                 await busControl.Publish(new MqttMessageReceivedEvent
                 {
                     Topic = e.ApplicationMessage.Topic,
-                    Payload = e.ApplicationMessage.Payload,
+                    Payload = e.ApplicationMessage.Payload.ToArray(),
                 });
-            });
+            };
 
-            mqttClient.UseConnectedHandler(async e =>
+            mqttClient.ConnectedAsync += async e =>
             {
                 //Topic格式
                 //RootTopic/{SourceClientId}/{TargetClientId}/{SourceEndpoint}/{TargetEndpoint}/{MessageBodyType}/{MessageType}/{MessageId}
@@ -68,9 +66,9 @@ namespace Colder.MessageBus.MQTT
                 topic = $"{Topic.RootTopic}/+/{options.ClientId}/+/+/+/{MessageTypes.Response}/+";
                 await mqttClient.SubscribeAsync(topic);
                 Logger.LogInformation("MessageBus:Subscribe To Topic {Topic}", topic);
-            });
+            };
 
-            mqttClient.UseDisconnectedHandler(async e =>
+            mqttClient.DisconnectedAsync += async e =>
             {
                 Logger.LogWarning("MessageBus:Disconnected from {Host}", Options.Host);
                 await Task.Delay(TimeSpan.FromSeconds(3));
@@ -83,7 +81,7 @@ namespace Colder.MessageBus.MQTT
                 {
                     Logger.LogError(ex, "MessageBus:Reconnect To {Host} Fail", Options.Host);
                 }
-            });
+            };
 
             busControl = Bus.Factory.CreateUsingInMemory(sbc =>
             {

@@ -205,8 +205,11 @@ public static class ApiExtentions
 
         if (apiOption.EnableSwagger)
         {
-            app.UseOpenApi(); // serve OpenAPI/Swagger documents
-            app.UseSwaggerUi(); // serve Swagger UI
+            app.UseOpenApi();
+            app.UseSwaggerUi(options =>
+            {
+                options.DefaultModelExpandDepth = 999;
+            });
         }
 
         return app;

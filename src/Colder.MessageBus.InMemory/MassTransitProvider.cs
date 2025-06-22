@@ -1,8 +1,6 @@
 ﻿using Colder.MessageBus.Abstractions;
 using Colder.MessageBus.Hosting;
-using GreenPipes;
 using MassTransit;
-using MassTransit.Context;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;

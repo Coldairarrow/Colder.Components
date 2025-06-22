@@ -23,10 +23,7 @@ namespace Demo.OpenService
             services.AddHttpClient();
 
             //swagger
-            services.AddOpenApiDocument(settings =>
-            {
-                settings.AllowReferencesWithProperties = true;
-            });
+            services.AddOpenApiDocument();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -46,8 +43,8 @@ namespace Demo.OpenService
                 endpoints.MapControllers();
             });
 
-            app.UseOpenApi()//添加swagger生成api文档（默认路由文档 /swagger/v1/swagger.json）
-                .UseSwaggerUi3();//添加Swagger UI到请求管道中(默认路由: /swagger).
+            app.UseOpenApi();
+            app.UseSwaggerUi();
         }
     }
 }
