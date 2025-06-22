@@ -1,7 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>$(DemoNetVersion)</TargetFramework>
     <NoWarn>CS1591;</NoWarn>
   </PropertyGroup>
 

@@ -1,14 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
     <!--打包-->
     <GeneratePackageOnBuild Condition="'$(Configuration)'=='Release'">true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="10.1.1" />
-    <PackageReference Include="EFCore.Sharding" Version="5.0.14" />
+    <PackageReference Include="AutoMapper" Version="14.0.0" />
+    <PackageReference Include="EFCore.Sharding" Version="9.0.7" />
   </ItemGroup>
 
   <ItemGroup>

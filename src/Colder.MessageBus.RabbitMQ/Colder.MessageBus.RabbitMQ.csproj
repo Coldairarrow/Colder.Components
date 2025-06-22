@@ -2,7 +2,6 @@
 
   <PropertyGroup>
     <OutputType>Library</OutputType>
-    <TargetFramework>netstandard2.0</TargetFramework>
     <Description>消息总线MassTransit实现</Description>
     <NoWarn>1701;1702;CS8602</NoWarn>
     <!--打包-->
@@ -10,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MassTransit.RabbitMQ" Version="7.2.4" />
+    <PackageReference Include="MassTransit.RabbitMQ" Version="8.5.0" />
   </ItemGroup>
 
   <ItemGroup>

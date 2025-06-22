@@ -1,13 +1,13 @@
 <Project>
 
   <PropertyGroup>
-    <LangVersion>latestMajor</LangVersion>
     <!--默认统一输出XML注释文档，不需要输出的项目可以单独关闭-->
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <PackageProjectUrl>https://github.com/Coldairarrow/Colder.Components</PackageProjectUrl>
     <Authors>Coldairarrow</Authors>
     <Company>Coldairarrow</Company>
-    <DemoNetVersion>net6.0</DemoNetVersion>
+    <TargetFramework>net9.0</TargetFramework>
+    <CETCompat>false</CETCompat>
   </PropertyGroup>
 
   <ItemGroup>
